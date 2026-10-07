@@ -1,0 +1,373 @@
+@import "tailwindcss";
+
+@theme {
+  --color-green-primary: #2d6a4f;
+  --color-green-dark: #1b4332;
+  --color-green-light: #52b788;
+  --color-dark-bg: #0a0f0a;
+
+  /* Custom Forest Green scale */
+  --color-forest-50: #f0f7f4;
+  --color-forest-100: #d8ede3;
+  --color-forest-200: #b7ddcb;
+  --color-forest-300: #8ec7ad;
+  --color-forest-400: #52b788;
+  --color-forest-500: #2d6a4f;
+  --color-forest-600: #1b4332;
+  --color-forest-700: #143628;
+  --color-forest-800: #0e261d;
+  --color-forest-900: #081c15;
+
+  /* Map standard Tailwind green to Forest Green */
+  --color-green-100: #d8ede3;
+  --color-green-200: #b7ddcb;
+  --color-green-300: #74c69d;
+  --color-green-400: #52b788;
+  --color-green-500: #2d6a4f;
+  --color-green-600: #1b4332;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #08090b;
+  color: #f3f4f6;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow-x: hidden;
+  letter-spacing: -0.012em;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #08090b; }
+::-webkit-scrollbar-thumb { background: #1a231f; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2d6a4f; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.5); }
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(7px); }
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+.animate-fadeUp        { animation: fadeUp 0.9s ease both; }
+.animate-fadeUp-delay  { animation: fadeUp 0.9s ease 0.2s both; }
+.animate-pulse-dot     { animation: pulse-dot 2s infinite; }
+.animate-scroll-bounce { animation: scroll-bounce 2.5s ease-in-out infinite; }
+.animate-ticker        { animation: ticker 30s linear infinite; }
+.animate-gradient-x    { animation: gradient-x 4s ease infinite; background-size: 200% 200%; }
+
+.text-gradient {
+  background: linear-gradient(135deg, #52b788, #95d5b2, #2d6a4f);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-x 4s ease infinite;
+}
+
+.glow-green { box-shadow: 0 0 32px rgba(45, 106, 79, 0.5); }
+.glow-green-lg { box-shadow: 0 0 60px rgba(45, 106, 79, 0.35); }
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.card-hover {
+  transition: border-color 0.3s, transform 0.3s, background 0.3s;
+}
+.card-hover:hover {
+  border-color: rgba(82, 183, 136, 0.4);
+  transform: translateY(-4px);
+  background: rgba(45, 106, 79, 0.08);
+}
+
+.bg-grid-subtle {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-radial-vignette {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+}
+
+.bento-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(14, 18, 24, 0.75) 0%, rgba(9, 12, 16, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card:hover {
+  border-color: rgba(52, 211, 153, 0.28);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6), 0 0 28px -6px rgba(16, 185, 129, 0.1);
+}
+
+.hairline-border {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ─── 3D LOGO TRANSITION & FLOATING KEYFRAMES ─── */
+@keyframes logo3dEntrance {
+  0% {
+    opacity: 0;
+    transform: perspective(1400px) rotateX(65deg) rotateY(-45deg) rotateZ(15deg) translateZ(-400px) scale(0.3);
+    filter: blur(14px) drop-shadow(0 0 0px rgba(16, 185, 129, 0));
+  }
+  55% {
+    opacity: 1;
+    transform: perspective(1400px) rotateX(-15deg) rotateY(12deg) rotateZ(-3deg) translateZ(80px) scale(1.1);
+    filter: blur(0px) drop-shadow(0 30px 60px rgba(16, 185, 129, 0.4));
+  }
+  78% {
+    transform: perspective(1400px) rotateX(6deg) rotateY(-5deg) rotateZ(1deg) translateZ(20px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(0px) scale(1);
+    filter: blur(0px) drop-shadow(0 20px 40px rgba(16, 185, 129, 0.3));
+  }
+}
+
+@keyframes logoSheen {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-100%, -100%) rotate(45deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(150%, 150%) rotate(45deg);
+  }
+}
+
+.animate-3d-logo {
+  animation: logo3dEntrance 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+
+.animate-sheen {
+  animation: logoSheen 6s ease-in-out infinite;
+}
+
+/* ─── HERO REVEAL TRANSITION (after background video pauses/ends) ─── */
+:root {
+  --hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 1. 0s: Background Video dims with a 1s transition (pure opacity/contrast for maximum GPU decode performance) */
+.hero-video {
+  opacity: 1;
+  transition: opacity 1s var(--hero-ease);
+  will-change: opacity;
+}
+.hero-revealed .hero-video {
+  opacity: 0.45;
+}
+
+/* Content wrapper: hidden before trigger, no flash on load */
+.hero-content-container {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--hero-ease);
+}
+.hero-revealed.hero-content-container,
+.hero-revealed .hero-content-container {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 2. 0.1s: Logo scales from 85% to 100% while going from blurred to sharp */
+.hero-logo-wrapper {
+  opacity: 0;
+  transform: scale(0.85);
+  filter: blur(8px);
+  transition:
+    transform 0.75s var(--hero-ease) 0.1s,
+    opacity 0.6s var(--hero-ease) 0.1s,
+    filter 0.65s var(--hero-ease) 0.1s;
+  will-change: transform, opacity, filter;
+}
+.hero-revealed .hero-logo-wrapper {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0px);
+}
+
+/* Green glow around logo pulses once */
+@keyframes greenGlowPulseOnce {
+  0% {
+    opacity: 0;
+    transform: scale(0.75);
+    filter: blur(12px);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.22);
+    filter: blur(34px);
+  }
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+    filter: blur(20px);
+  }
+}
+.hero-logo-glow {
+  opacity: 0;
+}
+.hero-revealed .hero-logo-glow {
+  animation: greenGlowPulseOnce 0.95s var(--hero-ease) 0.1s both;
+}
+
+/* 3. 0.3s: Badge pill fades in */
+.hero-badge {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.6s var(--hero-ease) 0.3s,
+    transform 0.6s var(--hero-ease) 0.3s;
+  will-change: opacity, transform;
+}
+.hero-revealed .hero-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 4. 0.45s: Heading "GreenGrid" slides up from behind mask (overflow hidden). "Green" first, then "Grid" 120ms later (0.57s) */
+.hero-heading-mask {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  line-height: 1.15;
+}
+.hero-heading-green {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(115%);
+  transition:
+    transform 0.65s var(--hero-ease) 0.45s,
+    opacity 0.45s var(--hero-ease) 0.45s;
+  will-change: transform, opacity;
+}
+.hero-heading-grid {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(115%);
+  transition:
+    transform 0.65s var(--hero-ease) 0.57s,
+    opacity 0.45s var(--hero-ease) 0.57s;
+  will-change: transform, opacity;
+}
+.hero-revealed .hero-heading-green,
+.hero-revealed .hero-heading-grid {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5. 0.7s: Subtitle paragraph fades up (translateY 24px, blur 10px to 0, opacity 0 to 1) */
+.hero-subtitle {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(10px);
+  transition:
+    transform 0.65s var(--hero-ease) 0.7s,
+    opacity 0.65s var(--hero-ease) 0.7s,
+    filter 0.6s var(--hero-ease) 0.7s;
+  will-change: transform, opacity, filter;
+}
+.hero-revealed .hero-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+}
+
+/* 6. 0.9s: CTA buttons fade up: primary first, secondary 100ms later (1.0s) */
+.hero-cta-primary {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.55s var(--hero-ease) 0.9s,
+    transform 0.6s var(--hero-ease) 0.9s;
+  will-change: opacity, transform;
+}
+.hero-cta-secondary {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.55s var(--hero-ease) 1.0s,
+    transform 0.6s var(--hero-ease) 1.0s;
+  will-change: opacity, transform;
+}
+.hero-revealed .hero-cta-primary,
+.hero-revealed .hero-cta-secondary {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── LEAFLET MAP FIXES ─── */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #0b0f14 !important;
+  outline: none;
+}
+
+.leaflet-tile.dark-tile-layer {
+  filter: brightness(0.85) contrast(1.2) hue-rotate(180deg) invert(1) !important;
+}
+
+.leaflet-tile.satellite-tile-layer {
+  filter: brightness(1.05) contrast(1.1) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #171717 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  padding: 4px !important;
+}
+.leaflet-popup-tip {
+  background: #ffffff !important;
+}
+
+/* Force popup button anchors to not inherit Leaflet's blue link color */
+.leaflet-popup-content a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+.leaflet-popup-content a:hover {
+  color: #ffffff !important;
+}
+
+
+

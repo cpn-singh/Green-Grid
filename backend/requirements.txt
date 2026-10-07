@@ -1,0 +1,9 @@
+django>=5.0
+djangorestframework
+django-cors-headers
+dj-rest-auth[with_social]
+channels
+daphne
+google-genai>=2.25.0
+python-dotenv
+Pillow
