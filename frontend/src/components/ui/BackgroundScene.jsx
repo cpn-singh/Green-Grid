@@ -279,7 +279,7 @@ export default function BackgroundScene() {
 
     // 9. Animation Loop
     let animId
-    const clock = new THREE.Clock()
+    const startTime = performance.now()
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
@@ -287,7 +287,7 @@ export default function BackgroundScene() {
       // Skip rendering if document is hidden to conserve GPU/CPU
       if (document.hidden) return
 
-      const elapsedTime = clock.getElapsedTime()
+      const elapsedTime = (performance.now() - startTime) * 0.001
 
       // Smooth lerp to scroll position
       currentScrollProgress += (targetScrollProgress - currentScrollProgress) * 0.06

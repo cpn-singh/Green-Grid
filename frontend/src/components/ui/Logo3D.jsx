@@ -173,12 +173,12 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
 
     // 9. Animation Loop
     let animId
-    let clock = new THREE.Clock()
+    const startTime = performance.now()
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
       if (document.hidden) return
-      const elapsedTime = clock.getElapsedTime()
+      const elapsedTime = (performance.now() - startTime) * 0.001
 
       // Idle auto-spin / float physics
       const idleSpinSpeed = isHovered ? 0.003 : 0.008
