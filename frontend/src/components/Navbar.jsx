@@ -22,9 +22,9 @@ export default function Navbar({ visible = true }) {
 
   return (
     <nav
-      className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-10 py-3.5 transition-all duration-700 ease-out ${
+      className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-3.5 transition-all duration-700 ease-out ${
         scrolled
-          ? 'bg-[#020504]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
+          ? 'bg-[#080b09]/92 backdrop-blur-md border-b border-[#19241d] shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
           : 'bg-transparent'
       } ${
         isVisible
@@ -37,67 +37,61 @@ export default function Navbar({ visible = true }) {
       }}
     >
       <div className="flex items-center gap-3">
-        <Link to="/" className="text-base sm:text-lg font-bold tracking-tight text-white group flex items-center gap-2.5">
-          <div className="relative w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-emerald-500 via-emerald-300 to-white/40 shadow-[0_0_12px_rgba(16,185,129,0.5)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 transform-gpu [perspective:600px]">
+        <Link to="/" className="text-base sm:text-lg font-bold tracking-tight text-[#f0f4f1] group flex items-center gap-2.5">
+          <div className="relative w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-[#22c55e] via-[#34d399] to-white/40 shadow-[0_0_12px_rgba(34,197,94,0.4)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 transform-gpu [perspective:600px]">
             <img
               src="/logo.png"
               alt="GreenGrid"
               className="w-full h-full object-cover rounded-full select-none"
             />
           </div>
-          <span className="font-bold tracking-[-0.02em] text-white uppercase text-sm sm:text-base">
-            GreenGrid <span className="text-emerald-400 font-mono text-xs font-medium tracking-normal">(AGI)</span>
+          <span className="font-bold font-display uppercase tracking-[-0.02em] text-[#f0f4f1] text-sm sm:text-base">
+            GreenGrid
           </span>
         </Link>
       </div>
 
-      <ul className="hidden md:flex items-center gap-7 text-[11px] font-mono tracking-wider uppercase text-neutral-300">
+      <ul className="hidden md:flex items-center gap-8 text-[11px] font-mono tracking-wider uppercase text-[#6b7c72]">
         <li>
-          <Link to="/" className="hover:text-emerald-400 transition-colors">Platform</Link>
+          <a href="#sizing" className="hover:text-[#22c55e] transition-colors">Dispatch Sizing</a>
         </li>
         <li>
-          <a href="/#simulator" className="hover:text-emerald-400 transition-colors">Simulator</a>
+          <Link to="/map" className="hover:text-[#22c55e] transition-colors">National Radar</Link>
         </li>
         <li>
-          <a href="/#providers" className="hover:text-emerald-400 transition-colors">Providers</a>
-        </li>
-        <li>
-          <Link to="/map" className="hover:text-emerald-400 transition-colors">Geospatial Map</Link>
-        </li>
-        <li>
-          <a href="/#contact" className="hover:text-emerald-400 transition-colors">Contact</a>
+          <a href="#inquiry" className="hover:text-[#22c55e] transition-colors">Offtake Desk</a>
         </li>
         {user?.role === 'dc_builder' && (
           <>
             <li>
-              <Link to="/dc/profile" className="hover:text-emerald-400 transition-colors">Facility Specs</Link>
+              <Link to="/dc/profile" className="hover:text-[#22c55e] transition-colors">Facility Specs</Link>
             </li>
             <li>
-              <Link to="/dc/results" className="hover:text-emerald-400 transition-colors">Clean Matches</Link>
+              <Link to="/dc/results" className="hover:text-[#22c55e] transition-colors">Clean Matches</Link>
             </li>
           </>
         )}
         {user?.role === 'energy_supplier' && (
           <>
             <li>
-              <Link to="/supplier/profile" className="hover:text-emerald-400 transition-colors">Asset Specs</Link>
+              <Link to="/supplier/profile" className="hover:text-[#22c55e] transition-colors">Asset Specs</Link>
             </li>
             <li>
-              <Link to="/supplier/dashboard" className="hover:text-emerald-400 transition-colors">Inquiries</Link>
+              <Link to="/supplier/dashboard" className="hover:text-[#22c55e] transition-colors">Inquiries</Link>
             </li>
           </>
         )}
       </ul>
 
-      <div className="flex items-center gap-3.5">
+      <div className="flex items-center gap-4">
         {user ? (
           <div className="flex items-center gap-3">
-            <span className="text-xs text-neutral-400 hidden sm:inline font-mono">
+            <span className="text-xs text-[#6b7c72] hidden sm:inline font-mono">
               {user.company_name || user.username}
             </span>
             <button
               onClick={handleLogout}
-              className="text-xs px-3 py-1.5 rounded bg-white/[0.03] border border-white/15 hover:border-red-500/40 hover:text-red-300 transition-all text-neutral-300 cursor-pointer font-mono uppercase tracking-wider"
+              className="btn-busbar !py-1.5 !px-3 !text-[11px]"
             >
               Sign Out
             </button>
@@ -106,13 +100,13 @@ export default function Navbar({ visible = true }) {
           <>
             <Link
               to="/login"
-              className="text-xs font-mono tracking-wider uppercase text-neutral-300 hover:text-white transition-colors px-2 py-1"
+              className="text-[11px] font-mono tracking-wider uppercase text-[#6b7c72] hover:text-[#f0f4f1] transition-colors px-2 py-1"
             >
               Sign In
             </Link>
             <Link
               to="/register"
-              className="sf-btn text-xs px-4 py-2 rounded cursor-pointer"
+              className="btn-signal !py-1.5 !px-3.5 !text-[11px]"
             >
               Get Started →
             </Link>

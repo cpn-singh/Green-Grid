@@ -12,9 +12,10 @@ export default function Section({
   ...props
 }) {
   const bgStyles = {
-    deep: 'bg-[#020504]',
-    canvas: 'bg-[#040806]',
-    base: 'bg-[#000000]'
+    deep: 'bg-[#020504]/55 backdrop-blur-[2px]',
+    canvas: 'bg-[#040806]/40 backdrop-blur-[1px]',
+    base: 'bg-transparent',
+    transparent: 'bg-transparent'
   };
 
   const dividerStyle = hasDivider ? 'border-t border-white/[0.08]' : '';

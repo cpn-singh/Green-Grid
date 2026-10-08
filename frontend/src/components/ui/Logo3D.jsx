@@ -36,12 +36,13 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
-      powerPreference: 'high-performance'
+      powerPreference: 'high-performance',
+      precision: 'mediump'
     })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.2
+    renderer.toneMappingExposure = 1.1
     container.appendChild(renderer.domElement)
 
     // 2. Lights
@@ -80,11 +81,11 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     // 5. Beveled Outer Edge Ring (Torus)
     const bevelTorusGeo = new THREE.TorusGeometry(1.85, 0.08, 24, 64)
     const rimMat = new THREE.MeshStandardMaterial({
-      color: 0x10b981,
+      color: 0x22c55e,
       metalness: 0.95,
-      roughness: 0.18,
-      emissive: 0x064e3b,
-      emissiveIntensity: 0.35,
+      roughness: 0.20,
+      emissive: 0x052e16,
+      emissiveIntensity: 0.25,
     })
     const rimMesh = new THREE.Mesh(bevelTorusGeo, rimMat)
     logoGroup.add(rimMesh)
@@ -117,9 +118,9 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     // 7. Concentric Holographic Orbital Rings
     const ring1Geo = new THREE.TorusGeometry(2.35, 0.02, 16, 80)
     const ring1Mat = new THREE.MeshBasicMaterial({
-      color: 0x34d399,
+      color: 0x22c55e,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.40,
     })
     const ring1 = new THREE.Mesh(ring1Geo, ring1Mat)
     ring1.rotation.x = 1.1
@@ -128,7 +129,7 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
 
     const ring2Geo = new THREE.TorusGeometry(2.65, 0.015, 16, 80)
     const ring2Mat = new THREE.MeshBasicMaterial({
-      color: 0x10b981,
+      color: 0x6b7c72,
       transparent: true,
       opacity: 0.25,
     })
@@ -176,6 +177,7 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
+      if (document.hidden) return
       const elapsedTime = clock.getElapsedTime()
 
       // Idle auto-spin / float physics
@@ -247,9 +249,6 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
         width: typeof size === 'number' ? `${size}px` : size,
         height: typeof size === 'number' ? `${size}px` : size,
       }}
-    >
-      {/* Background ambient glow pulse */}
-      <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none animate-[sfPulse_4s_infinite]" />
-    </div>
+    />
   )
 }
