@@ -259,6 +259,16 @@ export default function BackgroundScene() {
 
       scrollVelocity = (scrollY - lastScrollY) * 0.001
       lastScrollY = scrollY
+
+      // Ambient background video only needs to play when scrolled into the lower sections
+      const vid = videoRef.current
+      if (vid) {
+        if (scrollY > 50 && vid.paused) {
+          vid.play().catch(() => {})
+        } else if (scrollY <= 50 && !vid.paused) {
+          vid.pause()
+        }
+      }
     }
 
     const handlePointerMove = (e) => {
@@ -270,22 +280,21 @@ export default function BackgroundScene() {
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
     updateScroll()
 
-    // Ensure ambient video plays reliably
-    const vid = videoRef.current
-    if (vid) {
-      vid.muted = true
-      vid.play().catch(() => {})
-    }
-
     // 9. Animation Loop
     let animId
     const startTime = performance.now()
 
+    // Render one initial frame so WebGL pipeline compiles without user seeing pop-in
+    renderer.render(scene, camera)
+
     const animate = () => {
       animId = requestAnimationFrame(animate)
 
-      // Skip rendering if document is hidden to conserve GPU/CPU
+      // Skip rendering if document is hidden or if resting at top behind full-screen Hero video
       if (document.hidden) return
+      if (window.scrollY < 15 && currentScrollProgress < 0.005) {
+        return
+      }
 
       const elapsedTime = (performance.now() - startTime) * 0.001
 
@@ -371,15 +380,14 @@ export default function BackgroundScene() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-      {/* 1. Cinematic Ambient Background Video */}
+      {/* 1. Cinematic Ambient Background Video (Plays on scroll) */}
       <video
         ref={videoRef}
         src="/hero.mp4"
-        autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="none"
         className="absolute inset-0 w-full h-full object-cover opacity-60 md:opacity-70 transition-opacity duration-1000 transform-gpu"
       />
 

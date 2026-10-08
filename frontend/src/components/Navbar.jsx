@@ -51,9 +51,15 @@ export default function Navbar({ visible = true }) {
         </Link>
       </div>
 
-      <ul className="hidden md:flex items-center gap-8 text-[11px] font-mono tracking-wider uppercase text-[#6b7c72]">
+      <ul className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-mono tracking-wider uppercase text-[#6b7c72]">
         <li>
           <a href="#sizing" className="hover:text-[#22c55e] transition-colors">Dispatch Sizing</a>
+        </li>
+        <li>
+          <a href="#indian-dcs" className="hover:text-[#22c55e] transition-colors">Indian AI DCs</a>
+        </li>
+        <li>
+          <a href="#suppliers" className="hover:text-[#22c55e] transition-colors">Suppliers</a>
         </li>
         <li>
           <Link to="/map" className="hover:text-[#22c55e] transition-colors">National Radar</Link>

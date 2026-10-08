@@ -28,12 +28,13 @@ export default function LiveMapDashboard() {
   const [baseLayer, setBaseLayer] = useState('dark'); // 'dark' | 'satellite'
   const [streetViewTarget, setStreetViewTarget] = useState(null); // { name, lat, lng, type }
   const [events, setEvents] = useState([
-    '⚡ Active PPA: Adani Green Khavda Mega Park ↔ AdaniConneX 1 GW AI Campus (99% Compatibility)',
-    '🔋 Firm RTC: Greenko Pinnapuram Pumped Hydro ↔ AWS Hyderabad Hyperscale Cluster (98% Compatibility)',
-    '☀️ Clean Energy PPA: Avaada Energy Bikaner ↔ Digital Edge BOM 350 MW Campus (95.8% Compatibility)',
+    '⚡ Active PPA: Adani Green Khavda Mega Park ↔ Yotta D2 20,736 Blackwell Ultra GPU AI Campus (98.5% Compatibility)',
+    '🔋 Firm RTC: Greenko Pinnapuram Pumped Hydro ↔ AdaniConneX Hyderabad Hyperscale Campus (97.5% Compatibility)',
+    '☀️ Clean Energy PPA: Avaada Energy Bikaner ↔ Digital Edge BOM 350 MW Campus (83 MW Solar PPA)',
     '🌱 Captive Hybrid: CleanMax Babra Park ↔ Equinix MB1/MB2 Mumbai (33 MW Contracted)',
-    '⚡ 309.6 MWp RE: ReNew Power Jaisalmer ↔ Sify DGX-Ready AI Campus (95% Compatibility)',
-    '💨 Wind Wheeling: Suzlon Muppandal Wind Complex ↔ Nxtra by Airtel Chennai (91.5% Compatibility)',
+    '⚡ 309.6 MWp RE: ReNew Power ↔ Sify Technologies DGX-Ready AI Campus (97% Compatibility)',
+    '💨 Wind Wheeling: Suzlon Muppandal Wind Complex ↔ Nxtra by Airtel Chennai (92% Compatibility)',
+    '🏛️ Strategic Pipeline: Adani Green Khavda ↔ AdaniConneX Visakhapatnam 1 GW Megahub (99% Compatibility)',
   ]);
   const wsRef = useRef(null);
 
