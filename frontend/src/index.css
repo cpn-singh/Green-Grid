@@ -3,7 +3,7 @@
 @theme {
   --color-canvas: #080b09;
   --color-paper: #f0f4f1;
-  --color-graphite: #6b7c72;
+  --color-graphite: #91a399;
   --color-busbar: #19241d;
   --color-signal: #22c55e;
   
@@ -73,11 +73,11 @@ code, kbd, samp, pre, .font-mono {
   position: absolute;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
-  color: #6b7c72;
+  color: #91a399;
   line-height: 1;
   pointer-events: none;
   user-select: none;
-  opacity: 0.6;
+  opacity: 0.75;
 }
 .tech-crosshair.tl { top: -5px; left: -5px; }
 .tech-crosshair.tr { top: -5px; right: -5px; }
@@ -98,7 +98,7 @@ code, kbd, samp, pre, .font-mono {
   border-bottom: none;
 }
 .ledger-label {
-  color: #6b7c72;
+  color: #91a399;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 11px;
@@ -174,7 +174,7 @@ code, kbd, samp, pre, .font-mono {
   outline: none;
 }
 .tech-input::placeholder {
-  color: #6b7c72;
+  color: #91a399;
 }
 
 /* Legacy utility fallbacks for compatibility */

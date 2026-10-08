@@ -251,11 +251,16 @@ export default function BackgroundScene() {
     let lastScrollY = window.scrollY
     let targetMouseX = 0
     let targetMouseY = 0
+    let cachedMaxScroll = 1
+
+    const recalcMaxScroll = () => {
+      const docHeight = document.documentElement ? document.documentElement.scrollHeight : (document.body ? document.body.scrollHeight : 1000)
+      cachedMaxScroll = Math.max(1, docHeight - window.innerHeight)
+    }
 
     const updateScroll = () => {
       const scrollY = window.scrollY
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
-      targetScrollProgress = Math.min(1, Math.max(0, scrollY / maxScroll))
+      targetScrollProgress = Math.min(1, Math.max(0, scrollY / cachedMaxScroll))
 
       scrollVelocity = (scrollY - lastScrollY) * 0.001
       lastScrollY = scrollY
@@ -278,7 +283,12 @@ export default function BackgroundScene() {
 
     window.addEventListener('scroll', updateScroll, { passive: true })
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
-    updateScroll()
+
+    // Defer measuring scroll metrics to next animation frame so layout isn't invalidated right after appendChild
+    requestAnimationFrame(() => {
+      recalcMaxScroll()
+      updateScroll()
+    })
 
     // 9. Animation Loop
     let animId
@@ -348,6 +358,7 @@ export default function BackgroundScene() {
 
       const desktopNow = width >= 1024
       worldGroup.position.set(desktopNow ? 2.4 : 0, desktopNow ? -0.2 : -0.6, 0)
+      recalcMaxScroll()
     }
 
     window.addEventListener('resize', handleResize)

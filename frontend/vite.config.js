@@ -7,5 +7,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     allowedHosts: ['interlobate-isidro-palmately.ngrok-free.dev']
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three'],
+          vendor: ['react', 'react-dom', 'react-router-dom', 'lucide-react', 'axios']
+        }
+      }
+    }
   }
 })

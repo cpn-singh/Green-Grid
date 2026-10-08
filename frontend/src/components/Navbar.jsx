@@ -40,8 +40,13 @@ export default function Navbar({ visible = true }) {
         <Link to="/" className="text-base sm:text-lg font-bold tracking-tight text-[#f0f4f1] group flex items-center gap-2.5">
           <div className="relative w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-[#22c55e] via-[#34d399] to-white/40 shadow-[0_0_12px_rgba(34,197,94,0.4)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 transform-gpu [perspective:600px]">
             <img
-              src="/logo.png"
-              alt="GreenGrid"
+              src="/logo-nav.webp"
+              alt=""
+              aria-hidden="true"
+              width="28"
+              height="28"
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover rounded-full select-none"
             />
           </div>
@@ -51,7 +56,7 @@ export default function Navbar({ visible = true }) {
         </Link>
       </div>
 
-      <ul className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-mono tracking-wider uppercase text-[#6b7c72]">
+      <ul className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-mono tracking-wider uppercase text-[#91a399]">
         <li>
           <a href="#sizing" className="hover:text-[#22c55e] transition-colors">Dispatch Sizing</a>
         </li>
@@ -92,7 +97,7 @@ export default function Navbar({ visible = true }) {
       <div className="flex items-center gap-4">
         {user ? (
           <div className="flex items-center gap-3">
-            <span className="text-xs text-[#6b7c72] hidden sm:inline font-mono">
+            <span className="text-xs text-[#91a399] hidden sm:inline font-mono">
               {user.company_name || user.username}
             </span>
             <button
@@ -106,7 +111,7 @@ export default function Navbar({ visible = true }) {
           <>
             <Link
               to="/login"
-              className="text-[11px] font-mono tracking-wider uppercase text-[#6b7c72] hover:text-[#f0f4f1] transition-colors px-2 py-1"
+              className="text-[11px] font-mono tracking-wider uppercase text-[#91a399] hover:text-[#f0f4f1] transition-colors px-2 py-1"
             >
               Sign In
             </Link>

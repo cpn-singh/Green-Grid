@@ -648,16 +648,17 @@ function Hero({ isRevealed: controlledRevealed, setIsRevealed: setControlledReve
       />
 
       <div className="relative z-30 pt-20 sm:pt-24 px-4 sm:px-6 md:px-12 flex justify-between items-center gap-2">
-        <div className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#6b7c72] truncate max-w-[200px] sm:max-w-none">
+        <div className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#91a399] truncate max-w-[200px] sm:max-w-none">
           [ CERC § 41.2 GREEN ENERGY OPEN ACCESS ]
         </div>
         <button
           onClick={toggleSound}
+          aria-label={isMuted ? "Unmute ambient audio" : "Mute ambient audio"}
           className="btn-busbar !py-1 !px-2.5 !text-[10px] sm:!text-[11px] !border-[#19241d] shrink-0"
         >
           {isMuted ? (
             <>
-              <VolumeX className="w-3.5 h-3.5 text-[#6b7c72]" />
+              <VolumeX className="w-3.5 h-3.5 text-[#91a399]" />
               <span>Audio Off</span>
             </>
           ) : (
@@ -677,13 +678,15 @@ function Hero({ isRevealed: controlledRevealed, setIsRevealed: setControlledReve
               : 'opacity-0 translate-y-8 pointer-events-none'
           }`}
         >
-          <div
+          <button
+            type="button"
             onClick={replayIntro}
+            aria-label="Replay intro video animation"
             title="Click to replay video intro"
-            className="cursor-pointer mb-6 group relative min-h-[200px] flex items-center justify-center"
+            className="cursor-pointer mb-6 group relative min-h-[200px] flex items-center justify-center bg-transparent border-0 p-0 focus:outline-none focus:ring-1 focus:ring-[#22c55e]"
           >
             {isRevealed && <Logo3D size={200} className="sm:w-[240px] sm:h-[240px]" />}
-          </div>
+          </button>
 
           <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#22c55e] mb-3">
             National Renewable Energy &amp; AI Infrastructure Platform
@@ -693,7 +696,7 @@ function Hero({ isRevealed: controlledRevealed, setIsRevealed: setControlledReve
             Powering India's <span className="text-[#22c55e]">Gigawatt-Scale AI</span> Compute.
           </h1>
 
-          <p className="mt-5 text-sm sm:text-base text-[#6b7c72] max-w-2xl font-sans leading-relaxed">
+          <p className="mt-5 text-sm sm:text-base text-[#91a399] max-w-2xl font-sans leading-relaxed">
             Planning, procurement, and high-voltage transmission structuring connecting hyperscale data centers to verified round-the-clock solar, wind, BESS, and pumped-hydro generation.
           </p>
 
@@ -714,7 +717,7 @@ function Hero({ isRevealed: controlledRevealed, setIsRevealed: setControlledReve
         </div>
       </div>
 
-      <div className="relative z-30 border-t border-[#19241d] bg-[#080b09]/80 py-3.5 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] font-mono text-[#6b7c72]">
+      <div className="relative z-30 border-t border-[#19241d] bg-[#080b09]/80 py-3.5 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] font-mono text-[#91a399]">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />
           <span className="text-[#f0f4f1]">GEC III APPROVED: 135 GW RE EVACUATION · 50 GWh BESS</span>
@@ -732,7 +735,7 @@ function ExecutiveSnapshotLedger() {
   return (
     <section className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-16 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72] flex items-center justify-between">
+        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#91a399] flex items-center justify-between">
           <span>01 // Executive Snapshot · Indian Data Center Power Market</span>
           <span className="text-[#22c55e]">Research Snapshot: October 2026</span>
         </div>
@@ -747,7 +750,7 @@ function ExecutiveSnapshotLedger() {
               <div className="text-[11px] font-mono uppercase tracking-wider text-[#22c55e] mt-2">
                 {m.label}
               </div>
-              <div className="text-xs text-[#6b7c72] mt-1.5 font-sans leading-relaxed">
+              <div className="text-xs text-[#91a399] mt-1.5 font-sans leading-relaxed">
                 {m.note}
               </div>
             </div>
@@ -755,7 +758,7 @@ function ExecutiveSnapshotLedger() {
         </div>
 
         {/* Technical Guidance Badge */}
-        <div className="pt-8 flex items-start gap-3 bg-black/40 border border-[#19241d] p-4 text-xs font-mono text-[#6b7c72]">
+        <div className="pt-8 flex items-start gap-3 bg-black/40 border border-[#19241d] p-4 text-xs font-mono text-[#91a399]">
           <Info className="w-4 h-4 text-[#22c55e] shrink-0 mt-0.5" />
           <div>
             <span className="text-[#f0f4f1] font-bold">Procurement Distinction: </span>
@@ -807,7 +810,7 @@ function DispatchSizingEngine() {
   return (
     <section id="sizing" className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-20 px-6 md:px-12 scroll-mt-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72]">
+        <div className="mb-10 font-mono text-[11px] uppercase tracking-widest text-[#91a399]">
           02 // Hourly Dispatch Architecture &amp; Sizing
         </div>
 
@@ -817,7 +820,7 @@ function DispatchSizingEngine() {
               <h2 className="text-3xl sm:text-4xl font-bold font-display uppercase text-[#f0f4f1] tracking-tight">
                 The physics of <span className="text-[#22c55e]">baseload clean power</span>.
               </h2>
-              <p className="mt-4 text-sm text-[#6b7c72] leading-relaxed font-sans">
+              <p className="mt-4 text-sm text-[#91a399] leading-relaxed font-sans">
                 Data centers demand uninterrupted megawatts 8,760 hours a year. Solar generates during daytime; wind peaks seasonally. Achieving high time-matched clean power requires over-contracted generation paired with dedicated battery or pumped-hydro storage.
               </p>
             </div>
@@ -825,11 +828,18 @@ function DispatchSizingEngine() {
             <div className="busbar-panel p-6 space-y-4">
               <span className="tech-crosshair tl">+</span>
               <div className="flex justify-between items-baseline font-mono">
-                <span className="text-xs uppercase text-[#6b7c72]">IT Demand Load</span>
+                <label htmlFor="it-demand-load" className="text-xs uppercase text-[#91a399] cursor-pointer">
+                  IT Demand Load
+                </label>
                 <span className="text-2xl font-bold text-[#22c55e]">{loadMw} MW</span>
               </div>
               <input
+                id="it-demand-load"
                 type="range"
+                aria-label="IT Demand Load in Megawatts"
+                aria-valuemin="10"
+                aria-valuemax="250"
+                aria-valuenow={loadMw}
                 min="10"
                 max="250"
                 step="10"
@@ -837,7 +847,7 @@ function DispatchSizingEngine() {
                 onChange={(e) => setLoadMw(Number(e.target.value))}
                 className="w-full h-1.5 bg-[#19241d] rounded-none appearance-none cursor-pointer accent-[#22c55e]"
               />
-              <div className="flex justify-between text-[10px] font-mono text-[#6b7c72]">
+              <div className="flex justify-between text-[10px] font-mono text-[#91a399]">
                 <span>10 MW (Edge)</span>
                 <span>60 MW (D2 Scale)</span>
                 <span>250 MW (Hyperscale Hub)</span>
@@ -845,7 +855,7 @@ function DispatchSizingEngine() {
             </div>
 
             <div className="space-y-3">
-              <div className="text-[11px] font-mono uppercase tracking-wider text-[#6b7c72]">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-[#91a399]">
                 Dispatch Contract Mode:
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -860,14 +870,14 @@ function DispatchSizingEngine() {
                     className={`py-2 px-3 text-xs font-mono border transition-colors ${
                       mode === m.id
                         ? 'border-[#22c55e] bg-[#22c55e]/10 text-[#22c55e]'
-                        : 'border-[#19241d] bg-black/40 text-[#6b7c72] hover:border-[#6b7c72]'
+                        : 'border-[#19241d] bg-black/40 text-[#91a399] hover:border-[#91a399]'
                     }`}
                   >
                     {m.label}
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-[#6b7c72] font-mono pt-1">
+              <p className="text-xs text-[#91a399] font-mono pt-1">
                 {calculations.assessment}
               </p>
             </div>
@@ -879,7 +889,7 @@ function DispatchSizingEngine() {
             <span className="tech-crosshair bl">+</span>
             <span className="tech-crosshair br">+</span>
 
-            <div className="text-[11px] font-mono uppercase tracking-wider text-[#6b7c72] pb-4 border-b border-[#19241d] mb-6 flex justify-between items-center">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#91a399] pb-4 border-b border-[#19241d] mb-6 flex justify-between items-center">
               <span>8,760-Hour Portfolio Dispatch Simulation</span>
               <span className="text-[#22c55e] flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />
@@ -889,7 +899,7 @@ function DispatchSizingEngine() {
 
             <div className="grid grid-cols-2 gap-6 pb-6 border-b border-[#19241d] mb-6">
               <div>
-                <div className="text-[11px] font-mono uppercase text-[#6b7c72]">
+                <div className="text-[11px] font-mono uppercase text-[#91a399]">
                   Baseload Hourly Firmness
                 </div>
                 <div className="text-4xl font-mono font-bold text-[#22c55e] mt-1">
@@ -897,11 +907,11 @@ function DispatchSizingEngine() {
                 </div>
               </div>
               <div>
-                <div className="text-[11px] font-mono uppercase text-[#6b7c72]">
+                <div className="text-[11px] font-mono uppercase text-[#91a399]">
                   Ex-Substation Landed Tariff
                 </div>
                 <div className="text-4xl font-mono font-bold text-[#f0f4f1] mt-1">
-                  {calculations.tariff} <span className="text-sm font-normal text-[#6b7c72]">/ kWh</span>
+                  {calculations.tariff} <span className="text-sm font-normal text-[#91a399]">/ kWh</span>
                 </div>
               </div>
             </div>
@@ -930,7 +940,7 @@ function DispatchSizingEngine() {
             </div>
 
             <div className="pt-8 mt-6 border-t border-[#19241d] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <span className="text-xs text-[#6b7c72] font-mono">
+              <span className="text-xs text-[#91a399] font-mono">
                 CERC Green Open Access Reference Framework
               </span>
               <a href="#inquiry" className="btn-signal">
@@ -960,7 +970,7 @@ function IndianDataCentersRegistry() {
   return (
     <section id="indian-dcs" className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-20 px-6 md:px-12 scroll-mt-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72] flex items-center justify-between">
+        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#91a399] flex items-center justify-between">
           <span>03 // Major AI &amp; Hyperscale Data Center Campuses in India</span>
           <span className="text-[#22c55e]">16 Monitored Facilities</span>
         </div>
@@ -970,7 +980,7 @@ function IndianDataCentersRegistry() {
             <h2 className="text-3xl sm:text-4xl font-bold font-display uppercase text-[#f0f4f1] tracking-tight">
               India's verified <span className="text-[#22c55e]">AI data center portfolio</span>.
             </h2>
-            <p className="mt-3 text-sm text-[#6b7c72] font-sans max-w-2xl leading-relaxed">
+            <p className="mt-3 text-sm text-[#91a399] font-sans max-w-2xl leading-relaxed">
               Tracking reported and operational power capacity, liquid cooling architectures, and clean energy procurement structures across India's primary compute corridors.
             </p>
           </div>
@@ -988,7 +998,7 @@ function IndianDataCentersRegistry() {
                 className={`py-1.5 px-3 text-xs font-mono border transition-colors ${
                   filter === f.id
                     ? 'border-[#22c55e] bg-[#22c55e]/10 text-[#22c55e]'
-                    : 'border-[#19241d] bg-black/40 text-[#6b7c72] hover:border-[#6b7c72]'
+                    : 'border-[#19241d] bg-black/40 text-[#91a399] hover:border-[#91a399]'
                 }`}
               >
                 {f.label}
@@ -1003,7 +1013,7 @@ function IndianDataCentersRegistry() {
           <span className="tech-crosshair tr">+</span>
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#19241d] bg-black/60 text-[#6b7c72] text-[11px] uppercase tracking-wider">
+              <tr className="border-b border-[#19241d] bg-black/60 text-[#91a399] text-[11px] uppercase tracking-wider">
                 <th className="p-4">Campus / Facility</th>
                 <th className="p-4">Location</th>
                 <th className="p-4">Capacity / IT Load</th>
@@ -1017,9 +1027,9 @@ function IndianDataCentersRegistry() {
                 <tr key={dc.name} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4">
                     <div className="font-bold text-[#f0f4f1]">{dc.name}</div>
-                    <div className="text-[11px] text-[#6b7c72]">{dc.operator}</div>
+                    <div className="text-[11px] text-[#91a399]">{dc.operator}</div>
                   </td>
-                  <td className="p-4 text-[#6b7c72]">{dc.location}</td>
+                  <td className="p-4 text-[#91a399]">{dc.location}</td>
                   <td className="p-4 text-[#22c55e] font-semibold">{dc.capacity}</td>
                   <td className="p-4 text-[#f0f4f1] max-w-xs">{dc.specs}</td>
                   <td className="p-4 font-mono">{dc.pue}</td>
@@ -1035,7 +1045,7 @@ function IndianDataCentersRegistry() {
         </div>
 
         {/* Accurate Phrasing Notice */}
-        <div className="mt-6 p-4 border border-[#19241d] bg-black/40 flex items-start gap-3 text-xs font-mono text-[#6b7c72]">
+        <div className="mt-6 p-4 border border-[#19241d] bg-black/40 flex items-start gap-3 text-xs font-mono text-[#91a399]">
           <ShieldCheck className="w-4 h-4 text-[#22c55e] shrink-0 mt-0.5" />
           <div>
             <span className="text-[#f0f4f1] font-semibold">Technical Power Statement: </span>
@@ -1053,7 +1063,7 @@ function GenerationPortfolioRegistry() {
   return (
     <section id="suppliers" className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-20 px-6 md:px-12 scroll-mt-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72] flex items-center justify-between">
+        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#91a399] flex items-center justify-between">
           <span>04 // Verified Renewable Energy Developers &amp; Suppliers</span>
           <span className="text-[#22c55e]">16 Institutional Partners</span>
         </div>
@@ -1063,7 +1073,7 @@ function GenerationPortfolioRegistry() {
             <h2 className="text-3xl sm:text-4xl font-bold font-display uppercase text-[#f0f4f1] tracking-tight">
               Major renewable <span className="text-[#22c55e]">energy developers</span>.
             </h2>
-            <p className="mt-3 text-sm text-[#6b7c72] font-sans max-w-xl">
+            <p className="mt-3 text-sm text-[#91a399] font-sans max-w-xl">
               Utility-scale IPPs, C&amp;I specialists, and EPC infrastructure contractors with active renewable generation and storage pipelines in India.
             </p>
           </div>
@@ -1077,7 +1087,7 @@ function GenerationPortfolioRegistry() {
           <span className="tech-crosshair tr">+</span>
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#19241d] bg-black/60 text-[#6b7c72] text-[11px] uppercase tracking-wider">
+              <tr className="border-b border-[#19241d] bg-black/60 text-[#91a399] text-[11px] uppercase tracking-wider">
                 <th className="p-4">Developer / Supplier</th>
                 <th className="p-4">Category</th>
                 <th className="p-4">Reported Capacity</th>
@@ -1091,16 +1101,16 @@ function GenerationPortfolioRegistry() {
                 <tr key={s.name} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4">
                     <div className="font-bold text-[#f0f4f1]">{s.name}</div>
-                    <div className="text-[11px] text-[#6b7c72]">{s.hq}</div>
+                    <div className="text-[11px] text-[#91a399]">{s.hq}</div>
                   </td>
-                  <td className="p-4 text-[#6b7c72]">
-                    <span className="px-2 py-0.5 text-[10px] uppercase border border-[#19241d] bg-black/40 text-[#6b7c72]">
+                  <td className="p-4 text-[#91a399]">
+                    <span className="px-2 py-0.5 text-[10px] uppercase border border-[#19241d] bg-black/40 text-[#91a399]">
                       {s.type}
                     </span>
                   </td>
                   <td className="p-4 text-[#22c55e] font-semibold">{s.capacity}</td>
                   <td className="p-4 text-[#f0f4f1]">{s.mix}</td>
-                  <td className="p-4 text-[#6b7c72] max-w-md">{s.storageInfo}</td>
+                  <td className="p-4 text-[#91a399] max-w-md">{s.storageInfo}</td>
                   <td className="p-4 font-mono text-[#f0f4f1]">{s.pricing}</td>
                 </tr>
               ))}
@@ -1118,7 +1128,7 @@ function GlobalAIBenchmarkSection() {
   return (
     <section className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-20 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72] flex items-center justify-between">
+        <div className="mb-8 font-mono text-[11px] uppercase tracking-widest text-[#91a399] flex items-center justify-between">
           <span>05 // Global Frontier AI Infrastructure Benchmark</span>
           <span className="text-[#22c55e]">Comparative Reference</span>
         </div>
@@ -1127,7 +1137,7 @@ function GlobalAIBenchmarkSection() {
           <h2 className="text-3xl sm:text-4xl font-bold font-display uppercase text-[#f0f4f1] tracking-tight">
             Largest global AI <span className="text-[#22c55e]">data-center campuses</span>.
           </h2>
-          <p className="mt-3 text-sm text-[#6b7c72] font-sans max-w-2xl leading-relaxed">
+          <p className="mt-3 text-sm text-[#91a399] font-sans max-w-2xl leading-relaxed">
             The largest frontier AI campuses are increasingly designed around hundreds of megawatts to gigawatt-scale power requirements, combining utility grids with natural gas, behind-the-meter generation, batteries, and nuclear contracts.
           </p>
         </div>
@@ -1138,7 +1148,7 @@ function GlobalAIBenchmarkSection() {
           <span className="tech-crosshair tr">+</span>
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#19241d] bg-black/60 text-[#6b7c72] text-[11px] uppercase tracking-wider">
+              <tr className="border-b border-[#19241d] bg-black/60 text-[#91a399] text-[11px] uppercase tracking-wider">
                 <th className="p-4">Campus / Operator</th>
                 <th className="p-4">Location</th>
                 <th className="p-4">Power / Capacity</th>
@@ -1149,7 +1159,7 @@ function GlobalAIBenchmarkSection() {
               {GLOBAL_AI_DATA_CENTERS.map((g) => (
                 <tr key={g.name} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4 font-bold text-[#f0f4f1]">{g.name}</td>
-                  <td className="p-4 text-[#6b7c72]">{g.location}</td>
+                  <td className="p-4 text-[#91a399]">{g.location}</td>
                   <td className="p-4 text-[#22c55e] font-semibold">{g.power}</td>
                   <td className="p-4 text-[#f0f4f1] max-w-lg leading-relaxed">{g.strategy}</td>
                 </tr>
@@ -1159,7 +1169,7 @@ function GlobalAIBenchmarkSection() {
         </div>
 
         {/* 5 Key Energy Trends */}
-        <div className="mb-6 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72]">
+        <div className="mb-6 font-mono text-[11px] uppercase tracking-widest text-[#91a399]">
           Key Energy-Supply Trends in AI Infrastructure
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1179,7 +1189,7 @@ function GlobalAIBenchmarkSection() {
                 <h3 className="font-display font-bold uppercase text-sm text-[#f0f4f1] mb-2">
                   {t.title}
                 </h3>
-                <p className="text-xs text-[#6b7c72] font-sans leading-relaxed">
+                <p className="text-xs text-[#91a399] font-sans leading-relaxed">
                   {t.desc}
                 </p>
               </div>
@@ -1197,7 +1207,7 @@ function ProcurementFrameworks() {
   return (
     <section className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-20 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72]">
+        <div className="mb-10 font-mono text-[11px] uppercase tracking-widest text-[#91a399]">
           06 // How Renewable Power Reaches an AI Data Center
         </div>
 
@@ -1205,7 +1215,7 @@ function ProcurementFrameworks() {
           <h2 className="text-3xl sm:text-4xl font-bold font-display uppercase text-[#f0f4f1] tracking-tight">
             Commercial <span className="text-[#22c55e]">sourcing models</span>.
           </h2>
-          <p className="mt-3 text-sm text-[#6b7c72] font-sans max-w-xl">
+          <p className="mt-3 text-sm text-[#91a399] font-sans max-w-xl">
             Four primary procurement frameworks under the Ministry of Power Green Energy Open Access Regulations.
           </p>
         </div>
@@ -1221,7 +1231,7 @@ function ProcurementFrameworks() {
               <div>
                 <div className="flex justify-between items-baseline mb-3 font-mono">
                   <span className="text-xs text-[#22c55e]">{f.code} //</span>
-                  <span className="text-[10px] text-[#6b7c72] uppercase tracking-wider">Model</span>
+                  <span className="text-[10px] text-[#91a399] uppercase tracking-wider">Model</span>
                 </div>
                 <h3 className="text-base font-bold font-display uppercase text-[#f0f4f1] mb-1">
                   {f.title}
@@ -1229,7 +1239,7 @@ function ProcurementFrameworks() {
                 <div className="text-[11px] font-mono text-[#22c55e] mb-4">
                   {f.highlight}
                 </div>
-                <p className="text-xs text-[#6b7c72] font-sans leading-relaxed">
+                <p className="text-xs text-[#91a399] font-sans leading-relaxed">
                   {f.desc}
                 </p>
               </div>
@@ -1238,7 +1248,7 @@ function ProcurementFrameworks() {
         </div>
 
         {/* Pricing & Procurement Cost Layers */}
-        <div className="mb-6 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72]">
+        <div className="mb-6 font-mono text-[11px] uppercase tracking-widest text-[#91a399]">
           Pricing &amp; Procurement Framework // Delivered Cost Layers
         </div>
         <div className="busbar-panel overflow-x-auto">
@@ -1246,7 +1256,7 @@ function ProcurementFrameworks() {
           <span className="tech-crosshair tr">+</span>
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#19241d] bg-black/60 text-[#6b7c72] text-[11px] uppercase tracking-wider">
+              <tr className="border-b border-[#19241d] bg-black/60 text-[#91a399] text-[11px] uppercase tracking-wider">
                 <th className="p-4">Cost Layer</th>
                 <th className="p-4">What To Capture</th>
                 <th className="p-4">Typical Regulatory / Contract Treatment</th>
@@ -1257,7 +1267,7 @@ function ProcurementFrameworks() {
                 <tr key={c.layer} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4 font-bold text-[#f0f4f1]">{c.layer}</td>
                   <td className="p-4 text-[#22c55e]">{c.detail}</td>
-                  <td className="p-4 text-[#6b7c72]">{c.treatment}</td>
+                  <td className="p-4 text-[#91a399]">{c.treatment}</td>
                 </tr>
               ))}
             </tbody>
@@ -1282,7 +1292,7 @@ function InstitutionalOfftakeDesk() {
   return (
     <section id="inquiry" className="relative z-10 border-b border-[#19241d] bg-[#080b09]/45 backdrop-blur-[2px] py-20 px-6 md:px-12 scroll-mt-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10 font-mono text-[11px] uppercase tracking-widest text-[#6b7c72]">
+        <div className="mb-10 font-mono text-[11px] uppercase tracking-widest text-[#91a399]">
           07 // Transmission &amp; Offtake Advisory Desk
         </div>
 
@@ -1291,7 +1301,7 @@ function InstitutionalOfftakeDesk() {
             <h2 className="text-3xl sm:text-4xl font-bold font-display uppercase text-[#f0f4f1] tracking-tight">
               Initiate power offtake &amp; <span className="text-[#22c55e]">grid siting study</span>.
             </h2>
-            <p className="text-sm text-[#6b7c72] leading-relaxed font-sans">
+            <p className="text-sm text-[#91a399] leading-relaxed font-sans">
               We structure 400kV substation bay reservations, evaluate state Green Open Access banking schedules, and negotiate long-term round-the-clock PPAs for Indian AI campuses.
             </p>
 
@@ -1323,7 +1333,7 @@ function InstitutionalOfftakeDesk() {
                 <h3 className="text-xl font-bold font-display uppercase text-[#f0f4f1]">
                   Inquiry Logged on Dispatch Ledger
                 </h3>
-                <p className="text-xs font-mono text-[#6b7c72] max-w-md mx-auto">
+                <p className="text-xs font-mono text-[#91a399] max-w-md mx-auto">
                   Our transmission structuring group will prepare a regional substation bay headroom and tariff evaluation within 24 hours.
                 </p>
               </div>
@@ -1331,10 +1341,11 @@ function InstitutionalOfftakeDesk() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[#6b7c72] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
+                    <label htmlFor="offtake-name" className="block text-[#91a399] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
                       Principal Contact Name
                     </label>
                     <input
+                      id="offtake-name"
                       required
                       type="text"
                       value={form.name}
@@ -1344,10 +1355,11 @@ function InstitutionalOfftakeDesk() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[#6b7c72] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
+                    <label htmlFor="offtake-email" className="block text-[#91a399] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
                       Institutional Email
                     </label>
                     <input
+                      id="offtake-email"
                       required
                       type="email"
                       value={form.email}
@@ -1360,10 +1372,11 @@ function InstitutionalOfftakeDesk() {
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[#6b7c72] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
+                    <label htmlFor="offtake-company" className="block text-[#91a399] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
                       Organization / Operating Entity
                     </label>
                     <input
+                      id="offtake-company"
                       required
                       type="text"
                       value={form.company}
@@ -1373,10 +1386,12 @@ function InstitutionalOfftakeDesk() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[#6b7c72] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
+                    <label htmlFor="offtake-capacity" className="block text-[#91a399] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
                       Planned IT Capacity (MW)
                     </label>
                     <select
+                      id="offtake-capacity"
+                      aria-label="Planned IT Capacity in Megawatts"
                       value={form.capacity}
                       onChange={(e) => setForm({ ...form, capacity: e.target.value })}
                       className="tech-select"
@@ -1390,10 +1405,11 @@ function InstitutionalOfftakeDesk() {
                 </div>
 
                 <div>
-                  <label className="block text-[#6b7c72] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
+                  <label htmlFor="offtake-message" className="block text-[#91a399] mb-1.5 font-mono uppercase tracking-wider text-[11px]">
                     Project Siting Scope &amp; Target COD
                   </label>
                   <textarea
+                    id="offtake-message"
                     rows="3"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -1425,11 +1441,11 @@ function Footer() {
             <span className="text-lg font-bold font-display uppercase tracking-tight text-[#f0f4f1]">
               GreenGrid India
             </span>
-            <p className="text-xs text-[#6b7c72] mt-1.5 font-sans max-w-sm">
+            <p className="text-xs text-[#91a399] mt-1.5 font-sans max-w-sm">
               High-voltage clean power infrastructure platform for Indian hyperscale data center operators.
             </p>
           </div>
-          <div className="flex flex-wrap gap-6 font-mono text-[11px] uppercase tracking-wider text-[#6b7c72]">
+          <div className="flex flex-wrap gap-6 font-mono text-[11px] uppercase tracking-wider text-[#91a399]">
             <a href="#sizing" className="hover:text-[#22c55e] transition-colors">Dispatch Sizing</a>
             <a href="#indian-dcs" className="hover:text-[#22c55e] transition-colors">Indian AI DCs</a>
             <a href="#suppliers" className="hover:text-[#22c55e] transition-colors">Renewable Suppliers</a>
@@ -1438,7 +1454,7 @@ function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-[#19241d] flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-mono text-[#6b7c72]">
+        <div className="mt-12 pt-8 border-t border-[#19241d] flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-mono text-[#91a399]">
           <div>© {new Date().getFullYear()} GreenGrid Technologies India Pvt. Ltd. · Research Snapshot October 2026</div>
           <div className="flex items-center gap-2 text-[#22c55e]">
             <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />
@@ -1458,10 +1474,16 @@ export default function AppLanding() {
 
   return (
     <div className="bg-[#080b09] min-h-screen text-[#f0f4f1] selection:bg-[#22c55e]/25 selection:text-[#f0f4f1] relative">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#080b09] focus:text-[#22c55e] focus:border focus:border-[#22c55e] focus:font-mono focus:text-xs uppercase tracking-wider"
+      >
+        Skip to main content
+      </a>
       <BackgroundScene />
       <Navbar visible={isHeroRevealed} />
       <Hero isRevealed={isHeroRevealed} setIsRevealed={setIsHeroRevealed} />
-      <div className="relative z-10">
+      <main id="main-content" tabIndex="-1" className="relative z-10 focus:outline-none">
         <ExecutiveSnapshotLedger />
         <DispatchSizingEngine />
         <IndianDataCentersRegistry />
@@ -1470,7 +1492,7 @@ export default function AppLanding() {
         <ProcurementFrameworks />
         <InstitutionalOfftakeDesk />
         <Footer />
-      </div>
+      </main>
     </div>
   )
 }
