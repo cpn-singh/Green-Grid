@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supplierAPI } from '../../services/api';
 import Navbar from '../../components/Navbar';
+import { Card, Badge, Button } from '../../components/ui';
 
 export default function SupplierProfileForm() {
   const navigate = useNavigate();
@@ -46,36 +47,42 @@ export default function SupplierProfileForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f0a] text-white pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-[#020504] text-white pt-24 pb-16 px-4">
       <Navbar />
-      <div className="max-w-3xl mx-auto p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
+      <Card className="max-w-3xl mx-auto p-8 md:p-10">
         <div className="mb-8">
-          <span className="text-xs font-bold text-green-400 tracking-widest uppercase">Energy Supplier Listing</span>
-          <h1 className="text-3xl font-extrabold tracking-tight mt-1">Register Clean Energy Capacity</h1>
-          <p className="text-sm text-white/50 mt-1">
+          <Badge>Energy Supplier Listing // Asset Specs</Badge>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-white uppercase mt-4 mb-2 font-sans">
+            Register Clean Energy <span className="text-emerald-400">Capacity</span>
+          </h1>
+          <p className="text-xs md:text-sm text-[#94a3b8] leading-relaxed font-sans">
             Publish your available solar, wind, hydro, and battery capacity to match with incoming hyperscale data centers.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 text-xs">
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Company / Entity Name</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Company / Entity Name
+              </label>
               <input
                 type="text"
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Supplier Classification</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Supplier Classification
+              </label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#141b14] border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-select text-xs"
               >
                 <option value="ipp">Utility Hyperscale IPP (Gigawatt parks)</option>
                 <option value="ci">Commercial & Industrial (C&I) Specialist</option>
@@ -86,29 +93,35 @@ export default function SupplierProfileForm() {
 
           <div className="grid md:grid-cols-3 gap-5">
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Total Portfolio (MW)</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Total Portfolio (MW)
+              </label>
               <input
                 type="number"
                 required
                 value={formData.capacity_mw}
                 onChange={(e) => setFormData({ ...formData, capacity_mw: parseFloat(e.target.value) || 0 })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Available for PPA (MW)</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Available for PPA (MW)
+              </label>
               <input
                 type="number"
                 required
                 value={formData.available_capacity_mw}
                 onChange={(e) => setFormData({ ...formData, available_capacity_mw: parseFloat(e.target.value) || 0 })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">RTC Firm Availability (%)</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                RTC Firm Availability (%)
+              </label>
               <input
                 type="number"
                 min="0"
@@ -116,24 +129,22 @@ export default function SupplierProfileForm() {
                 required
                 value={formData.rtc_availability_pct}
                 onChange={(e) => setFormData({ ...formData, rtc_availability_pct: parseInt(e.target.value) || 0 })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/70 mb-2">Energy Types Offered</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-2.5">
+              Energy Types Offered
+            </label>
             <div className="flex flex-wrap gap-2">
               {['Solar', 'Wind', 'Hybrid', 'BESS', 'Pumped Hydro', 'Green Hydrogen'].map((t) => (
                 <button
                   type="button"
                   key={t}
                   onClick={() => toggleArrayItem('energy_types', t)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                    formData.energy_types.includes(t)
-                      ? 'border-green-400 bg-green-500/20 text-green-300'
-                      : 'border-white/10 bg-white/5 text-white/60 hover:text-white'
-                  }`}
+                  className={`sf-cluster-pill ${formData.energy_types.includes(t) ? 'active' : ''}`}
                 >
                   {t}
                 </button>
@@ -142,18 +153,16 @@ export default function SupplierProfileForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/70 mb-2">Supported Contracting Frameworks</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-2.5">
+              Supported Contracting Frameworks
+            </label>
             <div className="flex flex-wrap gap-2">
               {['Physical PPA', 'vPPA', 'RTC/FDRE', 'Open Access', 'Group Captive', 'Green Tariff'].map((m) => (
                 <button
                   type="button"
                   key={m}
                   onClick={() => toggleArrayItem('sourcing_models', m)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                    formData.sourcing_models.includes(m)
-                      ? 'border-green-400 bg-green-500/20 text-green-300'
-                      : 'border-white/10 bg-white/5 text-white/60 hover:text-white'
-                  }`}
+                  className={`sf-cluster-pill ${formData.sourcing_models.includes(m) ? 'active' : ''}`}
                 >
                   {m}
                 </button>
@@ -162,25 +171,28 @@ export default function SupplierProfileForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/70 mb-1.5">Description & Track Record</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+              Description &amp; Track Record
+            </label>
             <textarea
               rows="3"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+              className="sf-input text-xs"
               placeholder="Past corporate PPAs, major park locations, dispatch reliability..."
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full py-4 rounded-xl bg-green-500 hover:bg-green-400 text-black font-extrabold text-base transition-all glow-green cursor-pointer mt-4"
+            variant="primary"
+            className="w-full py-4 text-xs font-mono uppercase tracking-wider mt-4"
           >
             {loading ? 'Publishing Supplier Profile...' : '⚡ Publish Capacity to Match Engine →'}
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }

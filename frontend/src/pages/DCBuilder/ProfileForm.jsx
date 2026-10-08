@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dcAPI } from '../../services/api';
 import Navbar from '../../components/Navbar';
+import { Card, Badge, Button } from '../../components/ui';
 
 export default function ProfileForm() {
   const navigate = useNavigate();
@@ -46,32 +47,38 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f0a] text-white pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-[#020504] text-white pt-24 pb-16 px-4">
       <Navbar />
-      <div className="max-w-3xl mx-auto p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
+      <Card className="max-w-3xl mx-auto p-8 md:p-10">
         <div className="mb-8">
-          <span className="text-xs font-bold text-green-400 tracking-widest uppercase">DC Builder Specification</span>
-          <h1 className="text-3xl font-extrabold tracking-tight mt-1">Configure Data Center Clean Energy Profile</h1>
-          <p className="text-sm text-white/50 mt-1">
+          <Badge>DC Builder Specification // Energy Sizing</Badge>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-white uppercase mt-4 mb-2 font-sans">
+            Configure Data Center <span className="text-emerald-400">Clean Energy Profile</span>
+          </h1>
+          <p className="text-xs md:text-sm text-[#94a3b8] leading-relaxed font-sans">
             Gemini AI will analyze your cooling requirements, PUE targets, and IT capacity to output load metrics and score top energy providers.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 text-xs">
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Project / Campus Name</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Project / Campus Name
+              </label>
               <input
                 type="text"
                 required
                 value={formData.project_name}
                 onChange={(e) => setFormData({ ...formData, project_name: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Target Location Hub</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Target Location Hub
+              </label>
               <select
                 value={formData.preferred_city}
                 onChange={(e) => {
@@ -85,7 +92,7 @@ export default function ProfileForm() {
                   else if (city === 'Noida') { state = 'Uttar Pradesh'; lat = 28.5355; lng = 77.3910; }
                   setFormData({ ...formData, preferred_city: city, preferred_state: state, latitude: lat, longitude: lng });
                 }}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#141b14] border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-select text-xs"
               >
                 <option value="Mumbai">Mumbai (Navi Mumbai / BKC)</option>
                 <option value="Pune">Pune (Hinjawadi / Chakan)</option>
@@ -99,7 +106,9 @@ export default function ProfileForm() {
 
           <div className="grid md:grid-cols-3 gap-5">
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Total IT Load (MW)</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Total IT Load (MW)
+              </label>
               <input
                 type="number"
                 step="0.5"
@@ -107,12 +116,14 @@ export default function ProfileForm() {
                 required
                 value={formData.it_load_mw}
                 onChange={(e) => setFormData({ ...formData, it_load_mw: parseFloat(e.target.value) || 0 })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Target PUE</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Target PUE
+              </label>
               <input
                 type="number"
                 step="0.05"
@@ -121,12 +132,14 @@ export default function ProfileForm() {
                 required
                 value={formData.target_pue}
                 onChange={(e) => setFormData({ ...formData, target_pue: parseFloat(e.target.value) || 1.3 })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Renewable Goal (%)</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Renewable Goal (%)
+              </label>
               <input
                 type="number"
                 min="10"
@@ -134,18 +147,20 @@ export default function ProfileForm() {
                 required
                 value={formData.green_goal_pct}
                 onChange={(e) => setFormData({ ...formData, green_goal_pct: parseInt(e.target.value) || 100 })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-input text-xs"
               />
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Uptime Tier</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Uptime Tier
+              </label>
               <select
                 value={formData.tier}
                 onChange={(e) => setFormData({ ...formData, tier: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#141b14] border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-select text-xs"
               >
                 <option value="tier3">Tier III (99.982% uptime, N+1 concurrent)</option>
                 <option value="tier4">Tier IV (99.995% uptime, 2N fault-tolerant)</option>
@@ -153,11 +168,13 @@ export default function ProfileForm() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1.5">Cooling Architecture</label>
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+                Cooling Architecture
+              </label>
               <select
                 value={formData.cooling_type}
                 onChange={(e) => setFormData({ ...formData, cooling_type: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#141b14] border border-white/10 text-white text-sm focus:border-green-400 focus:outline-none"
+                className="sf-select text-xs"
               >
                 <option value="liquid">Direct-to-Chip Liquid / Immersion (AI HPC Optimized)</option>
                 <option value="air">Chilled Water / Precision Air Cooling</option>
@@ -167,18 +184,16 @@ export default function ProfileForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/70 mb-2">Preferred Sourcing Frameworks</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-2.5">
+              Preferred Sourcing Frameworks
+            </label>
             <div className="flex flex-wrap gap-2">
               {['Physical PPA', 'vPPA', 'RTC/FDRE', 'Open Access', 'Group Captive'].map((m) => (
                 <button
                   type="button"
                   key={m}
                   onClick={() => toggleArrayItem('sourcing_models', m)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                    formData.sourcing_models.includes(m)
-                      ? 'border-green-400 bg-green-500/20 text-green-300'
-                      : 'border-white/10 bg-white/5 text-white/60 hover:text-white'
-                  }`}
+                  className={`sf-cluster-pill ${formData.sourcing_models.includes(m) ? 'active' : ''}`}
                 >
                   {m}
                 </button>
@@ -186,15 +201,16 @@ export default function ProfileForm() {
             </div>
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full py-4 rounded-xl bg-green-500 hover:bg-green-400 text-black font-extrabold text-base transition-all glow-green cursor-pointer mt-4"
+            variant="primary"
+            className="w-full py-4 text-xs font-mono uppercase tracking-wider mt-4"
           >
-            {loading ? '🧠 Gemini Calculating Energy Analysis & Match Scores...' : '⚡ Run Gemini Energy Analysis & Find Matches →'}
-          </button>
+            {loading ? '🧠 Calculating Energy Analysis...' : '⚡ Run Energy Analysis & Find Matches →'}
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }

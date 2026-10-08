@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
+import { Card, Badge, Button } from '../../components/ui';
 
 export default function Register() {
   const [searchParams] = useSearchParams();
@@ -39,24 +40,33 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f0a] text-white flex flex-col justify-center items-center px-4 pt-24 pb-12">
+    <div className="min-h-screen bg-[#020504] text-white flex flex-col justify-center items-center px-4 pt-24 pb-12">
       <Navbar />
-      <div className="w-full max-w-md p-8 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-2xl">
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-          <span className="text-xs font-semibold tracking-wider uppercase text-emerald-400/90">Institutional Onboarding</span>
+      <Card className="w-full max-w-md p-8">
+        <div className="flex justify-center mb-6">
+          <Badge>Institutional Onboarding</Badge>
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-center mb-1 text-white">Create Enterprise Account</h2>
-        <p className="text-sm text-white/50 text-center mb-6">Select your primary role to configure your portal</p>
+        <h2 className="text-2xl font-bold tracking-tight text-center mb-1 text-white uppercase font-sans">
+          Create Enterprise Account
+        </h2>
+        <p className="text-xs text-[#94a3b8] text-center mb-6 font-sans">
+          Select your primary role to configure your portal
+        </p>
 
-        {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs">{error}</div>}
+        {error && (
+          <div className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono">
+            {error}
+          </div>
+        )}
 
-        <div className="flex rounded-xl border border-white/10 p-1 mb-6 bg-black/40">
+        <div className="flex rounded border border-white/[0.08] p-1 mb-6 bg-black/60 gap-1.5">
           <button
             type="button"
             onClick={() => setFormData({ ...formData, role: 'dc_builder' })}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-              formData.role === 'dc_builder' ? 'bg-green-500 text-black glow-green' : 'text-white/60 hover:text-white'
+            className={`flex-1 py-2 text-xs font-mono uppercase tracking-wider rounded transition-all cursor-pointer ${
+              formData.role === 'dc_builder'
+                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold shadow-[0_0_15px_rgba(16,185,129,0.15)]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
             }`}
           >
             🏗️ DC Builder
@@ -64,79 +74,90 @@ export default function Register() {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, role: 'energy_supplier' })}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-              formData.role === 'energy_supplier' ? 'bg-green-500 text-black glow-green' : 'text-white/60 hover:text-white'
+            className={`flex-1 py-2 text-xs font-mono uppercase tracking-wider rounded transition-all cursor-pointer ${
+              formData.role === 'energy_supplier'
+                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold shadow-[0_0_15px_rgba(16,185,129,0.15)]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
             }`}
           >
             ⚡ Energy Supplier
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block text-xs font-medium text-white/70 mb-1">Company / Organization</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+              Company / Organization
+            </label>
             <input
               type="text"
               required
               value={formData.company_name}
               onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-green-400"
+              className="sf-input text-xs"
               placeholder="e.g. Sify Cloud or Avaada Energy"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-white/70 mb-1">Username</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+              Username
+            </label>
             <input
               type="text"
               required
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-green-400"
+              className="sf-input text-xs"
               placeholder="username"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-white/70 mb-1">Business Email</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+              Business Email
+            </label>
             <input
               type="email"
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-green-400"
+              className="sf-input text-xs"
               placeholder="name@company.com"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-white/70 mb-1">Password</label>
+            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+              Password
+            </label>
             <input
               type="password"
               required
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-green-400"
+              className="sf-input text-xs"
               placeholder="••••••••"
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-green-500 hover:bg-green-400 text-black font-bold text-sm transition-all glow-green cursor-pointer mt-2"
+            variant="primary"
+            className="w-full py-3 mt-3"
           >
             {loading ? 'Creating Account...' : 'Continue to Specifications →'}
-          </button>
+          </Button>
         </form>
 
-        <p className="text-center text-xs text-white/40 mt-6">
+        <p className="text-center text-xs text-[#64748b] mt-6 font-mono">
           Already have an account?{' '}
-          <Link to="/login" className="text-green-400 hover:underline">
+          <Link to="/login" className="text-emerald-400 hover:text-emerald-300 underline">
             Sign In
           </Link>
         </p>
-      </div>
+      </Card>
     </div>
   );
 }

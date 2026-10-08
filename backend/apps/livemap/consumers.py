@@ -13,7 +13,7 @@ class LiveMapConsumer(AsyncWebsocketConsumer):
         # Send initial connection handshake confirmation
         await self.send(text_data=json.dumps({
             "type": "connected",
-            "message": "Connected to Green Grid Live Map real-time telemetry feed"
+            "message": "Connected to Artificial Green Intelligence (AGI) Live Map real-time telemetry feed"
         }))
 
     async def disconnect(self, close_code):

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supplierAPI, matchAPI } from '../../services/api';
 import Navbar from '../../components/Navbar';
 import { Link } from 'react-router-dom';
+import { Card, Badge, Button } from '../../components/ui';
 
 export default function Dashboard() {
   const [profile, setProfile] = useState(null);
@@ -31,98 +32,113 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0f0a] text-white flex items-center justify-center pt-20">
-        <div className="w-10 h-10 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#020504] text-white flex items-center justify-center pt-20">
+        <div className="w-10 h-10 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0f0a] text-white pt-24 pb-20 px-4 md:px-12">
+    <div className="min-h-screen bg-[#020504] text-white pt-24 pb-20 px-4 md:px-12">
       <Navbar />
       <div className="max-w-6xl mx-auto space-y-10">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6">
           <div>
-            <span className="text-xs font-bold text-green-400 tracking-widest uppercase">Supplier Portal</span>
-            <h1 className="text-3xl font-extrabold tracking-tight mt-1">{profile?.name || 'Energy Supplier Dashboard'}</h1>
-            <p className="text-sm text-white/50 mt-1">
-              Active Available Capacity: <span className="text-green-400 font-semibold">{profile?.available_capacity_mw || 0} MW</span> • Category:{' '}
-              <span className="text-white uppercase">{profile?.category || 'IPP'}</span>
+            <div className="mb-2">
+              <Badge>Supplier Portal // Capacity Dashboard</Badge>
+            </div>
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-white uppercase font-sans">
+              {profile?.name || 'Energy Supplier Dashboard'}
+            </h1>
+            <p className="text-xs md:text-sm text-[#94a3b8] mt-1 font-sans">
+              Active Available Capacity: <span className="text-emerald-400 font-mono font-semibold">{profile?.available_capacity_mw || 0} MW</span> • Category:{' '}
+              <span className="text-white uppercase font-mono">{profile?.category || 'IPP'}</span>
             </p>
           </div>
-          <Link to="/supplier/profile" className="px-4 py-2 rounded-lg border border-white/20 text-xs font-semibold hover:border-green-400">
-            Edit Capacity ⚡
+          <Link to="/supplier/profile">
+            <Button variant="outline">
+              Edit Capacity ⚡
+            </Button>
           </Link>
         </div>
 
         {/* Metrics */}
         <div className="grid sm:grid-cols-3 gap-4">
-          <div className="p-5 rounded-2xl border border-green-500/20 bg-green-500/5">
-            <span className="text-xs text-white/50 font-medium">Inquiries & Matches</span>
-            <p className="text-3xl font-black text-green-400 mt-2">{matches.length}</p>
-            <span className="text-[11px] text-white/40 block mt-1">Data centers evaluated</span>
-          </div>
+          <Card className="p-5 border-emerald-500/25">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748b]">
+              Inquiries &amp; Matches
+            </span>
+            <p className="text-3xl font-mono font-bold text-emerald-400 mt-2">{matches.length}</p>
+            <span className="text-[11px] text-[#94a3b8] block mt-1 font-sans">Data centers evaluated</span>
+          </Card>
 
-          <div className="p-5 rounded-2xl border border-white/10 bg-white/5">
-            <span className="text-xs text-white/50 font-medium">Accepted Deals</span>
-            <p className="text-3xl font-black text-white mt-2">
+          <Card className="p-5">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748b]">
+              Accepted Deals
+            </span>
+            <p className="text-3xl font-mono font-bold text-white mt-2">
               {matches.filter((m) => m.status === 'accepted' || m.status === 'negotiating').length}
             </p>
-            <span className="text-[11px] text-white/40 block mt-1">Active buyer discussions</span>
-          </div>
+            <span className="text-[11px] text-[#94a3b8] block mt-1 font-sans">Active buyer discussions</span>
+          </Card>
 
-          <div className="p-5 rounded-2xl border border-white/10 bg-white/5">
-            <span className="text-xs text-white/50 font-medium">Avg Match Score</span>
-            <p className="text-3xl font-black text-emerald-300 mt-2">
+          <Card className="p-5">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748b]">
+              Avg Match Score
+            </span>
+            <p className="text-3xl font-mono font-bold text-emerald-300 mt-2">
               {matches.length ? Math.round(matches.reduce((acc, m) => acc + m.match_score, 0) / matches.length) : 0}%
             </p>
-            <span className="text-[11px] text-white/40 block mt-1">Based on Gemini AI scoring</span>
-          </div>
+            <span className="text-[11px] text-[#94a3b8] block mt-1 font-sans">Based on Gemini AI scoring</span>
+          </Card>
         </div>
 
         {/* Opportunities List */}
         <div>
-          <h2 className="text-2xl font-extrabold tracking-tight mb-4">Matched Data Center Opportunities</h2>
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white uppercase font-sans mb-4">
+            Matched Data Center Opportunities
+          </h2>
           <div className="space-y-4">
             {matches.length === 0 ? (
-              <div className="p-8 rounded-2xl border border-white/10 bg-white/3 text-center text-white/50 text-sm">
+              <Card className="p-8 text-center text-[#94a3b8] text-xs font-sans">
                 No active DC matches yet. When Data Center builders configure their load specifications in your states, they will appear here.
-              </div>
+              </Card>
             ) : (
               matches.map((m) => {
                 const dc = m.dc_profile;
                 return (
-                  <div key={m.id} className="p-6 rounded-2xl border border-white/10 bg-white/5 flex flex-wrap items-center justify-between gap-4 card-hover">
+                  <Card key={m.id} className="p-6 flex flex-wrap items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-bold text-white">{dc.project_name}</h3>
-                        <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
-                          m.status === 'accepted' ? 'bg-green-500/20 text-green-300 border border-green-500/40' : 'bg-yellow-500/20 text-yellow-300'
+                        <h3 className="text-lg font-bold text-white font-sans">{dc.project_name}</h3>
+                        <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${
+                          m.status === 'accepted' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40'
                         }`}>
                           {m.status}
                         </span>
                       </div>
-                      <p className="text-xs text-white/60">
+                      <p className="text-xs text-[#94a3b8] font-sans">
                         Location: <span className="text-white">{dc.preferred_city}, {dc.preferred_state}</span> • Required Load:{' '}
-                        <span className="text-green-400 font-semibold">{dc.it_load_mw} MW</span> • Tier {dc.tier?.toUpperCase()}
+                        <span className="text-emerald-400 font-mono font-semibold">{dc.it_load_mw} MW</span> • Tier {dc.tier?.toUpperCase()}
                       </p>
                     </div>
 
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <div className="text-2xl font-black text-green-400 leading-tight">{m.match_score}%</div>
-                        <span className="text-[10px] text-white/40 uppercase tracking-widest">Compatibility</span>
+                        <div className="text-2xl font-mono font-bold text-emerald-400 leading-tight">{m.match_score}%</div>
+                        <span className="text-[10px] font-mono text-[#64748b] uppercase tracking-widest">Compatibility</span>
                       </div>
                       <div className="flex gap-2">
-                        <button
+                        <Button
                           onClick={() => handleAction(m.id, 'negotiate')}
-                          className="px-4 py-2 rounded-xl bg-green-500 hover:bg-green-400 text-black font-bold text-xs transition-all glow-green cursor-pointer"
+                          variant="primary"
+                          className="px-4 py-2 text-xs"
                         >
                           Respond to Lead →
-                        </button>
+                        </Button>
                       </div>
                     </div>
-                  </div>
+                  </Card>
                 );
               })
             )}
