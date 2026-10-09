@@ -62,7 +62,11 @@ export default function AppLanding() {
           </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-xs font-medium tracking-wide text-zinc-300">
+        <nav className="hidden md:flex items-center gap-7 text-xs font-medium tracking-wide text-zinc-300">
+          <Link to="/sources" className="hover:text-white transition-colors flex items-center gap-1.5 text-emerald-400 font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Clean Sources</span>
+          </Link>
           <Link to="/map" className="hover:text-white transition-colors flex items-center gap-1.5">
             <Globe className="w-3.5 h-3.5 text-[#10b981]" />
             <span>Grid Map</span>
@@ -145,11 +149,19 @@ export default function AppLanding() {
 
             <div className="flex flex-wrap items-center justify-center gap-4">
               <button
-                onClick={() => navigate('/map')}
+                onClick={() => navigate('/sources')}
                 className="px-6 py-3 rounded-lg bg-[#00d084] hover:bg-[#00e599] text-[#022c22] font-semibold text-sm sm:text-base flex items-center gap-2 shadow-[0_0_24px_rgba(0,208,132,0.3)] hover:shadow-[0_0_36px_rgba(0,208,132,0.5)] transition-all cursor-pointer active:scale-95"
               >
-                <span>Explore Solutions</span>
+                <span>Explore Energy Matrix</span>
                 <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => navigate('/map')}
+                className="px-6 py-3 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-emerald-500/40 backdrop-blur-md text-white font-medium text-sm sm:text-base flex items-center gap-2 transition-all cursor-pointer active:scale-95"
+              >
+                <Globe className="w-4 h-4 text-emerald-400" />
+                <span>Grid Siting Radar</span>
               </button>
 
               <button

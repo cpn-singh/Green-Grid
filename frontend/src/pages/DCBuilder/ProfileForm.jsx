@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { dcAPI } from '../../services/api';
 import Navbar from '../../components/Navbar';
 import { Card, Badge, Button } from '../../components/ui';
+import { ENERGY_SOURCES } from '../../data/energySourcesData';
 
 export default function ProfileForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     project_name: 'Hyperscale Alpha Mumbai',
@@ -18,11 +20,24 @@ export default function ProfileForm() {
     target_pue: 1.30,
     green_goal_pct: 100,
     sourcing_models: ['Physical PPA', 'RTC/FDRE', 'Open Access'],
+    preferred_energy_sources: ['solar', 'wind', 'pumped-hydro', 'bess'],
     budget_inr_cr: { min: 40, max: 120 },
     launch_timeline: 'Q1 2027',
     latitude: 19.0760,
     longitude: 72.8777,
   });
+
+  useEffect(() => {
+    if (location.state?.preferredSource) {
+      const srcId = location.state.preferredSource;
+      if (!formData.preferred_energy_sources.includes(srcId)) {
+        setFormData(prev => ({
+          ...prev,
+          preferred_energy_sources: [...prev.preferred_energy_sources, srcId]
+        }));
+      }
+    }
+  }, [location.state]);
 
   const toggleArrayItem = (field, item) => {
     const list = formData[field];
@@ -180,6 +195,53 @@ export default function ProfileForm() {
                 <option value="air">Chilled Water / Precision Air Cooling</option>
                 <option value="hybrid">Evaporative Hybrid Cooling</option>
               </select>
+            </div>
+          </div>
+
+          {/* Renewable Generation Mix Preference */}
+          <div>
+            <div className="flex justify-between items-baseline mb-2">
+              <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8]">
+                Renewable Generation Portfolio Mix
+              </label>
+              <Link to="/sources" className="text-[10px] font-mono text-emerald-400 hover:underline">
+                Explore All 9 Sources →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              {ENERGY_SOURCES.map((src) => {
+                const isSelected = formData.preferred_energy_sources.includes(src.id);
+                return (
+                  <div
+                    key={src.id}
+                    onClick={() => toggleArrayItem('preferred_energy_sources', src.id)}
+                    className={`relative p-2.5 rounded-[4px] border cursor-pointer transition-all flex items-center gap-2.5 overflow-hidden ${
+                      isSelected
+                        ? 'bg-emerald-500/15 border-emerald-500 text-white shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                        : 'bg-[#040a08] border-white/10 text-slate-400 hover:border-emerald-500/30'
+                    }`}
+                  >
+                    <img
+                      src={src.image}
+                      alt={src.shortName}
+                      className="w-8 h-8 rounded-[2px] object-cover shrink-0 border border-white/10"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[11px] font-semibold truncate text-white">
+                          {src.shortName}
+                        </span>
+                        {isSelected && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                        )}
+                      </div>
+                      <span className="block text-[9px] font-mono text-slate-500 truncate">
+                        {src.tariffInrPerKwh} • {src.cufRange}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

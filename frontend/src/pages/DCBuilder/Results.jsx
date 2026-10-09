@@ -192,6 +192,25 @@ export default function Results() {
                       <p className="text-xs text-[#94a3b8] font-sans">
                         {sup.states_covered?.join(' · ')} • Portfolio: <span className="text-emerald-400 font-mono font-semibold">{sup.capacity_mw} MW</span>
                       </p>
+                      {sup.energy_types && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {sup.energy_types.map((et) => {
+                            const sLower = String(et).toLowerCase();
+                            const sId = sLower.includes('pumped') ? 'pumped-hydro' : sLower.includes('hydro') ? 'large-hydro' : sLower.includes('bess') || sLower.includes('storage') ? 'bess' : sLower.includes('biomass') ? 'biomass' : sLower.includes('wind') ? 'wind' : 'solar';
+                            return (
+                              <Link
+                                key={et}
+                                to={`/sources/${sId}`}
+                                title={`Inspect ${et} Technical Specs & Benchmarks`}
+                                className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/25 transition-all flex items-center gap-1"
+                              >
+                                <span>{et}</span>
+                                <span className="text-[9px] text-emerald-400">↗</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-4">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { mapAPI } from '../../services/api';
@@ -12,6 +13,34 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
+
+// Helper to map energy source type to local high-res visual assets
+const getMediaForSupplier = (sup) => {
+  const types = (sup?.energy_types || []).map(t => String(t).toLowerCase());
+  const name = String(sup?.name || '').toLowerCase();
+  if (types.some(t => t.includes('pumped')) || name.includes('pumped') || name.includes('pinnapuram')) {
+    return { img: '/energy-media/pumped-hydro.jpg', type: 'pumped-hydro', label: 'Pumped Hydro (PSP)' };
+  }
+  if (types.some(t => t.includes('hydro')) || name.includes('hydro') || name.includes('dam')) {
+    return { img: '/energy-media/large-hydro.jpg', type: 'large-hydro', label: 'Large Hydro' };
+  }
+  if (types.some(t => t.includes('battery') || t.includes('bess')) || name.includes('bess')) {
+    return { img: '/energy-media/bess.jpg', type: 'bess', label: 'Grid BESS' };
+  }
+  if (types.some(t => t.includes('biomass')) || name.includes('biomass')) {
+    return { img: '/energy-media/biomass.jpg', type: 'biomass', label: 'Biomass Cogeneration' };
+  }
+  if (types.some(t => t.includes('hydrogen')) || name.includes('hydrogen')) {
+    return { img: '/energy-media/green-hydrogen.jpg', type: 'green-hydrogen', label: 'Green Hydrogen' };
+  }
+  if (types.some(t => t.includes('geothermal')) || name.includes('geothermal') || name.includes('puga')) {
+    return { img: '/energy-media/geothermal.jpg', type: 'geothermal', label: 'Geothermal Energy' };
+  }
+  if (types.some(t => t.includes('wind')) && !types.some(t => t.includes('solar'))) {
+    return { img: '/energy-media/wind.jpg', type: 'wind', label: 'Wind Power' };
+  }
+  return { img: '/energy-media/solar.jpg', type: 'solar', label: 'Solar PV' };
+};
 
 // Custom DC Icon
 const dcIcon = new L.DivIcon({
@@ -213,6 +242,30 @@ export default function LiveMapDashboard() {
               >
                 <Popup className="custom-leaflet-popup">
                   <div className="p-2 text-neutral-900 max-w-xs">
+                    {/* Visual Media Header */}
+                    {(() => {
+                      const media = getMediaForSupplier(sup);
+                      return (
+                        <div className="relative w-full h-24 rounded-md overflow-hidden mb-2 border border-emerald-500/30 bg-neutral-950">
+                          <img
+                            src={media.img}
+                            alt={sup.name}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                          <div className="absolute bottom-1.5 left-1.5 text-[9px] font-mono text-emerald-400 font-bold bg-black/75 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                            {media.label}
+                          </div>
+                          <Link
+                            to={`/sources/${media.type}`}
+                            className="absolute bottom-1.5 right-1.5 px-2 py-0.5 rounded bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold text-[9px] font-mono uppercase tracking-wider flex items-center gap-0.5 transition-all shadow-sm"
+                          >
+                            <span>Specs →</span>
+                          </Link>
+                        </div>
+                      );
+                    })()}
+
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
                         {sup.category.toUpperCase()} • Renewable Source
@@ -254,7 +307,18 @@ export default function LiveMapDashboard() {
                       </a>
                       <button
                         type="button"
-                        onClick={() => setStreetViewTarget({ name: sup.name, lat: sup.lat, lng: sup.lng, type: 'Renewable Plant' })}
+                        onClick={() => {
+                          const media = getMediaForSupplier(sup);
+                          setStreetViewTarget({
+                            name: sup.name,
+                            lat: sup.lat,
+                            lng: sup.lng,
+                            type: 'Renewable Plant',
+                            image: media.img,
+                            sourceId: media.type,
+                            sourceLabel: media.label
+                          });
+                        }}
                         className="bg-neutral-800 hover:bg-neutral-900 text-white font-medium text-[10px] py-1.5 px-2 rounded-md transition-colors"
                         title="Interactive Aerial & Street Inspection"
                       >
@@ -433,6 +497,31 @@ export default function LiveMapDashboard() {
 
               {/* Modal Body: Embed / Satellite & Street View Preview */}
               <div className="p-5 flex-1 overflow-y-auto space-y-4">
+                {/* Real Asset Image Banner if available */}
+                {streetViewTarget.image && (
+                  <div className="relative w-full h-44 rounded-xl overflow-hidden border border-emerald-500/25 bg-neutral-950">
+                    <img
+                      src={streetViewTarget.image}
+                      alt={streetViewTarget.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-white bg-black/70 px-2 py-0.5 rounded border border-emerald-500/30">
+                        {streetViewTarget.sourceLabel || 'Renewable Infrastructure'}
+                      </span>
+                    </div>
+                    {streetViewTarget.sourceId && (
+                      <Link
+                        to={`/sources/${streetViewTarget.sourceId}`}
+                        className="absolute bottom-3 right-3 px-3 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold font-mono text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1"
+                      >
+                        <span>View Technical Specs →</span>
+                      </Link>
+                    )}
+                  </div>
+                )}
+
                 <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/10 bg-neutral-900 shadow-inner">
                   {/* High-res satellite / aerial preview map */}
                   <iframe

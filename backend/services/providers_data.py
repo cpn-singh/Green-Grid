@@ -273,5 +273,39 @@ ENERGY_PROVIDERS = [
         "longitude": 78.2710,
         "is_verified": True,
         "description": "Global pure-play green EPC contractor for ultra-mega solar parks (e.g. Kurnool, AP) and utility-scale BESS battery installations."
+    },
+    {
+        "name": "NHPC Renewable Energy",
+        "category": "ipp",
+        "capacity_mw": 7071.0,
+        "available_capacity_mw": 1200.0,
+        "energy_types": ["Small Hydro", "Hydro", "Pumped Hydro", "Solar"],
+        "sourcing_models": ["Physical PPA", "RTC/FDRE", "Open Access"],
+        "states_covered": ["Himachal Pradesh", "Uttarakhand", "Pan-India"],
+        "min_contract_years": 15,
+        "price_per_unit_inr": {"min": 3.80, "max": 4.60},
+        "rtc_availability_pct": 89,
+        "website": "https://www.nhpcindia.com",
+        "latitude": 31.1048,
+        "longitude": 77.1734,
+        "is_verified": True,
+        "description": "India's premier hydropower PSU providing 24/7 continuous run-of-the-river clean baseload and pumped storage to offset solar intermittency."
+    },
+    {
+        "name": "Orient Green Power Company",
+        "category": "ipp",
+        "capacity_mw": 1100.0,
+        "available_capacity_mw": 220.0,
+        "energy_types": ["Biomass", "Wind", "Hybrid"],
+        "sourcing_models": ["Open Access", "Physical PPA", "Group Captive"],
+        "states_covered": ["Tamil Nadu", "Maharashtra", "Punjab", "Karnataka"],
+        "min_contract_years": 8,
+        "price_per_unit_inr": {"min": 4.20, "max": 5.20},
+        "rtc_availability_pct": 85,
+        "website": "https://www.orientgreenpower.com",
+        "latitude": 13.0827,
+        "longitude": 80.2707,
+        "is_verified": True,
+        "description": "Pioneer in non-intermittent biomass cogeneration and wind arrays across southern and western industrial grid corridors."
     }
 ]

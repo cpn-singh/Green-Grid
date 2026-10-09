@@ -11,6 +11,8 @@ const DCResults = lazy(() => import('./pages/DCBuilder/Results'));
 const SupplierProfileForm = lazy(() => import('./pages/Supplier/ProfileForm'));
 const SupplierDashboard = lazy(() => import('./pages/Supplier/Dashboard'));
 const LiveMapDashboard = lazy(() => import('./pages/Map/LiveMapDashboard'));
+const SourcesIndexPage = lazy(() => import('./pages/Sources/SourcesIndexPage'));
+const SourceDetailPage = lazy(() => import('./pages/Sources/SourceDetailPage'));
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
             <Route path="/supplier/profile" element={<SupplierProfileForm />} />
             <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
             <Route path="/map" element={<LiveMapDashboard />} />
+            <Route path="/sources" element={<SourcesIndexPage />} />
+            <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

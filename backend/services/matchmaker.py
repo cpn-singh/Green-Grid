@@ -33,12 +33,18 @@ def calculate_rule_match_score(dc_profile: dict, supplier_profile: dict) -> floa
     else:
         loc_score = 0.5
 
-    # 3. Energy Type Match
-    dc_types = [t.lower() for t in dc_profile.get('server_types', [])]
-    # Standard check for Solar, Wind, Hybrid, BESS
+    # 3. Energy Type Match (Supports all 7 Indian RE types: Solar, Wind, Hybrid, Pumped Hydro, BESS, Small Hydro, Biomass)
+    preferred_sources = [t.lower() for t in dc_profile.get('preferred_energy_sources', [])]
     sup_types = [t.lower() for t in supplier_profile.get('energy_types', [])]
-    type_matches = len(set(['solar', 'wind', 'hybrid', 'bess']).intersection(set(sup_types)))
-    energy_score = min(1.0, 0.4 + (type_matches * 0.2))
+    
+    if preferred_sources:
+        matched = set(preferred_sources).intersection(set(sup_types))
+        energy_score = min(1.0, 0.4 + (len(matched) / max(1, len(preferred_sources))) * 0.6)
+    else:
+        # General clean energy check across major Indian RE types
+        all_re_types = {'solar', 'wind', 'hybrid', 'bess', 'pumped hydro', 'small hydro', 'hydro', 'biomass'}
+        type_matches = len(all_re_types.intersection(set(sup_types)))
+        energy_score = min(1.0, 0.4 + (type_matches * 0.15))
 
     # 4. Sourcing Model Match
     dc_sourcing = [m.lower() for m in dc_profile.get('sourcing_models', ['Physical PPA', 'Open Access'])]
