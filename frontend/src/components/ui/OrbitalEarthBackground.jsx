@@ -10,40 +10,26 @@ import React, { useState, useEffect, useRef } from 'react';
  */
 export default function OrbitalEarthBackground({
   isInitiated = false,
-  skipIntro = false,
   onDescentComplete,
   onResetOrbit,
   onReplayDescent,
   opacity = 1
 }) {
-  const [descentFinished, setDescentFinished] = useState(skipIntro);
+  const [descentFinished, setDescentFinished] = useState(false);
   const heroVideoRef = useRef(null);
   const earthVideoRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Initialize playback on mount
+  // Pause hero video on mount
   useEffect(() => {
-    if (skipIntro) {
-      setDescentFinished(true);
-      if (earthVideoRef.current) {
-        earthVideoRef.current.pause();
-      }
-      if (heroVideoRef.current) {
-        heroVideoRef.current.currentTime = 6.0;
-        heroVideoRef.current.play().catch(() => {});
-      }
-    } else {
-      if (heroVideoRef.current) {
-        heroVideoRef.current.pause();
-        heroVideoRef.current.currentTime = 0;
-      }
+    if (heroVideoRef.current) {
+      heroVideoRef.current.pause();
+      heroVideoRef.current.currentTime = 0;
     }
-  }, [skipIntro]);
+  }, []);
 
   // Handle transition when isInitiated changes
   useEffect(() => {
-    if (skipIntro) return;
-
     if (isInitiated) {
       setDescentFinished(false);
 
@@ -72,7 +58,7 @@ export default function OrbitalEarthBackground({
         earthVideoRef.current.play().catch(() => {});
       }
     }
-  }, [isInitiated, skipIntro]);
+  }, [isInitiated]);
 
   // Pause videos when scrolled out of view (opacity reaches zero or below threshold)
   useEffect(() => {
