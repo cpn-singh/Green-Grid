@@ -37,16 +37,16 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
       alpha: true,
       antialias: true,
       powerPreference: 'high-performance',
-      precision: 'mediump'
+      precision: 'highp'
     })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5))
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.1
+    renderer.toneMappingExposure = 1.15
     container.appendChild(renderer.domElement)
 
     // 2. Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4)
     scene.add(ambientLight)
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.8)
@@ -72,7 +72,7 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     const bodyMat = new THREE.MeshStandardMaterial({
       color: 0x051b11,
       metalness: 0.9,
-      roughness: 0.25,
+      roughness: 0.2,
     })
 
     const cylinderMesh = new THREE.Mesh(cylinderGeo, bodyMat)
@@ -83,24 +83,33 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     const rimMat = new THREE.MeshStandardMaterial({
       color: 0x22c55e,
       metalness: 0.95,
-      roughness: 0.20,
+      roughness: 0.15,
       emissive: 0x052e16,
       emissiveIntensity: 0.25,
     })
     const rimMesh = new THREE.Mesh(bevelTorusGeo, rimMat)
     logoGroup.add(rimMesh)
 
-    // 6. Front & Back Face Texture with GreenGrid Logo
+    // 6. Front & Back Face Texture with GreenGrid High-Resolution Logo
     const textureLoader = new THREE.TextureLoader()
-    textureLoader.load('/logo.png', (texture) => {
+    textureLoader.load('/logo-hires.png', (texture) => {
       texture.colorSpace = THREE.SRGBColorSpace
+      texture.generateMipmaps = true
+      texture.minFilter = THREE.LinearMipmapLinearFilter
+      texture.magFilter = THREE.LinearFilter
+      if (renderer) {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+      }
 
       const faceGeo = new THREE.CircleGeometry(1.78, 64)
       const faceMat = new THREE.MeshStandardMaterial({
         map: texture,
-        metalness: 0.4,
-        roughness: 0.35,
+        metalness: 0.15,
+        roughness: 0.15,
         transparent: true,
+        emissive: 0xffffff,
+        emissiveMap: texture,
+        emissiveIntensity: 0.15,
       })
 
       // Front face
@@ -171,21 +180,47 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     container.addEventListener('mouseenter', handleMouseEnter)
     container.addEventListener('mouseleave', handleMouseLeave)
 
-    // 9. Animation Loop
+    // 9. Animation Loop with Smooth Cinematic Intro Transition
     let animId
     const startTime = performance.now()
+    const introDuration = 1.3 // seconds
+
+    // Initial intro state
+    logoGroup.scale.set(0.3, 0.3, 0.3)
+    accentPointLight.intensity = 0.5
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
       if (document.hidden) return
       const elapsedTime = (performance.now() - startTime) * 0.001
 
-      // Idle auto-spin / float physics
-      const idleSpinSpeed = isHovered ? 0.003 : 0.008
-      logoGroup.rotation.y += idleSpinSpeed
+      // Intro reveal progression with smooth cubic ease-out
+      const introProgress = Math.min(1, elapsedTime / introDuration)
+      const easeOut = 1 - Math.pow(1 - introProgress, 3)
 
-      // Smooth lerp to mouse tilt
-      logoGroup.rotation.y += (targetRotY - (logoGroup.rotation.y % (Math.PI * 2))) * 0.05
+      if (introProgress < 1) {
+        // Smooth scale expansion with elastic settle
+        const s = 0.3 + 0.7 * easeOut
+        logoGroup.scale.set(s, s, s)
+
+        // Smooth spin-in from angle to 0
+        const spinOffset = (1 - easeOut) * (Math.PI * 1.5)
+        logoGroup.rotation.y = spinOffset
+
+        // Specular flare sweeps across medallion surface
+        accentPointLight.intensity = 1.2 + Math.sin(introProgress * Math.PI) * 3.0
+      } else {
+        logoGroup.scale.set(1, 1, 1)
+        accentPointLight.intensity = 2.5
+
+        // Idle auto-spin / float physics
+        const idleSpinSpeed = isHovered ? 0.003 : 0.008
+        logoGroup.rotation.y += idleSpinSpeed
+
+        // Smooth lerp to mouse tilt
+        logoGroup.rotation.y += (targetRotY - (logoGroup.rotation.y % (Math.PI * 2))) * 0.05
+      }
+
       logoGroup.rotation.x += (targetRotX - logoGroup.rotation.x) * 0.08
 
       // Gentle floating bobbing

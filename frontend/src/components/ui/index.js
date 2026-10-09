@@ -5,4 +5,4 @@ export { default as Card } from './Card';
 export { default as Button } from './Button';
 export { default as Reveal } from './Reveal';
 export { default as Logo3D } from './Logo3D';
-export { default as BackgroundScene } from './BackgroundScene';
+export { default as OrbitalEarthBackground } from './OrbitalEarthBackground';
