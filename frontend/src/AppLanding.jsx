@@ -242,30 +242,6 @@ export default function AppLanding() {
       {/* Sequential Dedicated Energy Source Pages (Directly Accessible via Scroll) */}
       {isGroundReady && (
         <>
-          {/* Floating Tactical Energy Source Quick Navigator */}
-          <div className="fixed right-3 sm:right-6 top-24 z-40 hidden xl:flex flex-col gap-1.5 p-2 rounded-lg bg-black/85 backdrop-blur-xl border border-emerald-500/30 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-400/80 px-2 py-0.5 text-center">
-              SOURCE MATRIX
-            </span>
-            {ENERGY_SOURCES.map((s, idx) => {
-              const anchor = s.id === 'large-hydro' ? 'hydro' : s.id
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => {
-                    const el = document.getElementById(anchor)
-                    if (el) el.scrollIntoView({ behavior: 'smooth' })
-                  }}
-                  title={s.name}
-                  className="group flex items-center gap-2 px-2.5 py-1.5 rounded-[4px] font-mono text-[11px] text-slate-400 hover:text-white hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 transition-all text-left cursor-pointer"
-                >
-                  <span className="text-[10px] text-emerald-400 font-bold">0{idx + 1}</span>
-                  <span className="truncate max-w-[110px]">{s.shortName}</span>
-                </button>
-              )
-            })}
-          </div>
-
           {/* Sequential Energy Source Pages */}
           {ENERGY_SOURCES.map((source, idx) => {
             const anchorId = source.id === 'large-hydro' ? 'hydro' : source.id
