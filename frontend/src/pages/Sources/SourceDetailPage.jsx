@@ -27,53 +27,24 @@ import {
 import Navbar from '../../components/Navbar';
 import { getEnergySourceById, ENERGY_SOURCES } from '../../data/energySourcesData';
 
-function DedicatedBackgroundVideo({ videoSrc, imageSrc, sourceName }) {
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.defaultMuted = true;
-    video.muted = true;
-    const playVideo = () => {
-      const p = video.play();
-      if (p !== undefined) {
-        p.catch(() => {});
-      }
-    };
-
-    playVideo();
-    video.addEventListener('loadeddata', playVideo);
-    return () => {
-      video.removeEventListener('loadeddata', playVideo);
-    };
-  }, [videoSrc]);
-
+function DedicatedBackgroundImage({ imageSrc, sourceName }) {
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">
-      {videoSrc ? (
-        <video
-          ref={videoRef}
-          key={videoSrc}
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={imageSrc}
-          className="w-full h-full object-cover opacity-100 scale-[1.02] contrast-[1.07] brightness-[1.03] saturate-[1.10] transition-opacity duration-1000 ease-out"
-        />
-      ) : (
-        <img
-          src={imageSrc}
-          alt={sourceName}
-          className="w-full h-full object-cover opacity-100 scale-[1.02] contrast-[1.07] brightness-[1.03] saturate-[1.10]"
-        />
-      )}
-      {/* High-clarity subtle scrim overlay: preserves vibrant 1080p video while maintaining text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-[#000204]/75" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/10 to-[#000204]/65" />
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none bg-[#000204]">
+      <img
+        src={imageSrc}
+        alt={sourceName}
+        loading="eager"
+        decoding="async"
+        className="w-full h-full object-cover object-center opacity-90 contrast-[1.05] brightness-[1.02] transition-opacity duration-500 ease-out"
+        style={{
+          imageRendering: 'auto',
+          WebkitBackfaceVisibility: 'hidden',
+          transform: 'translateZ(0)',
+        }}
+      />
+      {/* Subtle scrim overlay: preserves vibrant imagery while maintaining text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/75 via-black/20 to-[#000204]/85" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/15 to-[#000204]/70" />
     </div>
   );
 }
@@ -122,9 +93,8 @@ export default function SourceDetailPage({ sourceIdOverride }) {
     <div className="relative min-h-screen bg-[#000204] text-[#f0f4f1] font-sans selection:bg-emerald-500/20 selection:text-white overflow-x-hidden">
       <Navbar />
 
-      {/* Dedicated AI-Generated Ambient Video Across the ENTIRE Page Background */}
-      <DedicatedBackgroundVideo
-        videoSrc={source.video}
+      {/* Dedicated Ambient Background Image */}
+      <DedicatedBackgroundImage
         imageSrc={source.image}
         sourceName={source.name}
       />

@@ -40,9 +40,9 @@ export default function Navbar({ visible = true }) {
         <Link to="/" className="text-base sm:text-lg font-bold tracking-tight text-[#f0f4f1] group flex items-center gap-2.5">
           <div className="relative w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-[#22c55e] via-[#34d399] to-white/40 shadow-[0_0_12px_rgba(34,197,94,0.4)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 transform-gpu [perspective:600px]">
             <img
-              src="/logo-nav.webp"
-              alt=""
-              aria-hidden="true"
+              src="/logo.png"
+              srcSet="/logo.png 1x, /logo-hires.png 2x"
+              alt="GreenGrid Logo"
               width="28"
               height="28"
               loading="eager"

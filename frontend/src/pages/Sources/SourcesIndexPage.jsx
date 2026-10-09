@@ -32,7 +32,20 @@ export default function SourcesIndexPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-16 px-6 sm:px-12 max-w-[1360px] mx-auto border-b border-emerald-500/10">
+      <section className="relative pt-32 pb-16 px-6 sm:px-12 max-w-[1360px] mx-auto border-b border-emerald-500/10 overflow-hidden">
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <img
+            src="/energy-media/ai_energy_grid.jpg"
+            alt="National Clean Energy Grid"
+            className="w-full h-full object-cover object-center opacity-25 contrast-[1.05] brightness-[1.02]"
+            style={{
+              imageRendering: 'auto',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/90 via-[#000204]/80 to-[#000204]" />
+        </div>
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/5 blur-[120px] pointer-events-none rounded-full" />
         
         {/* Micro-badge */}

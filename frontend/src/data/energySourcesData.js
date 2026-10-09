@@ -15,9 +15,7 @@ export const ENERGY_SOURCES = [
     carbonIntensityGCo2: '38 - 48 gCO₂e/kWh',
     matchingScore247: 62,
     roleInDatacenter: 'Primary daytime zero-carbon bulk power; drives electrolyzers and charges daytime battery/PSP reserves.',
-    image: '/energy-media/solar.jpg',
-    video: '/energy-media/solar.mp4',
-    videoCdn: null,
+    image: '/energy-media/ai_energy_grid.jpg',
     accentColor: '#10b981',
     corridors: [
       'Bhadla-Bikaner 765kV Green Corridor (Rajasthan)',
@@ -72,8 +70,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 74,
     roleInDatacenter: 'Counter-cyclical to solar; delivers peak evening and night generation during summer & southwest monsoon months.',
     image: '/energy-media/wind.jpg',
-    video: '/energy-media/wind.mp4',
-    videoCdn: null,
     accentColor: '#34d399',
     corridors: [
       'Southern Regional Interconnector (Tamil Nadu - Karnataka)',
@@ -127,8 +123,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 91,
     roleInDatacenter: 'Continuous spinning reserve, frequency stability (50.0 Hz), black-start resilience, and round-the-clock firm baseload.',
     image: '/energy-media/large-hydro.jpg',
-    video: '/energy-media/hydro.mp4',
-    videoCdn: null,
     accentColor: '#38bdf8',
     corridors: [
       'Northern Regional 765kV Pooling Line (Tehri - Meerut)',
@@ -181,8 +175,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 96,
     roleInDatacenter: 'Crucial backbone of 24/7 Firm Dispatchable Renewable Energy (FDRE). Absorbs surplus daytime solar and generates full load for 6–10 hours across night shifts.',
     image: '/energy-media/pumped-hydro.jpg',
-    video: '/energy-media/pumped-hydro.mp4',
-    videoCdn: null,
     accentColor: '#06b6d4',
     corridors: [
       'Southern Grid Kurnool Hub 765kV (Andhra Pradesh)',
@@ -235,8 +227,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 94,
     roleInDatacenter: 'Sub-second UPS buffer, frequency stability, voltage ride-through, and 2-to-4 hour evening peak shaving.',
     image: '/energy-media/bess.jpg',
-    video: '/energy-media/bess.mp4',
-    videoCdn: null,
     accentColor: '#10b981',
     corridors: [
       'Khavda Hybrid BESS Substation (Gujarat)',
@@ -291,8 +281,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 88,
     roleInDatacenter: 'Supplies steady non-intermittent run-of-river baseload with minimal land acquisition overhead or reservoir displacement.',
     image: '/energy-media/small-hydro.jpg',
-    video: '/energy-media/small-hydro.mp4',
-    videoCdn: null,
     accentColor: '#6ee7b7',
     corridors: [
       'Himachal Inter-Valley 132kV Local Feeders',
@@ -344,8 +332,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 89,
     roleInDatacenter: 'Firm thermal generation available 24 hours a day; eliminates farm stubble burning in Punjab/Haryana while providing dispatchable baseload.',
     image: '/energy-media/biomass.jpg',
-    video: '/energy-media/biomass.mp4',
-    videoCdn: null,
     accentColor: '#f59e0b',
     corridors: [
       'Punjab Agro-Energy Evacuation Corridors (Mansa - Patiala)',
@@ -397,8 +383,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 99,
     roleInDatacenter: 'Direct replacement for Tier III/IV diesel backup generators (gensets); eliminates Scope 1 emissions during prolonged grid disconnects.',
     image: '/energy-media/green-hydrogen.jpg',
-    video: '/energy-media/green-hydrogen.mp4',
-    videoCdn: null,
     accentColor: '#10b981',
     corridors: [
       'Kandla-Mundra Hydrogen Hub Corridor (Gujarat)',
@@ -451,8 +435,6 @@ export const ENERGY_SOURCES = [
     matchingScore247: 98,
     roleInDatacenter: 'Continuous constant-temperature zero-fluctuation baseload in high-altitude cold environments; offers dual-use direct liquid cooling sink.',
     image: '/energy-media/geothermal.jpg',
-    video: '/energy-media/geothermal.mp4',
-    videoCdn: null,
     accentColor: '#a7f3d0',
     corridors: [
       'Leh-Puga 66kV High Altitude Transmission Link (Ladakh)',
