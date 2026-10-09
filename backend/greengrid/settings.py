@@ -64,10 +64,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'greengrid.wsgi.application'
 ASGI_APPLICATION = 'greengrid.asgi.application'
 
+_SQLITE_PATH = os.getenv('SQLITE_PATH')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': Path(_SQLITE_PATH) if _SQLITE_PATH else (BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -86,6 +87,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
