@@ -1,63 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Headphones, Maximize2, Minimize2, Eye, EyeOff, Globe, ArrowRight } from 'lucide-react'
+import { Maximize2, Minimize2, Eye, EyeOff, Globe, ArrowRight } from 'lucide-react'
 import OrbitalEarthBackground from './components/ui/OrbitalEarthBackground'
 import Logo3D from './components/ui/Logo3D'
 
 export default function AppLanding() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showUI, setShowUI] = useState(true)
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false)
   const [isSystemInitiated, setIsSystemInitiated] = useState(false)
   const [descentCompleted, setDescentCompleted] = useState(false)
-  const audioCtxRef = useRef(null)
   const navigate = useNavigate()
-
-  // Optional ambient sound generator
-  const toggleAudio = () => {
-    if (isAudioPlaying) {
-      if (audioCtxRef.current) {
-        audioCtxRef.current.close().catch(() => {})
-        audioCtxRef.current = null
-      }
-      setIsAudioPlaying(false)
-      return
-    }
-
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext
-      const ctx = new AudioCtx()
-      audioCtxRef.current = ctx
-
-      const masterGain = ctx.createGain()
-      masterGain.gain.setValueAtTime(0.001, ctx.currentTime)
-      masterGain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 3)
-      masterGain.connect(ctx.destination)
-
-      const filter = ctx.createBiquadFilter()
-      filter.type = 'lowpass'
-      filter.frequency.setValueAtTime(200, ctx.currentTime)
-      filter.connect(masterGain)
-
-      const freqs = [55.0, 110.0]
-      freqs.forEach((freq) => {
-        const osc = ctx.createOscillator()
-        osc.type = 'sine'
-        osc.frequency.setValueAtTime(freq, ctx.currentTime)
-
-        const oscGain = ctx.createGain()
-        oscGain.gain.value = 0.2 / freqs.length
-
-        osc.connect(oscGain)
-        oscGain.connect(filter)
-        osc.start()
-      })
-
-      setIsAudioPlaying(true)
-    } catch {
-      setIsAudioPlaying(false)
-    }
-  }
 
   const handleLaunchPlatform = () => {
     if (!isSystemInitiated) {
@@ -66,14 +18,6 @@ export default function AppLanding() {
       navigate('/map')
     }
   }
-
-  useEffect(() => {
-    return () => {
-      if (audioCtxRef.current) {
-        audioCtxRef.current.close().catch(() => {})
-      }
-    }
-  }, [])
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -219,26 +163,9 @@ export default function AppLanding() {
         )}
       </main>
 
-      {/* Footer Controls */}
-      <footer className="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-6 sm:px-12 py-6">
-        <div className="w-24 hidden md:block" />
-
-        <button
-          onClick={toggleAudio}
-          className="mx-auto flex items-center gap-2 group transition-all cursor-pointer text-zinc-400 hover:text-zinc-200"
-          title={isAudioPlaying ? 'Mute ambient sound' : 'Enable ambient sound'}
-        >
-          <Headphones
-            className={`w-4 h-4 transition-colors ${
-              isAudioPlaying ? 'text-[#10b981]' : 'text-zinc-400 group-hover:text-white'
-            }`}
-          />
-          <span className="text-xs font-mono tracking-wider uppercase">
-            {isAudioPlaying ? 'Audio: On' : 'Ambient Audio'}
-          </span>
-        </button>
-
-        <div className="flex items-center gap-2.5 w-24 justify-end">
+      {/* Bottom Controls */}
+      <footer className="fixed bottom-0 inset-x-0 z-30 flex items-center justify-end px-6 sm:px-12 py-6 pointer-events-none">
+        <div className="flex items-center gap-2.5 pointer-events-auto">
           <button
             onClick={() => setShowUI(!showUI)}
             title={showUI ? 'Hide Interface' : 'Show Interface'}
