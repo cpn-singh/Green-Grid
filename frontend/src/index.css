@@ -293,6 +293,71 @@ code, kbd, samp, pre, .font-mono {
   animation: heroContentReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+@keyframes jointBeamShimmer {
+  0% {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(250%);
+    opacity: 0;
+  }
+}
+
+.animate-joint-beam {
+  animation: jointBeamShimmer 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Cinematic Energy Wave & Ambient Reflection for Section Joints */
+@keyframes energyWaveFlow {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(220%);
+    opacity: 0;
+  }
+}
+
+@keyframes subtleReflectionSheen {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.2;
+  }
+  70% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+.animate-energy-wave {
+  animation: energyWaveFlow 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-reflection-sheen {
+  animation: subtleReflectionSheen 8.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 1.8s;
+}
+
 /* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {

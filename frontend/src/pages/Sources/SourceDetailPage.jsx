@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -26,6 +26,57 @@ import {
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import { getEnergySourceById, ENERGY_SOURCES } from '../../data/energySourcesData';
+
+function DedicatedBackgroundVideo({ videoSrc, imageSrc, sourceName }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+    const playVideo = () => {
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {});
+      }
+    };
+
+    playVideo();
+    video.addEventListener('loadeddata', playVideo);
+    return () => {
+      video.removeEventListener('loadeddata', playVideo);
+    };
+  }, [videoSrc]);
+
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">
+      {videoSrc ? (
+        <video
+          ref={videoRef}
+          key={videoSrc}
+          src={videoSrc}
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={imageSrc}
+          className="w-full h-full object-cover opacity-90 scale-105 transition-opacity duration-1000 ease-out"
+        />
+      ) : (
+        <img
+          src={imageSrc}
+          alt={sourceName}
+          className="w-full h-full object-cover opacity-85"
+        />
+      )}
+      {/* Cinematic subtle scrim overlay that blends video with page text */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#000204]/80" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/25 to-[#000204]/80" />
+    </div>
+  );
+}
 
 export default function SourceDetailPage({ sourceIdOverride }) {
   const { sourceId: paramId } = useParams();
@@ -72,29 +123,11 @@ export default function SourceDetailPage({ sourceIdOverride }) {
       <Navbar />
 
       {/* Dedicated AI-Generated Ambient Video Across the ENTIRE Page Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        {source.video ? (
-          <video
-            key={source.id}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-40 scale-105 filter blur-[0.5px] transition-opacity duration-1000 ease-out"
-          >
-            <source src={source.video} type="video/mp4" />
-          </video>
-        ) : (
-          <img
-            src={source.image}
-            alt={source.name}
-            className="w-full h-full object-cover opacity-30 filter blur-[0.5px]"
-          />
-        )}
-        {/* Layered Cinematic Vignettes for High Contrast and Razor-Sharp Text */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/90 via-[#000204]/75 to-[#000204]/92" />
-        <div className="absolute inset-0 bg-radial-[at_50%_35%] from-transparent via-[#000204]/40 to-[#000204]/90" />
-      </div>
+      <DedicatedBackgroundVideo
+        videoSrc={source.video}
+        imageSrc={source.image}
+        sourceName={source.name}
+      />
 
       {/* Foreground Content Container */}
       <div className="relative z-10 max-w-[1360px] mx-auto px-6 sm:px-12 pt-28 pb-20">
@@ -182,7 +215,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
 
             <button
               onClick={() => navigate('/map', { state: { filterType: source.category } })}
-              className="px-6 py-2.5 rounded-[4px] bg-[#040a08]/90 border border-emerald-500/30 hover:border-emerald-500 text-slate-200 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer backdrop-blur-md"
+              className="px-6 py-2.5 rounded-xl bg-black/40 hover:bg-black/60 border border-emerald-500/30 hover:border-emerald-500 text-slate-200 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer backdrop-blur-xl"
             >
               <Globe className="w-4 h-4 text-emerald-400" />
               <span>Locate Plants on Live Map</span>
@@ -190,7 +223,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
 
             <button
               onClick={() => scrollToSection('architecture-specs')}
-              className="px-4 py-2.5 rounded-[4px] bg-black/60 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer backdrop-blur-md"
+              className="px-4 py-2.5 rounded-xl bg-black/40 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer backdrop-blur-xl"
             >
               <span>Scroll to Specifications</span>
               <ChevronDown className="w-3.5 h-3.5 text-emerald-400" />
@@ -198,33 +231,33 @@ export default function SourceDetailPage({ sourceIdOverride }) {
           </div>
         </div>
 
-        {/* Top High-Level Telemetry Cards (Full-Width 5-Column Grid) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 p-5 rounded-lg bg-[#040a08]/85 border border-emerald-500/30 font-mono backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] mb-10">
-          <div>
+        {/* Top High-Level Telemetry Cards (Full-Width 5-Column Grid Blended in Frosted Glass) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 p-5 rounded-2xl bg-black/35 border border-emerald-500/30 font-mono backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] mb-10">
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
             <span className="block text-[9px] uppercase tracking-wider text-slate-400">Operating Capacity</span>
             <span className="text-base sm:text-lg font-bold text-emerald-400">{source.installedCapacityIndia}</span>
-            <span className="block text-[9px] text-slate-400">Target 2030: {source.targetCapacity2030}</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">Target 2030: {source.targetCapacity2030}</span>
           </div>
 
-          <div>
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
             <span className="block text-[9px] uppercase tracking-wider text-slate-400">Tariff Band (LCOE)</span>
             <span className="text-base sm:text-lg font-bold text-white">{source.tariffInrPerKwh}</span>
-            <span className="block text-[9px] text-slate-400">{source.tariffUsdPerMwh}</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">{source.tariffUsdPerMwh}</span>
           </div>
 
-          <div>
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
             <span className="block text-[9px] uppercase tracking-wider text-slate-400">Capacity Factor (CUF)</span>
             <span className="text-base sm:text-lg font-bold text-emerald-300">{source.cufRange}</span>
-            <span className="block text-[9px] text-slate-400">Operating Band</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">Operating Band</span>
           </div>
 
-          <div>
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
             <span className="block text-[9px] uppercase tracking-wider text-slate-400">Lifecycle Carbon</span>
             <span className="text-base sm:text-lg font-bold text-white">{source.carbonIntensityGCo2}</span>
-            <span className="block text-[9px] text-slate-400">Scope 1 & 2 Neutral</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">Scope 1 & 2 Neutral</span>
           </div>
 
-          <div className="col-span-2 sm:col-span-1">
+          <div className="col-span-2 sm:col-span-1 p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
             <div className="flex justify-between items-center text-[10px] mb-1">
               <span className="text-slate-400 uppercase tracking-wider">24/7 Match Suitability</span>
               <span className="text-emerald-400 font-bold">{source.matchingScore247}%</span>
@@ -246,7 +279,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
           <div className="lg:col-span-6 flex flex-col gap-6">
             
             {/* Diurnal Dispatch Profile Card */}
-            <div className="rounded-lg bg-[#040a08]/85 border border-emerald-500/25 p-6 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+            <div className="rounded-2xl bg-black/35 border border-emerald-500/25 p-6 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5" />
@@ -295,7 +328,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
             </div>
 
             {/* Technical Specifications Ledger */}
-            <div className="rounded-lg bg-[#040a08]/85 border border-emerald-500/25 p-6 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+            <div className="rounded-2xl bg-black/35 border border-emerald-500/25 p-6 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
               <div className="flex items-center gap-2 mb-3">
                 <Cpu className="w-4 h-4 text-emerald-400" />
                 <h2 className="text-sm font-bold font-mono uppercase tracking-wide text-white">
@@ -320,7 +353,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
           <div className="lg:col-span-6 flex flex-col gap-6">
             
             {/* Benchmark Mega-Assets in India */}
-            <div className="rounded-lg bg-[#040a08]/85 border border-emerald-500/25 p-6 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+            <div className="rounded-2xl bg-black/35 border border-emerald-500/25 p-6 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-emerald-400" />
@@ -335,7 +368,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {source.keyPlants.map((plant, idx) => (
-                  <div key={idx} className="p-3.5 rounded-[4px] bg-[#020504]/90 border border-white/5 hover:border-emerald-500/30 transition-all">
+                  <div key={idx} className="p-3.5 rounded-lg bg-black/35 border border-white/10 hover:border-emerald-500/40 backdrop-blur-md transition-all">
                     <div className="flex justify-between items-start gap-2">
                       <span className="font-semibold text-xs text-white">{plant.name}</span>
                       <span className="font-mono text-xs text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
@@ -355,13 +388,13 @@ export default function SourceDetailPage({ sourceIdOverride }) {
             </div>
 
             {/* CTU Green Transmission Corridors */}
-            <div className="rounded-lg bg-[#040a08]/85 border border-emerald-500/25 p-5 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+            <div className="rounded-2xl bg-black/35 border border-emerald-500/25 p-5 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
               <h3 className="text-xs font-mono uppercase tracking-wider text-emerald-400 mb-3 font-semibold">
                 765kV Green Transmission Corridors
               </h3>
               <div className="flex flex-wrap gap-2">
                 {source.corridors.map((c, idx) => (
-                  <span key={idx} className="px-2.5 py-1 rounded bg-black/80 border border-emerald-500/20 font-mono text-[11px] text-slate-300">
+                  <span key={idx} className="px-3 py-1 rounded-md bg-black/45 border border-emerald-500/25 font-mono text-[11px] text-slate-200 backdrop-blur-md">
                     {c}
                   </span>
                 ))}
@@ -371,7 +404,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
             {/* Strategic Trade-offs: Advantages & Limitations */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Engineering Advantages */}
-              <div className="rounded-lg bg-[#040a08]/85 border border-emerald-500/20 p-5 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+              <div className="rounded-2xl bg-black/35 border border-emerald-500/25 p-5 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
                 <div className="flex items-center gap-2 text-emerald-400 mb-3">
                   <CheckCircle2 className="w-4 h-4" />
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
@@ -389,7 +422,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
               </div>
 
               {/* Operational Limitations */}
-              <div className="rounded-lg bg-[#040a08]/85 border border-amber-500/20 p-5 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+              <div className="rounded-2xl bg-black/35 border border-amber-500/25 p-5 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
                 <div className="flex items-center gap-2 text-amber-400 mb-3">
                   <AlertCircle className="w-4 h-4" />
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
@@ -412,7 +445,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
         </div>
 
         {/* Regulatory Framework Policies (Full-Width Card) */}
-        <div className="rounded-lg bg-[#040a08]/85 border border-emerald-500/20 p-6 backdrop-blur-md mb-10 shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+        <div className="rounded-2xl bg-black/35 border border-emerald-500/25 p-6 backdrop-blur-xl mb-10 shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
           <div className="flex items-center gap-2 mb-4">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-white">
@@ -421,7 +454,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {source.regulatoryFramework.map((reg, idx) => (
-              <div key={idx} className="p-3 rounded-[4px] bg-[#020504]/90 border border-white/5 font-mono text-xs text-slate-300 flex items-start gap-2">
+              <div key={idx} className="p-3 rounded-lg bg-black/35 border border-white/10 font-mono text-xs text-slate-200 backdrop-blur-md flex items-start gap-2">
                 <span className="text-emerald-400 font-bold">0{idx + 1}.</span>
                 <span>{reg}</span>
               </div>
@@ -430,7 +463,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
         </div>
 
         {/* Next Energy Source Sequencer Banner */}
-        <div className="p-6 rounded-lg bg-gradient-to-r from-emerald-950/40 via-[#040a08]/90 to-black/80 border border-emerald-500/30 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-black/40 to-black/60 border border-emerald-500/30 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">
               NEXT CLEAN GENERATION PROFILE // STAGE 0{currentIndex + 2 > 9 ? 1 : currentIndex + 2}
@@ -445,7 +478,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
 
           <Link
             to={nextRoute}
-            className="px-6 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono text-xs font-semibold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all shrink-0 cursor-pointer"
+            className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono text-xs font-semibold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all shrink-0 cursor-pointer"
           >
             <span>Proceed to {nextSource.shortName}</span>
             <ChevronRight className="w-4 h-4" />

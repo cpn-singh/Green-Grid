@@ -12,6 +12,22 @@ import * as THREE from 'three'
  * - Graceful WebGL error handling & automatic cleanup
  */
 export default function Logo3D({ size = 220, className = '', onClick }) {
+  if (size <= 48) {
+    return (
+      <div
+        className={`relative inline-flex items-center justify-center select-none ${className}`}
+        style={{ width: size, height: size }}
+        onClick={onClick}
+      >
+        <img
+          src="/logo-hires.png"
+          alt="GreenGrid"
+          className="w-full h-full object-contain rounded-full drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+        />
+      </div>
+    )
+  }
+
   const containerRef = useRef(null)
 
   useEffect(() => {
@@ -37,10 +53,10 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
       alpha: true,
       antialias: true,
       powerPreference: 'high-performance',
-      precision: 'highp'
+      precision: 'mediump'
     })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.15
     container.appendChild(renderer.domElement)

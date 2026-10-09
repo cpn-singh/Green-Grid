@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { 
   Maximize2, 
@@ -31,13 +31,485 @@ import OrbitalEarthBackground from './components/ui/OrbitalEarthBackground'
 import Logo3D from './components/ui/Logo3D'
 import { ENERGY_SOURCES, ENERGY_SOURCE_CATEGORIES } from './data/energySourcesData'
 
+function SectionBackgroundVideo({ videoSrc, imageSrc }) {
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const [scrollBlendOpacity, setScrollBlendOpacity] = useState(1);
+  const [parallaxY, setParallaxY] = useState(0);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.01, rootMargin: '260px 0px' }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+
+    if (isInViewport && videoSrc) {
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {});
+      }
+    } else {
+      video.pause();
+    }
+  }, [isInViewport, videoSrc]);
+
+  // Subtle scroll parallax and smooth cross-dissolve when entering/leaving viewport
+  useEffect(() => {
+    let rafId = null;
+    const handleScroll = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const windowHeight = window.innerHeight || 800;
+
+      // Subtle parallax: 3.5% slower movement creates natural optical depth
+      const offset = (rect.top - windowHeight / 2) * 0.035;
+      setParallaxY(offset);
+
+      // Smooth blend: calculate progress across the viewport
+      const totalSpan = windowHeight + rect.height;
+      const progress = (windowHeight - rect.top) / totalSpan;
+
+      let opacity = 1;
+      if (progress < 0.2) {
+        // Entering from bottom: smooth ease-in
+        opacity = 0.35 + (progress / 0.2) * 0.65;
+      } else if (progress > 0.8) {
+        // Exiting toward top: smooth ease-out
+        opacity = 1 - ((progress - 0.8) / 0.2) * 0.65;
+      }
+      setScrollBlendOpacity(Math.max(0.25, Math.min(1, opacity)));
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="absolute -top-24 sm:-top-36 -bottom-24 sm:-bottom-36 inset-x-0 h-[calc(100%+12rem)] sm:h-[calc(100%+18rem)] z-0 pointer-events-none overflow-hidden select-none"
+      style={{
+        WebkitMaskImage:
+          'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 6%, rgba(0,0,0,0.85) 15%, black 25%, black 75%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.2) 94%, transparent 100%)',
+        maskImage:
+          'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 6%, rgba(0,0,0,0.85) 15%, black 25%, black 75%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.2) 94%, transparent 100%)',
+        opacity: scrollBlendOpacity,
+        transition: 'opacity 200ms ease-out',
+      }}
+    >
+      {videoSrc ? (
+        <video
+          ref={videoRef}
+          key={videoSrc}
+          src={videoSrc}
+          loop
+          muted
+          playsInline
+          preload="none"
+          poster={imageSrc}
+          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)` }}
+          className="w-full h-full object-cover opacity-90 transition-transform duration-100 ease-out will-change-transform"
+        />
+      ) : (
+        <img
+          src={imageSrc}
+          alt=""
+          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)` }}
+          className="w-full h-full object-cover opacity-85 transition-transform duration-100 ease-out will-change-transform"
+        />
+      )}
+      {/* Cinematic subtle contrast scrims: allows video textures to mix organically across sections while keeping cards crisp */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/60" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/15 to-[#000204]/75" />
+    </div>
+  );
+}
+
+function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
+  const anchorId = source.id === 'large-hydro' ? 'hydro' : source.id;
+  const directPath = source.id === 'large-hydro' ? '/hydro' : `/${source.id}`;
+  const nextSource = idx < ENERGY_SOURCES.length - 1 ? ENERGY_SOURCES[idx + 1] : null;
+  const nextAnchorId = nextSource ? (nextSource.id === 'large-hydro' ? 'hydro' : nextSource.id) : null;
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '80px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id={anchorId}
+      style={{ zIndex: 10 + idx }}
+      className="relative min-h-screen flex flex-col justify-center bg-transparent px-6 sm:px-12 py-24 sm:py-32 text-[#f0f4f1] transition-all duration-700 ease-out scroll-mt-0 overflow-visible"
+    >
+      {/* Dedicated Seamless Feather-Blended Background Video (Smoothly cross-fades into adjacent sections) */}
+      <SectionBackgroundVideo videoSrc={source.video} imageSrc={source.image} />
+
+      <div
+        className={`relative z-10 max-w-[1360px] mx-auto w-full transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) transform ${
+          isInView
+            ? 'opacity-100 translate-y-0 scale-100 filter-none'
+            : 'opacity-25 translate-y-12 scale-[0.98] blur-[1px]'
+        }`}
+      >
+        {/* Tactical Stage & Sequence Header */}
+        <div className="mb-6 text-left">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[4px] bg-black/40 border border-emerald-500/40 backdrop-blur-xl">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-mono text-[10px] tracking-[2px] uppercase text-emerald-400 font-semibold">
+                PAGE 0{idx + 1} OF 09 // {source.badge}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <span className="px-2.5 py-1 rounded bg-black/40 border border-white/10 text-emerald-300 backdrop-blur-xl">
+                {source.status}
+              </span>
+              <Link
+                to={directPath}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-mono text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] backdrop-blur-xl"
+              >
+                <span>Dedicated {source.shortName} Page</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-emerald-400" />
+              </Link>
+            </div>
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase leading-tight flex items-center gap-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+            <span className="p-2 rounded bg-black/40 border border-emerald-500/30 text-emerald-400 hidden sm:inline-flex backdrop-blur-md">
+              {getSourceIcon(source.id)}
+            </span>
+            <span>{source.name}</span>
+          </h2>
+
+          <p className="max-w-3xl text-sm sm:text-base text-slate-200 leading-relaxed font-normal mt-2 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+            {source.tagline}. {source.roleInDatacenter}
+          </p>
+        </div>
+
+        {/* Core Telemetry Grid (Full-Width 5 Metrics Blended in Frosted Glass) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 p-4 sm:p-5 rounded-2xl bg-black/35 border border-emerald-500/30 font-mono backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] mb-8">
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
+            <span className="block text-[9px] uppercase tracking-wider text-slate-400">Operating Capacity</span>
+            <span className="text-base sm:text-lg font-bold text-emerald-400">{source.installedCapacityIndia}</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">Target 2030: {source.targetCapacity2030}</span>
+          </div>
+
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
+            <span className="block text-[9px] uppercase tracking-wider text-slate-400">Tariff Band</span>
+            <span className="text-base sm:text-lg font-bold text-white">{source.tariffInrPerKwh}</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">{source.tariffUsdPerMwh}</span>
+          </div>
+
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
+            <span className="block text-[9px] uppercase tracking-wider text-slate-400">Capacity Factor (CUF)</span>
+            <span className="text-base sm:text-lg font-bold text-emerald-300">{source.cufRange}</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">Operating Band</span>
+          </div>
+
+          <div className="p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
+            <span className="block text-[9px] uppercase tracking-wider text-slate-400">Lifecycle Carbon</span>
+            <span className="text-base sm:text-lg font-bold text-white">{source.carbonIntensityGCo2}</span>
+            <span className="block text-[9px] text-slate-400 mt-0.5">Scope 1 & 2 Neutral</span>
+          </div>
+
+          <div className="col-span-2 sm:col-span-1 p-3 rounded-lg bg-black/25 border border-white/5 backdrop-blur-md">
+            <div className="flex justify-between items-center text-[10px] mb-1">
+              <span className="text-slate-400 uppercase tracking-wider">24/7 Match Rank</span>
+              <span className="text-emerald-400 font-bold">{source.matchingScore247}%</span>
+            </div>
+            <div className="w-full h-2.5 bg-black/80 rounded-full overflow-hidden border border-white/10">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 transition-all duration-700 rounded-full"
+                style={{ width: `${source.matchingScore247}%` }}
+              />
+            </div>
+            <span className="block text-[9px] text-emerald-400 mt-1 font-semibold">Uptime Rank</span>
+          </div>
+        </div>
+
+        {/* Thorough Two-Column Deep Technical Ledger */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left mb-6">
+          {/* Left Column (6 Cols): Diurnal Generation & Engineering Specifications */}
+          <div className="lg:col-span-6 flex flex-col gap-6">
+            {/* Diurnal Generation Profile */}
+            <div className="p-6 rounded-2xl bg-black/35 border border-emerald-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>DIURNAL GENERATION & DISPATCH PROFILE</span>
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">24-HOUR IST CYCLE</span>
+              </div>
+
+              {/* Visual 24H Timeline Bar */}
+              <div className="space-y-1.5 my-3">
+                <div className="flex justify-between text-[9px] font-mono text-slate-400 px-1">
+                  <span>00:00 (NIGHT)</span>
+                  <span>06:00 (DAWN)</span>
+                  <span>12:00 (NOON)</span>
+                  <span>18:00 (DUSK)</span>
+                  <span>24:00</span>
+                </div>
+                <div className="h-2.5 w-full bg-black/90 rounded-full overflow-hidden border border-white/10 relative">
+                  {source.id === 'solar' && (
+                    <div className="absolute inset-y-0 left-[25%] right-[25%] bg-gradient-to-r from-emerald-500/30 via-emerald-400 to-emerald-500/30 animate-pulse rounded-full" />
+                  )}
+                  {source.id === 'wind' && (
+                    <>
+                      <div className="absolute inset-y-0 left-0 right-[70%] bg-emerald-400/80 rounded-full" />
+                      <div className="absolute inset-y-0 left-[65%] right-0 bg-emerald-400/80 rounded-full" />
+                    </>
+                  )}
+                  {(source.id === 'large-hydro' || source.id === 'small-hydro' || source.id === 'biomass' || source.id === 'geothermal') && (
+                    <div className="absolute inset-0 bg-emerald-400/80 rounded-full" />
+                  )}
+                  {source.id === 'pumped-hydro' && (
+                    <>
+                      <div className="absolute inset-y-0 left-[35%] right-[35%] bg-cyan-500/40 rounded-full" title="Pumping charging mode" />
+                      <div className="absolute inset-y-0 left-[70%] right-[5%] bg-emerald-400 rounded-full" title="Generating discharge mode" />
+                    </>
+                  )}
+                  {(source.id === 'bess' || source.id === 'green-hydrogen') && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-400 to-emerald-500/20 animate-pulse rounded-full" />
+                  )}
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-300 leading-relaxed font-sans mt-2">
+                {source.dispatchProfile}
+              </p>
+            </div>
+
+            {/* Technical Architecture & Specs */}
+            <div className="p-6 rounded-2xl bg-black/35 border border-emerald-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mb-3 font-semibold flex items-center gap-2">
+                <Cpu className="w-3.5 h-3.5" />
+                <span>ENGINEERING SPECIFICATIONS // HARDWARE TOPOLOGY</span>
+              </div>
+              <div className="space-y-2.5 text-xs font-mono">
+                {Object.entries(source.technicalSpecs).map(([key, val]) => (
+                  <div key={key} className="flex flex-col sm:flex-row sm:items-baseline justify-between border-b border-white/5 pb-2 last:border-0 last:pb-0">
+                    <span className="text-slate-400 capitalize tracking-wider text-[11px]">
+                      {key.replace(/([A-Z])/g, ' $1')}:
+                    </span>
+                    <span className="text-slate-200 sm:text-right font-sans sm:font-mono text-xs sm:max-w-[65%] font-medium">
+                      {val}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Interactive Actions */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => navigate('/dc/profile', { state: { preferredSource: source.id } })}
+                className="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono text-xs font-semibold uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all cursor-pointer"
+              >
+                <Sliders className="w-4 h-4" />
+                <span>Model in DC Sizing Wizard</span>
+              </button>
+
+              <button
+                onClick={() => navigate('/map')}
+                className="py-3 px-4 rounded-xl bg-black/40 hover:bg-black/60 border border-emerald-500/40 text-emerald-300 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer backdrop-blur-xl"
+              >
+                <Globe className="w-4 h-4 text-emerald-400" />
+                <span>765kV Corridors</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column (6 Cols): Benchmark Plants, Corridors & Trade-offs */}
+          <div className="lg:col-span-6 flex flex-col gap-6">
+            {/* Benchmark Indian Mega-Plants */}
+            <div className="p-6 rounded-2xl bg-black/35 border border-emerald-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mb-3 font-semibold flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>KEY INDIAN BENCHMARK INSTALLATIONS</span>
+                </span>
+                <span className="text-slate-400 text-[9px]">OPERATIONAL LEDGER</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {source.keyPlants.map((plant, pIdx) => (
+                  <div key={pIdx} className="p-3.5 rounded-lg bg-black/35 border border-white/10 hover:border-emerald-500/40 backdrop-blur-md transition-all">
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="font-semibold text-xs text-white">{plant.name}</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap font-bold">
+                        {plant.capacity}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-2.5 h-2.5 text-slate-500" />
+                        {plant.location}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono">{plant.developer}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Transmission Corridors */}
+            <div className="p-5 rounded-2xl bg-black/35 border border-emerald-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:border-emerald-500/40 transition-all">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold block mb-2">
+                765kV GREEN TRANSMISSION CORRIDORS
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {source.corridors.map((c, cIdx) => (
+                  <span key={cIdx} className="px-3 py-1 rounded-md bg-black/45 border border-emerald-500/25 font-mono text-[11px] text-slate-200 backdrop-blur-md">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Strategic Trade-offs: Advantages & Limitations */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="p-5 rounded-2xl bg-black/35 border border-emerald-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold block mb-2">
+                  OPERATIONAL ADVANTAGES
+                </span>
+                <ul className="space-y-1.5 text-xs text-slate-300">
+                  {source.advantages.map((adv, aIdx) => (
+                    <li key={aIdx} className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span className="text-[11px] leading-relaxed">{adv}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-black/35 border border-amber-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-semibold block mb-2">
+                  GRID INTEGRATION CONSTRAINTS
+                </span>
+                <ul className="space-y-1.5 text-xs text-slate-300">
+                  {source.limitations.map((lim, lIdx) => (
+                    <li key={lIdx} className="flex items-start gap-2">
+                      <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                      <span className="text-[11px] leading-relaxed">{lim}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Regulatory Framework Ledger */}
+        <div className="p-5 rounded-2xl bg-black/35 border border-emerald-500/25 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">
+              CERC & MNRE REGULATORY POLICIES
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {source.regulatoryFramework.map((reg, rIdx) => (
+              <div key={rIdx} className="p-3 rounded-lg bg-black/35 border border-white/10 font-mono text-[11px] text-slate-200 backdrop-blur-md flex items-start gap-2">
+                <span className="text-emerald-400 font-bold">0{rIdx + 1}.</span>
+                <span>{reg}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll to Next Source Switch Transition */}
+        {nextSource && (
+          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-left font-mono text-xs text-slate-400">
+              <span className="text-emerald-400 font-semibold uppercase tracking-wider block text-[10px]">
+                NEXT CLEAN ENERGY SECTOR
+              </span>
+              <span>Stage 0{idx + 2} // {nextSource.name} ({nextSource.badge})</span>
+            </div>
+            <button
+              onClick={() => {
+                const el = document.getElementById(nextAnchorId)
+                if (el) el.scrollIntoView({ behavior: 'smooth' })
+              }}
+              className="group relative px-6 py-3 rounded-full bg-black/60 hover:bg-emerald-950/60 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-white font-mono text-xs uppercase tracking-widest backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all cursor-pointer flex items-center gap-3 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <span>Switch Page to {nextSource.shortName}</span>
+              <ChevronDown className="w-4 h-4 text-emerald-400 group-hover:translate-y-1 transition-transform" />
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function AppLanding() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showUI, setShowUI] = useState(true)
   const [isSystemInitiated, setIsSystemInitiated] = useState(false)
   const [descentCompleted, setDescentCompleted] = useState(false)
   const [selectedSourceId, setSelectedSourceId] = useState('solar')
+  const [heroScrollFade, setHeroScrollFade] = useState(1)
+  const [heroTranslateY, setHeroTranslateY] = useState(0)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    let rafId = null
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset || 0
+      // Over the first 520px of scroll, hero gracefully dissolves into deep space
+      const fade = Math.max(0, Math.min(1, 1 - scrollY / 520))
+      const transY = scrollY * 0.16
+      setHeroScrollFade(fade)
+      setHeroTranslateY(transY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [])
 
   const currentSource = ENERGY_SOURCES.find((s) => s.id === selectedSourceId) || ENERGY_SOURCES[0]
 
@@ -182,9 +654,15 @@ export default function AppLanding() {
           </div>
         )}
 
-        {/* State 2: Ground Power Infrastructure Hero (Revealed after descent) */}
+        {/* State 2: Ground Power Infrastructure Hero (Revealed after descent with scroll-driven cinematic fade) */}
         {isGroundReady && (
-          <div className="max-w-3xl flex flex-col items-center justify-center pt-24 pb-8 z-30 px-4">
+          <div
+            className="max-w-3xl flex flex-col items-center justify-center pt-24 pb-8 z-30 px-4 transition-transform duration-75 ease-out will-change-transform"
+            style={{
+              opacity: heroScrollFade,
+              transform: `translate3d(0, -${heroTranslateY}px, 0)`,
+            }}
+          >
             <div className="relative mb-5 hover:scale-105 transition-transform duration-300">
               <div className="absolute inset-0 -z-10 rounded-full bg-[#00d084]/20 blur-2xl scale-125 pointer-events-none" />
               <Logo3D size={200} className="w-[180px] h-[180px] sm:w-[210px] sm:h-[210px] drop-shadow-[0_0_40px_rgba(0,208,132,0.6)]" />
@@ -237,339 +715,29 @@ export default function AppLanding() {
             </div>
           </div>
         )}
+
       </section>
 
       {/* Sequential Dedicated Energy Source Pages (Directly Accessible via Scroll) */}
       {isGroundReady && (
         <>
-          {/* Sequential Energy Source Pages */}
-          {ENERGY_SOURCES.map((source, idx) => {
-            const anchorId = source.id === 'large-hydro' ? 'hydro' : source.id
-            const directPath = source.id === 'large-hydro' ? '/hydro' : `/${source.id}`
-            const nextSource = idx < ENERGY_SOURCES.length - 1 ? ENERGY_SOURCES[idx + 1] : null
-            const nextAnchorId = nextSource ? (nextSource.id === 'large-hydro' ? 'hydro' : nextSource.id) : null
 
-            return (
-              <section
-                key={source.id}
-                id={anchorId}
-                className="relative z-20 min-h-screen flex flex-col justify-center bg-[#000302]/95 border-t border-emerald-500/20 backdrop-blur-2xl px-6 sm:px-12 py-20 text-[#f0f4f1] transition-all duration-700 ease-out scroll-mt-16 overflow-hidden"
-              >
-                {/* Dedicated AI Generated Video Background for the ENTIRE energy source page */}
-                <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                  {source.video ? (
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover opacity-40 scale-105 filter blur-[0.5px] transition-opacity duration-1000"
-                    >
-                      <source src={source.video} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <img
-                      src={source.image}
-                      alt=""
-                      className="w-full h-full object-cover opacity-30"
-                    />
-                  )}
-                  {/* Layered cinematic gradients ensuring sharp contrast and complete legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/90 via-[#000204]/75 to-[#000204]/92" />
-                  <div className="absolute inset-0 bg-radial-[at_50%_35%] from-transparent via-[#000204]/40 to-[#000204]/90" />
-                </div>
+          {ENERGY_SOURCES.map((source, idx) => (
+            <EnergySourceSection
+              key={source.id}
+              source={source}
+              idx={idx}
+              getSourceIcon={getSourceIcon}
+              navigate={navigate}
+            />
+          ))}
 
-                <div className="relative z-10 max-w-[1360px] mx-auto w-full">
-                  {/* Tactical Stage & Sequence Header */}
-                  <div className="mb-6 text-left">
-                    <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[4px] bg-emerald-500/15 border border-emerald-500/30 backdrop-blur-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span className="font-mono text-[10px] tracking-[2px] uppercase text-emerald-400 font-semibold">
-                          PAGE 0{idx + 1} OF 09 // {source.badge}
-                        </span>
-                      </div>
 
-                      <div className="flex items-center gap-2 font-mono text-xs">
-                        <span className="px-2.5 py-1 rounded bg-[#040a08]/90 border border-white/10 text-emerald-300 backdrop-blur-md">
-                          {source.status}
-                        </span>
-                        <Link
-                          to={directPath}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-mono text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                        >
-                          <span>Dedicated {source.shortName} Page</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 text-emerald-400" />
-                        </Link>
-                      </div>
-                    </div>
-
-                    <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase leading-tight flex items-center gap-3">
-                      <span className="p-2 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hidden sm:inline-flex">
-                        {getSourceIcon(source.id)}
-                      </span>
-                      <span>{source.name}</span>
-                    </h2>
-
-                    <p className="max-w-3xl text-sm sm:text-base text-slate-200 leading-relaxed font-normal mt-2">
-                      {source.tagline}. {source.roleInDatacenter}
-                    </p>
-                  </div>
-
-                  {/* Core Telemetry Grid (Full-Width 5 Metrics) */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 p-4 rounded-lg bg-[#040a08]/85 border border-emerald-500/30 font-mono backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] mb-8">
-                    <div>
-                      <span className="block text-[9px] uppercase tracking-wider text-slate-400">Operating Capacity</span>
-                      <span className="text-base sm:text-lg font-bold text-emerald-400">{source.installedCapacityIndia}</span>
-                      <span className="block text-[9px] text-slate-400">Target 2030: {source.targetCapacity2030}</span>
-                    </div>
-
-                    <div>
-                      <span className="block text-[9px] uppercase tracking-wider text-slate-400">Tariff Band</span>
-                      <span className="text-base sm:text-lg font-bold text-white">{source.tariffInrPerKwh}</span>
-                      <span className="block text-[9px] text-slate-400">{source.tariffUsdPerMwh}</span>
-                    </div>
-
-                    <div>
-                      <span className="block text-[9px] uppercase tracking-wider text-slate-400">Capacity Factor (CUF)</span>
-                      <span className="text-base sm:text-lg font-bold text-emerald-300">{source.cufRange}</span>
-                      <span className="block text-[9px] text-slate-400">Operating Band</span>
-                    </div>
-
-                    <div>
-                      <span className="block text-[9px] uppercase tracking-wider text-slate-400">Lifecycle Carbon</span>
-                      <span className="text-base sm:text-lg font-bold text-white">{source.carbonIntensityGCo2}</span>
-                      <span className="block text-[9px] text-slate-400">Scope 1 & 2 Neutral</span>
-                    </div>
-
-                    <div className="col-span-2 sm:col-span-1">
-                      <div className="flex justify-between items-center text-[10px] mb-1">
-                        <span className="text-slate-400 uppercase tracking-wider">24/7 Match Rank</span>
-                        <span className="text-emerald-400 font-bold">{source.matchingScore247}%</span>
-                      </div>
-                      <div className="w-full h-2.5 bg-black/80 rounded-full overflow-hidden border border-white/10">
-                        <div
-                          className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 transition-all duration-700 rounded-full"
-                          style={{ width: `${source.matchingScore247}%` }}
-                        />
-                      </div>
-                      <span className="block text-[9px] text-emerald-400 mt-1 font-semibold">Uptime Rank</span>
-                    </div>
-                  </div>
-
-                  {/* Thorough Two-Column Deep Technical Ledger */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left mb-6">
-                    {/* Left Column (6 Cols): Diurnal Generation & Engineering Specifications */}
-                    <div className="lg:col-span-6 flex flex-col gap-6">
-                      {/* Diurnal Generation Profile */}
-                      <div className="p-5 rounded-lg bg-[#040a08]/85 border border-emerald-500/25 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>DIURNAL GENERATION & DISPATCH PROFILE</span>
-                          </span>
-                          <span className="text-[10px] font-mono text-slate-400">24-HOUR IST CYCLE</span>
-                        </div>
-
-                        {/* Visual 24H Timeline Bar */}
-                        <div className="space-y-1.5 my-3">
-                          <div className="flex justify-between text-[9px] font-mono text-slate-400 px-1">
-                            <span>00:00 (NIGHT)</span>
-                            <span>06:00 (DAWN)</span>
-                            <span>12:00 (NOON)</span>
-                            <span>18:00 (DUSK)</span>
-                            <span>24:00</span>
-                          </div>
-                          <div className="h-2.5 w-full bg-black/90 rounded-full overflow-hidden border border-white/10 relative">
-                            {source.id === 'solar' && (
-                              <div className="absolute inset-y-0 left-[25%] right-[25%] bg-gradient-to-r from-emerald-500/30 via-emerald-400 to-emerald-500/30 animate-pulse rounded-full" />
-                            )}
-                            {source.id === 'wind' && (
-                              <>
-                                <div className="absolute inset-y-0 left-0 right-[70%] bg-emerald-400/80 rounded-full" />
-                                <div className="absolute inset-y-0 left-[65%] right-0 bg-emerald-400/80 rounded-full" />
-                              </>
-                            )}
-                            {(source.id === 'large-hydro' || source.id === 'small-hydro' || source.id === 'biomass' || source.id === 'geothermal') && (
-                              <div className="absolute inset-0 bg-emerald-400/80 rounded-full" />
-                            )}
-                            {source.id === 'pumped-hydro' && (
-                              <>
-                                <div className="absolute inset-y-0 left-[35%] right-[35%] bg-cyan-500/40 rounded-full" title="Pumping charging mode" />
-                                <div className="absolute inset-y-0 left-[70%] right-[5%] bg-emerald-400 rounded-full" title="Generating discharge mode" />
-                              </>
-                            )}
-                            {(source.id === 'bess' || source.id === 'green-hydrogen') && (
-                              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-400 to-emerald-500/20 animate-pulse rounded-full" />
-                            )}
-                          </div>
-                        </div>
-
-                        <p className="text-xs text-slate-300 leading-relaxed font-sans mt-2">
-                          {source.dispatchProfile}
-                        </p>
-                      </div>
-
-                      {/* Technical Architecture & Specs */}
-                      <div className="p-5 rounded-lg bg-[#040a08]/85 border border-emerald-500/25 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-                        <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mb-3 font-semibold flex items-center gap-2">
-                          <Cpu className="w-3.5 h-3.5" />
-                          <span>ENGINEERING SPECIFICATIONS // HARDWARE TOPOLOGY</span>
-                        </div>
-                        <div className="space-y-2.5 text-xs font-mono">
-                          {Object.entries(source.technicalSpecs).map(([key, val]) => (
-                            <div key={key} className="flex flex-col sm:flex-row sm:items-baseline justify-between border-b border-white/5 pb-2 last:border-0 last:pb-0">
-                              <span className="text-slate-400 capitalize tracking-wider text-[11px]">
-                                {key.replace(/([A-Z])/g, ' $1')}:
-                              </span>
-                              <span className="text-slate-200 sm:text-right font-sans sm:font-mono text-xs sm:max-w-[65%] font-medium">
-                                {val}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Interactive Actions */}
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <button
-                          onClick={() => navigate('/dc/profile', { state: { preferredSource: source.id } })}
-                          className="flex-1 py-3 px-4 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono text-xs font-semibold uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all cursor-pointer"
-                        >
-                          <Sliders className="w-4 h-4" />
-                          <span>Model in DC Sizing Wizard</span>
-                        </button>
-
-                        <button
-                          onClick={() => navigate('/map')}
-                          className="py-3 px-4 rounded bg-[#040a08]/90 hover:bg-[#07130b] border border-emerald-500/40 text-emerald-300 hover:text-white font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer backdrop-blur-md"
-                        >
-                          <Globe className="w-4 h-4 text-emerald-400" />
-                          <span>765kV Corridors</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Right Column (6 Cols): Benchmark Plants, Corridors & Trade-offs */}
-                    <div className="lg:col-span-6 flex flex-col gap-6">
-                      {/* Benchmark Indian Mega-Plants */}
-                      <div className="p-5 rounded-lg bg-[#040a08]/85 border border-emerald-500/25 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-                        <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 mb-3 font-semibold flex items-center justify-between">
-                          <span className="flex items-center gap-1.5">
-                            <Building2 className="w-3.5 h-3.5" />
-                            <span>KEY INDIAN BENCHMARK INSTALLATIONS</span>
-                          </span>
-                          <span className="text-slate-400 text-[9px]">OPERATIONAL LEDGER</span>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                          {source.keyPlants.map((plant, pIdx) => (
-                            <div key={pIdx} className="p-3 rounded bg-[#020504]/90 border border-white/5 hover:border-emerald-500/30 transition-all">
-                              <div className="flex justify-between items-start gap-2">
-                                <span className="font-semibold text-xs text-white">{plant.name}</span>
-                                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap font-bold">
-                                  {plant.capacity}
-                                </span>
-                              </div>
-                              <div className="text-[11px] text-slate-400 mt-1.5 flex items-center justify-between">
-                                <span className="flex items-center gap-1">
-                                  <MapPin className="w-2.5 h-2.5 text-slate-500" />
-                                  {plant.location}
-                                </span>
-                                <span className="text-[10px] text-slate-500">{plant.developer}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Transmission Corridors */}
-                      <div className="p-4 rounded-lg bg-[#040a08]/85 border border-emerald-500/25 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-                        <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold block mb-2">
-                          765kV GREEN TRANSMISSION CORRIDORS
-                        </span>
-                        <div className="flex flex-wrap gap-2">
-                          {source.corridors.map((c, cIdx) => (
-                            <span key={cIdx} className="px-2.5 py-1 rounded bg-black/80 border border-emerald-500/20 font-mono text-[11px] text-slate-300">
-                              {c}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Strategic Trade-offs: Advantages & Limitations */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="p-4 rounded-lg bg-[#040a08]/85 border border-emerald-500/20 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold block mb-2">
-                            OPERATIONAL ADVANTAGES
-                          </span>
-                          <ul className="space-y-1.5 text-xs text-slate-300">
-                            {source.advantages.map((adv, aIdx) => (
-                              <li key={aIdx} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                                <span className="text-[11px] leading-relaxed">{adv}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="p-4 rounded-lg bg-[#040a08]/85 border border-amber-500/20 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-semibold block mb-2">
-                            GRID INTEGRATION CONSTRAINTS
-                          </span>
-                          <ul className="space-y-1.5 text-xs text-slate-300">
-                            {source.limitations.map((lim, lIdx) => (
-                              <li key={lIdx} className="flex items-start gap-2">
-                                <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-                                <span className="text-[11px] leading-relaxed">{lim}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Regulatory Framework Ledger */}
-                  <div className="p-4 rounded-lg bg-[#040a08]/85 border border-emerald-500/20 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)] mb-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">
-                        CERC & MNRE REGULATORY POLICIES
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      {source.regulatoryFramework.map((reg, rIdx) => (
-                        <div key={rIdx} className="p-2.5 rounded bg-black/60 border border-white/5 font-mono text-[11px] text-slate-300 flex items-start gap-2">
-                          <span className="text-emerald-400 font-bold">0{rIdx + 1}.</span>
-                          <span>{reg}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Scroll to Next Source Prompt */}
-                  {nextSource && (
-                    <div className="pt-4 border-t border-white/10 flex justify-center">
-                      <button
-                        onClick={() => {
-                          const el = document.getElementById(nextAnchorId)
-                          if (el) el.scrollIntoView({ behavior: 'smooth' })
-                        }}
-                        className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#040a08]/90 hover:bg-[#08150f] border border-emerald-500/30 text-emerald-300 hover:text-white font-mono text-xs uppercase tracking-wider transition-all cursor-pointer backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                      >
-                        <span>Scroll Down to Next Source: {nextSource.shortName}</span>
-                        <ChevronDown className="w-4 h-4 text-emerald-400 group-hover:translate-y-0.5 transition-transform" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </section>
-            )
-          })}
 
           {/* Tactical Grid Siting Radar & DC Profile Interconnect Banner */}
-          <section className="relative z-20 bg-[#000302]/95 border-t border-emerald-500/20 backdrop-blur-2xl px-6 sm:px-12 py-16 text-[#f0f4f1]">
-            <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 p-8 rounded-lg bg-gradient-to-r from-emerald-950/30 to-[#020504] border border-emerald-500/30 text-left">
+          <section className="relative z-20 bg-transparent px-6 sm:px-12 py-24 text-[#f0f4f1] overflow-visible">
+
+            <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-emerald-500/30 shadow-[0_12px_40px_rgba(0,0,0,0.5)] text-left relative z-20">
               <div>
                 <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
                   GEOSPATIAL SITING RADAR // 765kV CTU INTERCONNECT
@@ -582,7 +750,7 @@ export default function AppLanding() {
                 </p>
                 <Link
                   to="/map"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono text-xs font-semibold uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono text-xs font-semibold uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
                 >
                   <Globe className="w-4 h-4" />
                   <span>Launch National Siting Radar →</span>
@@ -601,7 +769,7 @@ export default function AppLanding() {
                 </p>
                 <Link
                   to="/dc/profile"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[#040a08] hover:bg-[#08120b] border border-emerald-500/40 text-emerald-300 hover:text-white font-mono text-xs font-semibold uppercase tracking-wider transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-black/50 hover:bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 hover:text-white font-mono text-xs font-semibold uppercase tracking-wider transition-all backdrop-blur-md"
                 >
                   <Sliders className="w-4 h-4" />
                   <span>Configure Facility Specs →</span>

@@ -48,21 +48,18 @@ export default function SynapseCursor() {
       const dy = e.clientY - lastMousePos.current.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Spawn synaptic vesicle spark particles on movement
-      if (dist > 3) {
-        const count = Math.min(Math.floor(dist / 6) + 1, 3);
-        for (let i = 0; i < count; i++) {
-          particles.current.push({
-            x: e.clientX + (Math.random() - 0.5) * 8,
-            y: e.clientY + (Math.random() - 0.5) * 8,
-            vx: (Math.random() - 0.5) * 1.5 - dx * 0.08,
-            vy: (Math.random() - 0.5) * 1.5 - dy * 0.08,
-            size: Math.random() * 2.5 + 1.2,
-            maxLife: Math.random() * 20 + 25,
-            life: 0,
-            hue: Math.random() > 0.4 ? 158 : 172 // Emerald mint to cyan synapse glow
-          });
-        }
+      // Spawn synaptic vesicle spark particles on movement (throttled for high FPS)
+      if (dist > 6 && particles.current.length < 18) {
+        particles.current.push({
+          x: e.clientX + (Math.random() - 0.5) * 6,
+          y: e.clientY + (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * 1.2 - dx * 0.06,
+          vy: (Math.random() - 0.5) * 1.2 - dy * 0.06,
+          size: Math.random() * 2 + 1,
+          maxLife: 20,
+          life: 0,
+          hue: Math.random() > 0.4 ? 158 : 172 // Emerald mint to cyan synapse glow
+        });
         lastMousePos.current = { x: e.clientX, y: e.clientY };
       }
     };
@@ -173,14 +170,16 @@ export default function SynapseCursor() {
           ctx.stroke();
         }
 
-        // Draw particle with synaptic aura
+        // Draw particle with hardware-accelerated synaptic glow aura (no CPU shadowBlur)
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, currentSize * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${alpha * 0.22})`;
+        ctx.fill();
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, currentSize, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${alpha})`;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = `hsla(${p.hue}, 100%, 60%, ${alpha})`;
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 75%, ${alpha})`;
         ctx.fill();
-        ctx.shadowBlur = 0; // reset
       }
 
       animFrameId.current = requestAnimationFrame(render);
