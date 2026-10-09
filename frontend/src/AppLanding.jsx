@@ -128,7 +128,7 @@ function SpecList({ specs }) {
           key={key}
           className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-white/5 pb-2 last:border-0 last:pb-0"
         >
-          <span className="text-slate-400 capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+          <span className="text-gray-400 font-bold capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
           <span className="text-slate-100 sm:text-right sm:max-w-[65%]">{val}</span>
         </div>
       ))}
@@ -145,7 +145,7 @@ function PlantList({ plants }) {
             <span className="font-medium text-sm text-white">{plant.name}</span>
             <span className="text-xs text-emerald-400 whitespace-nowrap">{plant.capacity}</span>
           </div>
-          <div className="text-xs text-slate-400 mt-1.5 flex items-center justify-between gap-2">
+          <div className="text-sm text-gray-400 font-bold mt-1.5 flex items-center justify-between gap-2">
             <span className="flex items-center gap-1">
               <MapPin className="w-3 h-3" />
               {plant.location}
