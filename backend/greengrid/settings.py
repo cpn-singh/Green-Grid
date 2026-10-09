@@ -4,11 +4,24 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / '.env')
+load_dotenv(BASE_DIR / '.env', override=False)
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-greengrid-renewable-energy-marketplace-key-2026')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+
+allowed_hosts_raw = os.getenv('ALLOWED_HOSTS', '*')
+if allowed_hosts_raw.strip() == '*':
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_raw.split(',') if h.strip()]
+
+# Automatically permit Render domains and local dev hosts
+render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname and render_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(render_hostname)
+for default_host in ['.onrender.com', 'green-grid-saik.onrender.com', 'localhost', '127.0.0.1']:
+    if default_host not in ALLOWED_HOSTS and '*' not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(default_host)
 
 INSTALLED_APPS = [
     'daphne',
