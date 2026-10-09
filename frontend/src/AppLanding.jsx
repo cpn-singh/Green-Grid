@@ -6,7 +6,6 @@ import {
   Eye, 
   EyeOff, 
   Globe, 
-  ArrowRight, 
   ChevronDown, 
   Sliders, 
   ArrowUpRight,
@@ -21,7 +20,6 @@ import {
   Flame,
   Layers,
   AlertCircle,
-  Compass,
   Cpu,
   Clock,
   Building2,
@@ -33,22 +31,19 @@ import { ENERGY_SOURCES, ENERGY_SOURCE_CATEGORIES } from './data/energySourcesDa
 
 function SectionBackgroundVideo({ videoSrc, imageSrc }) {
   const videoRef = useRef(null);
+  const mediaRef = useRef(null);
   const containerRef = useRef(null);
   const [isInViewport, setIsInViewport] = useState(false);
-  const [scrollBlendOpacity, setScrollBlendOpacity] = useState(1);
-  const [parallaxY, setParallaxY] = useState(0);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsInViewport(entry.isIntersecting);
-        });
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting);
       },
-      { threshold: 0.01, rootMargin: '260px 0px' }
+      { threshold: 0.01, rootMargin: '200px 0px' }
     );
 
     observer.observe(container);
@@ -64,49 +59,51 @@ function SectionBackgroundVideo({ videoSrc, imageSrc }) {
 
     if (isInViewport && videoSrc) {
       const p = video.play();
-      if (p !== undefined) {
-        p.catch(() => {});
-      }
+      if (p !== undefined) p.catch(() => {});
     } else {
       video.pause();
     }
   }, [isInViewport, videoSrc]);
 
-  // Subtle scroll parallax and smooth cross-dissolve when entering/leaving viewport
+  // Direct GPU parallax on scroll - active only when section is visible
   useEffect(() => {
-    let rafId = null;
+    if (!isInViewport) return;
+
+    let ticking = false;
     const handleScroll = () => {
-      const container = containerRef.current;
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
-      const windowHeight = window.innerHeight || 800;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const container = containerRef.current;
+          const media = mediaRef.current || videoRef.current;
+          if (container && media) {
+            const rect = container.getBoundingClientRect();
+            const windowHeight = window.innerHeight || 800;
+            const offset = (rect.top - windowHeight / 2) * 0.035;
+            media.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0) scale(1.03)`;
 
-      // Subtle parallax: 3.5% slower movement creates natural optical depth
-      const offset = (rect.top - windowHeight / 2) * 0.035;
-      setParallaxY(offset);
-
-      // Smooth blend: calculate progress across the viewport
-      const totalSpan = windowHeight + rect.height;
-      const progress = (windowHeight - rect.top) / totalSpan;
-
-      let opacity = 1;
-      if (progress < 0.2) {
-        // Entering from bottom: smooth ease-in
-        opacity = 0.35 + (progress / 0.2) * 0.65;
-      } else if (progress > 0.8) {
-        // Exiting toward top: smooth ease-out
-        opacity = 1 - ((progress - 0.8) / 0.2) * 0.65;
+            const totalSpan = windowHeight + rect.height;
+            const progress = (windowHeight - rect.top) / totalSpan;
+            let opacity = 1;
+            if (progress < 0.2) {
+              opacity = 0.35 + (progress / 0.2) * 0.65;
+            } else if (progress > 0.8) {
+              opacity = 1 - ((progress - 0.8) / 0.2) * 0.65;
+            }
+            container.style.opacity = Math.max(0.25, Math.min(1, opacity));
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
-      setScrollBlendOpacity(Math.max(0.25, Math.min(1, opacity)));
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (rafId) cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [isInViewport]);
 
   return (
     <div
@@ -117,7 +114,6 @@ function SectionBackgroundVideo({ videoSrc, imageSrc }) {
           'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 6%, rgba(0,0,0,0.85) 15%, black 25%, black 75%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.2) 94%, transparent 100%)',
         maskImage:
           'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 6%, rgba(0,0,0,0.85) 15%, black 25%, black 75%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.2) 94%, transparent 100%)',
-        opacity: scrollBlendOpacity,
         transition: 'opacity 200ms ease-out',
       }}
     >
@@ -131,18 +127,18 @@ function SectionBackgroundVideo({ videoSrc, imageSrc }) {
           playsInline
           preload="auto"
           poster={imageSrc}
-          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.03)` }}
-          className="w-full h-full object-cover opacity-100 contrast-[1.07] brightness-[1.03] saturate-[1.10] transition-transform duration-100 ease-out will-change-transform"
+          style={{ transform: 'translate3d(0, 0, 0) scale(1.03)' }}
+          className="w-full h-full object-cover opacity-100 contrast-[1.07] brightness-[1.03] saturate-[1.10] will-change-transform"
         />
       ) : (
         <img
+          ref={mediaRef}
           src={imageSrc}
           alt=""
-          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.03)` }}
-          className="w-full h-full object-cover opacity-100 contrast-[1.07] brightness-[1.03] saturate-[1.10] transition-transform duration-100 ease-out will-change-transform"
+          style={{ transform: 'translate3d(0, 0, 0) scale(1.03)' }}
+          className="w-full h-full object-cover opacity-100 contrast-[1.07] brightness-[1.03] saturate-[1.10] will-change-transform"
         />
       )}
-      {/* High-clarity subtle contrast scrims: preserves rich 1080p highlights and details while maintaining card legibility */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-black/55" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/10 to-[#000204]/65" />
     </div>

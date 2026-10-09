@@ -69,25 +69,10 @@ export default function Navbar({ visible = true }) {
         <li>
           <Link to="/supplier/dashboard" className="hover:text-[#22c55e] transition-colors">Suppliers</Link>
         </li>
-        {user?.role === 'dc_builder' && (
-          <>
-            <li>
-              <Link to="/dc/profile" className="hover:text-[#22c55e] transition-colors">Facility Specs</Link>
-            </li>
-            <li>
-              <Link to="/dc/results" className="hover:text-[#22c55e] transition-colors">Clean Matches</Link>
-            </li>
-          </>
-        )}
         {user?.role === 'energy_supplier' && (
-          <>
-            <li>
-              <Link to="/supplier/profile" className="hover:text-[#22c55e] transition-colors">Asset Specs</Link>
-            </li>
-            <li>
-              <Link to="/supplier/dashboard" className="hover:text-[#22c55e] transition-colors">Inquiries</Link>
-            </li>
-          </>
+          <li>
+            <Link to="/supplier/profile" className="hover:text-[#22c55e] transition-colors">Asset Specs</Link>
+          </li>
         )}
       </ul>
 

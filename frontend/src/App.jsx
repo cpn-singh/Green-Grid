@@ -41,7 +41,7 @@ export default function App() {
             <Route path="/green-hydrogen" element={<SourceDetailPage sourceIdOverride="green-hydrogen" />} />
             <Route path="/hydrogen" element={<SourceDetailPage sourceIdOverride="green-hydrogen" />} />
             <Route path="/geothermal" element={<SourceDetailPage sourceIdOverride="geothermal" />} />
-            <Route path="/sources" element={<SourceDetailPage sourceIdOverride="solar" />} />
+            <Route path="/sources" element={<SourcesIndexPage />} />
             <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           </Routes>
         </Suspense>

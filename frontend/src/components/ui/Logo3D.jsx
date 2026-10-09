@@ -198,16 +198,26 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
 
     // 9. Animation Loop with Smooth Cinematic Intro Transition
     let animId
+    let isElementVisible = true
     const startTime = performance.now()
     const introDuration = 1.3 // seconds
+
+    // Intersection observer to pause WebGL when scrolled out of view
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      isElementVisible = entry.isIntersecting
+      if (isElementVisible) {
+        animId = requestAnimationFrame(animate)
+      }
+    }, { threshold: 0.05 })
+    visibilityObserver.observe(container)
 
     // Initial intro state
     logoGroup.scale.set(0.3, 0.3, 0.3)
     accentPointLight.intensity = 0.5
 
     const animate = () => {
+      if (!isElementVisible || document.hidden) return
       animId = requestAnimationFrame(animate)
-      if (document.hidden) return
       const elapsedTime = (performance.now() - startTime) * 0.001
 
       // Intro reveal progression with smooth cubic ease-out
@@ -269,6 +279,7 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
 
     // Cleanup
     return () => {
+      visibilityObserver.disconnect()
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', handleResize)
       container.removeEventListener('pointermove', handlePointerMove)

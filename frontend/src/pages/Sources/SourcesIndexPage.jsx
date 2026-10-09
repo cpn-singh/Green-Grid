@@ -17,7 +17,6 @@ import {
   Globe 
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
-import EnergyVideoMedia from '../../components/ui/EnergyVideoMedia';
 import { ENERGY_SOURCES, ENERGY_SOURCE_CATEGORIES } from '../../data/energySourcesData';
 
 export default function SourcesIndexPage() {
@@ -132,16 +131,15 @@ export default function SourcesIndexPage() {
               <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-emerald-400 z-20 pointer-events-none" />
               <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-emerald-400 z-20 pointer-events-none" />
 
-              {/* Video / High-Res Media Header */}
-              <div className="relative">
-                <EnergyVideoMedia
-                  imageSrc={source.image}
-                  videoSrc={source.video}
-                  videoCdn={source.videoCdn}
+              {/* High-Res Media Header */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-black/60">
+                <img
+                  src={source.image}
                   alt={source.name}
-                  aspectRatio="aspect-[16/10]"
-                  overlayOpacity="0.65"
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#070e0a] via-black/25 to-transparent pointer-events-none" />
 
                 {/* Status Badge Overlay */}
                 <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] bg-black/80 backdrop-blur-md border border-emerald-500/40 text-[10px] font-mono tracking-wider uppercase text-emerald-400">
