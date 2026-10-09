@@ -324,7 +324,6 @@ function SourceDetailModal({ source, isOpen, onClose, navigate }) {
 
 function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
   const anchorId = source.id === 'large-hydro' ? 'hydro' : source.id
-  const directPath = source.id === 'large-hydro' ? '/hydro' : `/${source.id}`
   const [showDetailModal, setShowDetailModal] = useState(false)
 
   return (
@@ -340,15 +339,6 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
         <div className="mb-6 text-left">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
             <span className="text-sm text-emerald-400">{source.badge}</span>
-            <div className="flex items-center gap-2 text-sm">
-              <span className="px-2.5 py-1 rounded bg-black/50 border border-white/10 text-slate-200">
-                {source.status}
-              </span>
-              <Link to={directPath} className={btnSecondary}>
-                {source.shortName} page
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </div>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white leading-tight flex items-center gap-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">

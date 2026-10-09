@@ -199,9 +199,6 @@ export default function SourceDetailPage({ sourceIdOverride }) {
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <span className="text-sm text-emerald-400">{source.badge}</span>
             <div className="flex items-center gap-2 text-sm">
-              <span className="px-2.5 py-1 rounded bg-black/60 border border-white/10 text-slate-200">
-                {source.status}
-              </span>
               <span className="px-2.5 py-1 rounded bg-black/60 border border-white/10 text-slate-300">
                 Installed in India: {source.installedCapacityIndia}
               </span>
