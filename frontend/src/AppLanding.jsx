@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import {
   Maximize2,
   Minimize2,
@@ -516,11 +516,61 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
 export default function AppLanding() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showUI, setShowUI] = useState(true)
-  const [isSystemInitiated, setIsSystemInitiated] = useState(false)
-  const [descentCompleted, setDescentCompleted] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // Determine if we should jump straight to the logo page:
+  // - If routed with state: { toLogo: true }
+  // - OR if this is a normal reload / revisit after having seen the intro
+  const shouldSkipIntro = () => {
+    if (location.state?.toLogo) return true
+    try {
+      const introDone = sessionStorage.getItem('greengrid_intro_done')
+      if (introDone === 'true') return true
+    } catch (_) {}
+    return false
+  }
+
+  const [isSystemInitiated, setIsSystemInitiated] = useState(() => shouldSkipIntro())
+  const [descentCompleted, setDescentCompleted] = useState(() => shouldSkipIntro())
   const [heroScrollFade, setHeroScrollFade] = useState(1)
   const [heroTranslateY, setHeroTranslateY] = useState(0)
-  const navigate = useNavigate()
+
+  // Listen for hard refresh shortcuts (Ctrl+F5, Ctrl+Shift+R, Cmd+Shift+R)
+  // so a hard refresh clears sessionStorage and lets the user see the Earth landing page again
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (
+        (e.key === 'F5' && (e.ctrlKey || e.shiftKey)) ||
+        ((e.key === 'r' || e.key === 'R') && (e.metaKey || e.ctrlKey) && e.shiftKey)
+      ) {
+        try {
+          sessionStorage.removeItem('greengrid_intro_done')
+        } catch (_) {}
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  // If navigated to with state: { toLogo: true } (e.g. from navbar logo click)
+  useEffect(() => {
+    if (location.state?.toLogo) {
+      setIsSystemInitiated(true)
+      setDescentCompleted(true)
+      try {
+        sessionStorage.setItem('greengrid_intro_done', 'true')
+      } catch (_) {}
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [location.state])
+
+  const handleDescentComplete = () => {
+    setDescentCompleted(true)
+    try {
+      sessionStorage.setItem('greengrid_intro_done', 'true')
+    } catch (_) {}
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -594,11 +644,15 @@ export default function AppLanding() {
       <OrbitalEarthBackground
         opacity={heroScrollFade}
         isInitiated={isSystemInitiated}
-        onDescentComplete={() => setDescentCompleted(true)}
+        skipToGround={descentCompleted}
+        onDescentComplete={handleDescentComplete}
         onReplayDescent={() => setDescentCompleted(false)}
         onResetOrbit={() => {
           setIsSystemInitiated(false)
           setDescentCompleted(false)
+          try {
+            sessionStorage.removeItem('greengrid_intro_done')
+          } catch (_) {}
         }}
       />
 
@@ -607,7 +661,15 @@ export default function AppLanding() {
         className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 sm:px-12 pt-4 pb-5 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-500 ${isGroundReady && showUI ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
       >
-        <Link to="/" className="flex items-center gap-3">
+        <Link
+          to="/"
+          state={{ toLogo: true }}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+          className="flex items-center gap-3 cursor-pointer"
+          title="Scroll to top of GreenGrid"
+        >
           <Logo3D size={34} className="w-8 h-8 shrink-0" />
           <span className="text-base font-semibold text-white">GreenGrid</span>
         </Link>

@@ -13,23 +13,36 @@ export default function OrbitalEarthBackground({
   onDescentComplete,
   onResetOrbit,
   onReplayDescent,
-  opacity = 1
+  opacity = 1,
+  skipToGround = false,
 }) {
-  const [descentFinished, setDescentFinished] = useState(false);
+  const [descentFinished, setDescentFinished] = useState(() => skipToGround);
   const heroVideoRef = useRef(null);
   const earthVideoRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Pause hero video on mount
+  // Initial video setup on mount
   useEffect(() => {
-    if (heroVideoRef.current) {
-      heroVideoRef.current.pause();
-      heroVideoRef.current.currentTime = 0;
+    if (skipToGround) {
+      setDescentFinished(true);
+      if (heroVideoRef.current) {
+        heroVideoRef.current.currentTime = 7.0;
+        heroVideoRef.current.play().catch(() => {});
+      }
+      if (earthVideoRef.current) {
+        earthVideoRef.current.pause();
+      }
+    } else {
+      if (heroVideoRef.current) {
+        heroVideoRef.current.pause();
+        heroVideoRef.current.currentTime = 0;
+      }
     }
-  }, []);
+  }, [skipToGround]);
 
   // Handle transition when isInitiated changes
   useEffect(() => {
+    if (skipToGround) return;
     if (isInitiated) {
       setDescentFinished(false);
 
