@@ -35,10 +35,10 @@ function DedicatedBackgroundImage({ imageSrc }) {
         alt=""
         loading="eager"
         decoding="async"
-        className="w-full h-full object-cover object-center opacity-90"
+        className="w-full h-full object-cover object-center opacity-85 brightness-[0.82]"
       />
       {/* Dark overlay so the text stays readable */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/80 via-black/30 to-[#000204]/90" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/85 via-black/40 to-[#000204]/90" />
     </div>
   );
 }
