@@ -58,12 +58,6 @@ export default function Navbar({ visible = true }) {
 
       <ul className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-mono tracking-wider uppercase text-[#91a399]">
         <li>
-          <Link to="/sources" className="hover:text-[#22c55e] transition-colors flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Clean Sources</span>
-          </Link>
-        </li>
-        <li>
           <Link to="/map" className="hover:text-[#22c55e] transition-colors">National Radar</Link>
         </li>
         <li>
