@@ -292,10 +292,14 @@ export default function LiveMapDashboard() {
 
     // 2. Setup WebSocket live ticker
     try {
-      const defaultWs = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/map/`;
+      let defaultWs = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/map/`;
+      if (window.location.hostname === 'localhost' && window.location.port === '5173') {
+        defaultWs = 'ws://localhost:8000/ws/map/';
+      }
       const wsUrl = import.meta.env.VITE_WS_URL || defaultWs;
       const socket = new WebSocket(wsUrl);
       wsRef.current = socket;
+
       socket.onmessage = (e) => {
         try {
           const msg = JSON.parse(e.data);
@@ -304,15 +308,27 @@ export default function LiveMapDashboard() {
           }
         } catch (err) {}
       };
+
+      socket.onerror = () => {
+        // Silently handle connection drops
+      };
     } catch (e) {
       // fallback
     }
 
     return () => {
-      if (wsRef.current) {
-        try {
-          wsRef.current.close();
-        } catch (err) {}
+      const socket = wsRef.current;
+      if (socket) {
+        socket.onmessage = null;
+        socket.onerror = null;
+        if (socket.readyState === WebSocket.OPEN) {
+          try { socket.close(); } catch (_) {}
+        } else if (socket.readyState === WebSocket.CONNECTING) {
+          // Prevent browser error: "WebSocket is closed before the connection is established"
+          socket.onopen = () => {
+            try { socket.close(); } catch (_) {}
+          };
+        }
       }
     };
   }, []);
