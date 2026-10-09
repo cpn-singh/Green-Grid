@@ -367,3 +367,30 @@ code, kbd, samp, pre, .font-mono {
     scroll-behavior: auto !important;
   }
 }
+
+/* --- LEAFLET DARK MAP TILE STYLING --- */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background: #08090a !important;
+  font-family: inherit;
+}
+
+.dark-tile-layer {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+.satellite-tile-layer {
+  filter: brightness(0.85) contrast(1.1);
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+

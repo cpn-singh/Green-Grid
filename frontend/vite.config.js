@@ -6,7 +6,17 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    allowedHosts: ['interlobate-isidro-palmately.ngrok-free.dev']
+    allowedHosts: ['interlobate-isidro-palmately.ngrok-free.dev'],
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/ws': {
+        target: 'http://localhost:8000',
+        ws: true,
+      }
+    }
   },
   build: {
     rollupOptions: {

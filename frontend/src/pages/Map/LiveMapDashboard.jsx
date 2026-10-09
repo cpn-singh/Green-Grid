@@ -50,9 +50,214 @@ const dcIcon = new L.DivIcon({
   iconAnchor: [9, 9],
 });
 
+const DEFAULT_MAP_DATA = {
+  suppliers: [
+    {
+      id: "sup_1",
+      name: "Adani Green Energy (AGEL) — Khavda",
+      category: "ipp",
+      type: "supplier",
+      lat: 23.8500,
+      lng: 69.7500,
+      capacity_mw: 20000.0,
+      available_capacity_mw: 4500.0,
+      energy_types: ["Solar", "Wind", "Hybrid", "BESS"],
+      sourcing_models: ["Physical PPA", "vPPA", "Open Access", "RTC/FDRE"],
+      states: ["Gujarat", "Rajasthan", "Maharashtra"],
+      rtc_pct: 88,
+      description: "World's largest 30 GW renewable energy plant in Khavda, Gujarat."
+    },
+    {
+      id: "sup_2",
+      name: "ReNew Power — Rajasthan Hub",
+      category: "ipp",
+      type: "supplier",
+      lat: 26.9124,
+      lng: 70.9000,
+      capacity_mw: 12600.0,
+      available_capacity_mw: 2600.0,
+      energy_types: ["Solar", "Wind", "BESS"],
+      sourcing_models: ["Physical PPA", "vPPA", "RTC/FDRE"],
+      states: ["Rajasthan", "Karnataka", "Maharashtra"],
+      rtc_pct: 85,
+      description: "Utility-scale solar and round-the-clock clean energy installations."
+    },
+    {
+      id: "sup_3",
+      name: "Greenko Group — Pinnapuram IRESP",
+      category: "ipp",
+      type: "supplier",
+      lat: 15.6500,
+      lng: 78.1000,
+      capacity_mw: 7500.0,
+      available_capacity_mw: 1800.0,
+      energy_types: ["Pumped Hydro (PSP)", "Solar", "Wind"],
+      sourcing_models: ["Physical PPA", "RTC/FDRE", "Open Access"],
+      states: ["Andhra Pradesh", "Karnataka", "Telangana"],
+      rtc_pct: 94,
+      description: "Pinnapuram Integrated Renewable Energy Storage Project (IRESP)."
+    },
+    {
+      id: "sup_4",
+      name: "Tata Power Renewable Energy (TPREL)",
+      category: "utility",
+      type: "supplier",
+      lat: 18.9220,
+      lng: 72.8347,
+      capacity_mw: 9000.0,
+      available_capacity_mw: 1950.0,
+      energy_types: ["Solar", "Wind", "Hybrid", "Rooftop Solar"],
+      sourcing_models: ["Group Captive", "Physical PPA", "Open Access"],
+      states: ["Maharashtra", "Gujarat", "Tamil Nadu"],
+      rtc_pct: 82,
+      description: "Pioneer in commercial group captive clean power for enterprise campuses."
+    },
+    {
+      id: "sup_5",
+      name: "Avaada Energy — Bikaner Complex",
+      category: "ipp",
+      type: "supplier",
+      lat: 28.0229,
+      lng: 73.3119,
+      capacity_mw: 5000.0,
+      available_capacity_mw: 1200.0,
+      energy_types: ["Solar", "Green Hydrogen", "Hybrid"],
+      sourcing_models: ["Open Access", "vPPA", "Physical PPA"],
+      states: ["Rajasthan", "Maharashtra", "Uttar Pradesh"],
+      rtc_pct: 80,
+      description: "Utility solar installations powering cloud regions and green ammonia."
+    },
+    {
+      id: "sup_6",
+      name: "CleanMax Solar",
+      category: "c&i",
+      type: "supplier",
+      lat: 19.0760,
+      lng: 72.8777,
+      capacity_mw: 2000.0,
+      available_capacity_mw: 450.0,
+      energy_types: ["Solar", "Wind-Solar Hybrid", "BESS"],
+      sourcing_models: ["Group Captive", "Open Access", "Behind-the-Meter"],
+      states: ["Maharashtra", "Karnataka", "Tamil Nadu"],
+      rtc_pct: 86,
+      description: "India's largest B2B clean energy provider dedicated to data centers."
+    }
+  ],
+  data_centers: [
+    {
+      id: "dc_1",
+      name: "Yotta D1 / NM1 Hyperscale Campus",
+      type: "dc",
+      city: "Navi Mumbai",
+      state: "Maharashtra",
+      lat: 19.0330,
+      lng: 73.0297,
+      it_load_mw: 250.0,
+      cooling: "liquid",
+      pue: 1.25,
+      tier: "Tier IV",
+      timeline: "Operational",
+      server_types: ["AI/GPU Clusters", "Cloud Hyperscale"],
+      green_goal_pct: 100
+    },
+    {
+      id: "dc_2",
+      name: "AdaniConneX Hyderabad AI Hub",
+      type: "dc",
+      city: "Hyderabad",
+      state: "Telangana",
+      lat: 17.3850,
+      lng: 78.4867,
+      it_load_mw: 100.0,
+      cooling: "direct-to-chip",
+      pue: 1.22,
+      tier: "Tier IV",
+      timeline: "Operational",
+      server_types: ["AI Supercomputing", "High-Density Compute"],
+      green_goal_pct: 100
+    },
+    {
+      id: "dc_3",
+      name: "CtrlS Bangalore Datacenter Campus",
+      type: "dc",
+      city: "Bengaluru",
+      state: "Karnataka",
+      lat: 12.9716,
+      lng: 77.5946,
+      it_load_mw: 80.0,
+      cooling: "evaporative",
+      pue: 1.28,
+      tier: "Tier IV",
+      timeline: "Operational",
+      server_types: ["Enterprise Cloud", "AI Inference"],
+      green_goal_pct: 90
+    },
+    {
+      id: "dc_4",
+      name: "STT GDC Noida Campus",
+      type: "dc",
+      city: "Noida",
+      state: "Uttar Pradesh",
+      lat: 28.5355,
+      lng: 77.3910,
+      it_load_mw: 70.0,
+      cooling: "liquid",
+      pue: 1.24,
+      tier: "Tier III+",
+      timeline: "Operational",
+      server_types: ["Hyperscale Cloud", "Fintech"],
+      green_goal_pct: 95
+    },
+    {
+      id: "dc_5",
+      name: "Nxtra by Airtel Chennai Central",
+      type: "dc",
+      city: "Chennai",
+      state: "Tamil Nadu",
+      lat: 13.0827,
+      lng: 80.2707,
+      it_load_mw: 60.0,
+      cooling: "air",
+      pue: 1.30,
+      tier: "Tier III+",
+      timeline: "Operational",
+      server_types: ["Telecom Edge", "Cloud Storage"],
+      green_goal_pct: 85
+    }
+  ],
+  match_lines: [
+    {
+      id: "match_1",
+      score: 98.5,
+      status: "active",
+      from: { name: "Adani Green Energy Khavda", lat: 23.8500, lng: 69.7500 },
+      to: { name: "Yotta D1 Navi Mumbai", lat: 19.0330, lng: 73.0297 }
+    },
+    {
+      id: "match_2",
+      score: 97.5,
+      status: "active",
+      from: { name: "Greenko Pinnapuram IRESP", lat: 15.6500, lng: 78.1000 },
+      to: { name: "AdaniConneX Hyderabad", lat: 17.3850, lng: 78.4867 }
+    },
+    {
+      id: "match_3",
+      score: 94.0,
+      status: "active",
+      from: { name: "CleanMax Solar", lat: 19.0760, lng: 72.8777 },
+      to: { name: "CtrlS Bangalore", lat: 12.9716, lng: 77.5946 }
+    }
+  ]
+};
+
 export default function LiveMapDashboard() {
-  const [data, setData] = useState({ suppliers: [], data_centers: [], match_lines: [] });
-  const [stats, setStats] = useState(null);
+  const [data, setData] = useState(DEFAULT_MAP_DATA);
+  const [stats, setStats] = useState({
+    clean_energy_gw: 120.4,
+    total_suppliers: 16,
+    total_dcs: 17,
+    total_matches: 10
+  });
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'suppliers' | 'dcs' | 'matches'
   const [baseLayer, setBaseLayer] = useState('dark'); // 'dark' | 'satellite'
   const [streetViewTarget, setStreetViewTarget] = useState(null); // { name, lat, lng, type }
@@ -68,9 +273,22 @@ export default function LiveMapDashboard() {
   const wsRef = useRef(null);
 
   useEffect(() => {
-    // 1. Fetch markers and stats
-    mapAPI.getMarkers().then((res) => setData(res.data)).catch(() => {});
-    mapAPI.getStats().then((res) => setStats(res.data)).catch(() => {});
+    // 1. Fetch markers and stats with strict validation
+    mapAPI.getMarkers()
+      .then((res) => {
+        if (res && res.data && typeof res.data === 'object' && Array.isArray(res.data.suppliers) && res.data.suppliers.length > 0) {
+          setData(res.data);
+        }
+      })
+      .catch(() => {});
+
+    mapAPI.getStats()
+      .then((res) => {
+        if (res && res.data && typeof res.data === 'object') {
+          setStats(res.data);
+        }
+      })
+      .catch(() => {});
 
     // 2. Setup WebSocket live ticker
     try {
@@ -81,7 +299,7 @@ export default function LiveMapDashboard() {
       socket.onmessage = (e) => {
         try {
           const msg = JSON.parse(e.data);
-          if (msg.message) {
+          if (msg && msg.message) {
             setEvents((prev) => [msg.message, ...prev.slice(0, 7)]);
           }
         } catch (err) {}
@@ -91,9 +309,17 @@ export default function LiveMapDashboard() {
     }
 
     return () => {
-      if (wsRef.current) wsRef.current.close();
+      if (wsRef.current) {
+        try {
+          wsRef.current.close();
+        } catch (err) {}
+      }
     };
   }, []);
+
+  const suppliersList = Array.isArray(data?.suppliers) ? data.suppliers : [];
+  const dcsList = Array.isArray(data?.data_centers) ? data.data_centers : [];
+  const matchesList = Array.isArray(data?.match_lines) ? data.match_lines : [];
 
   const showSuppliers = activeFilter === 'all' || activeFilter === 'suppliers';
   const showDCs = activeFilter === 'all' || activeFilter === 'dcs';
@@ -123,7 +349,7 @@ export default function LiveMapDashboard() {
                 : 'text-white/60 hover:text-white'
             }`}
           >
-            All ({data.suppliers.length + data.data_centers.length})
+            All ({suppliersList.length + dcsList.length})
           </button>
           <button
             onClick={() => setActiveFilter('suppliers')}
@@ -133,7 +359,7 @@ export default function LiveMapDashboard() {
                 : 'text-white/60 hover:text-white'
             }`}
           >
-            Renewable Sources ({data.suppliers.length})
+            Renewable Sources ({suppliersList.length})
           </button>
           <button
             onClick={() => setActiveFilter('dcs')}
@@ -143,7 +369,7 @@ export default function LiveMapDashboard() {
                 : 'text-white/60 hover:text-white'
             }`}
           >
-            Data Centers ({data.data_centers.length})
+            Data Centers ({dcsList.length})
           </button>
           <button
             onClick={() => setActiveFilter('matches')}
@@ -153,7 +379,7 @@ export default function LiveMapDashboard() {
                 : 'text-white/60 hover:text-white'
             }`}
           >
-            PPA Corridors ({data.match_lines.length})
+            PPA Corridors ({matchesList.length})
           </button>
         </div>
 
@@ -191,10 +417,10 @@ export default function LiveMapDashboard() {
             Clean Capacity: <span className="font-bold text-emerald-400">{stats?.clean_energy_gw || 120.4} GW</span>
           </div>
           <div>
-            Data Centers: <span className="font-bold text-sky-400">{data.data_centers.length} Sites</span>
+            Data Centers: <span className="font-bold text-sky-400">{dcsList.length} Sites</span>
           </div>
           <div>
-            PPA Routes: <span className="font-bold text-emerald-300">{data.match_lines.length} Active</span>
+            PPA Routes: <span className="font-bold text-emerald-300">{matchesList.length} Active</span>
           </div>
         </div>
       </div>
@@ -202,7 +428,7 @@ export default function LiveMapDashboard() {
       {/* Map View — Fills 100% of remaining viewport height */}
       <div className="flex-1 relative w-full h-full overflow-hidden">
         <MapContainer
-          key={`map_${data.suppliers.length}_${data.data_centers.length}`}
+          key={`map_${suppliersList.length}_${dcsList.length}`}
           center={[21.5000, 78.9629]} // Center of India
           zoom={5}
           scrollWheelZoom={true}
@@ -228,7 +454,7 @@ export default function LiveMapDashboard() {
           )}
 
           {/* Supplier Markers (Green circles scaled by capacity) */}
-          {showSuppliers && data.suppliers.map((sup) => {
+          {showSuppliers && suppliersList.map((sup) => {
             const radius = Math.min(22, Math.max(8, Math.sqrt(sup.capacity_mw) / 9));
             return (
               <CircleMarker
@@ -334,7 +560,7 @@ export default function LiveMapDashboard() {
           })}
 
           {/* Data Center Markers (Blue icons) */}
-          {showDCs && data.data_centers.map((dc) => (
+          {showDCs && dcsList.map((dc) => (
             <Marker key={dc.id} position={[dc.lat, dc.lng]} icon={dcIcon}>
               <Popup>
                 <div className="p-2 text-neutral-900 max-w-xs">
@@ -409,7 +635,7 @@ export default function LiveMapDashboard() {
           ))}
 
           {/* Connected Match Polyline */}
-          {showMatches && data.match_lines.map((l) => (
+          {showMatches && matchesList.map((l) => (
             <Polyline
               key={l.id}
               positions={[
@@ -442,15 +668,15 @@ export default function LiveMapDashboard() {
           </div>
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] shrink-0" />
-            <span className="text-white/85 truncate">Renewable Sources ({data.suppliers.length})</span>
+            <span className="text-white/85 truncate">Renewable Sources ({suppliersList.length})</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-sky-500 border border-white shadow-[0_0_8px_rgba(56,189,248,0.7)] shrink-0" />
-            <span className="text-white/85 truncate">Data Centers ({data.data_centers.length})</span>
+            <span className="text-white/85 truncate">Data Centers ({dcsList.length})</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-4 h-0.5 border-t-2 border-dashed border-emerald-400 shrink-0" />
-            <span className="text-white/85 truncate">Contracted PPAs ({data.match_lines.length})</span>
+            <span className="text-white/85 truncate">Contracted PPAs ({matchesList.length})</span>
           </div>
         </div>
 
