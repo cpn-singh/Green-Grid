@@ -62,18 +62,18 @@ function DedicatedBackgroundVideo({ videoSrc, imageSrc, sourceName }) {
           muted
           playsInline
           poster={imageSrc}
-          className="w-full h-full object-cover opacity-90 scale-105 transition-opacity duration-1000 ease-out"
+          className="w-full h-full object-cover opacity-100 scale-[1.02] contrast-[1.07] brightness-[1.03] saturate-[1.10] transition-opacity duration-1000 ease-out"
         />
       ) : (
         <img
           src={imageSrc}
           alt={sourceName}
-          className="w-full h-full object-cover opacity-85"
+          className="w-full h-full object-cover opacity-100 scale-[1.02] contrast-[1.07] brightness-[1.03] saturate-[1.10]"
         />
       )}
-      {/* Cinematic subtle scrim overlay that blends video with page text */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#000204]/80" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/25 to-[#000204]/80" />
+      {/* High-clarity subtle scrim overlay: preserves vibrant 1080p video while maintaining text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-[#000204]/75" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/10 to-[#000204]/65" />
     </div>
   );
 }

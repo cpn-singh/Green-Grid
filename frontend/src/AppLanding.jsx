@@ -129,22 +129,22 @@ function SectionBackgroundVideo({ videoSrc, imageSrc }) {
           loop
           muted
           playsInline
-          preload="none"
+          preload="auto"
           poster={imageSrc}
-          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)` }}
-          className="w-full h-full object-cover opacity-90 transition-transform duration-100 ease-out will-change-transform"
+          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.03)` }}
+          className="w-full h-full object-cover opacity-100 contrast-[1.07] brightness-[1.03] saturate-[1.10] transition-transform duration-100 ease-out will-change-transform"
         />
       ) : (
         <img
           src={imageSrc}
           alt=""
-          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)` }}
-          className="w-full h-full object-cover opacity-85 transition-transform duration-100 ease-out will-change-transform"
+          style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.03)` }}
+          className="w-full h-full object-cover opacity-100 contrast-[1.07] brightness-[1.03] saturate-[1.10] transition-transform duration-100 ease-out will-change-transform"
         />
       )}
-      {/* Cinematic subtle contrast scrims: allows video textures to mix organically across sections while keeping cards crisp */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/60" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/15 to-[#000204]/75" />
+      {/* High-clarity subtle contrast scrims: preserves rich 1080p highlights and details while maintaining card legibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-black/55" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/10 to-[#000204]/65" />
     </div>
   );
 }
