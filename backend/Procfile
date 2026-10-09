@@ -1,0 +1,2 @@
+web: daphne -b 0.0.0.0 -p ${PORT:-8000} greengrid.asgi:application
+release: python manage.py migrate --noinput && python manage.py collectstatic --noinput && python -c "import os, django; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'greengrid.settings'); django.setup(); from apps.supplier.models import SupplierProfile; import seed_all_infrastructure if SupplierProfile.objects.count() == 0 else None"

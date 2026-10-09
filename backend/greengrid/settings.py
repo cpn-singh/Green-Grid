@@ -64,13 +64,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'greengrid.wsgi.application'
 ASGI_APPLICATION = 'greengrid.asgi.application'
 
+_DATABASE_URL = os.getenv('DATABASE_URL')
 _SQLITE_PATH = os.getenv('SQLITE_PATH')
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': Path(_SQLITE_PATH) if _SQLITE_PATH else (BASE_DIR / 'db.sqlite3'),
+
+if _DATABASE_URL:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=_DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': Path(_SQLITE_PATH) if _SQLITE_PATH else (BASE_DIR / 'db.sqlite3'),
+        }
+    }
 
 AUTH_USER_MODEL = 'accounts.User'
 

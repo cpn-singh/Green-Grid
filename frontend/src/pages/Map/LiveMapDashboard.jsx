@@ -74,8 +74,9 @@ export default function LiveMapDashboard() {
 
     // 2. Setup WebSocket live ticker
     try {
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const socket = new WebSocket(`${protocol}//${window.location.host}/ws/map/`);
+      const defaultWs = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/map/`;
+      const wsUrl = import.meta.env.VITE_WS_URL || defaultWs;
+      const socket = new WebSocket(wsUrl);
       wsRef.current = socket;
       socket.onmessage = (e) => {
         try {
