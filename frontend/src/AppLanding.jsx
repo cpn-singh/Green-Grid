@@ -329,8 +329,6 @@ function SourceDetailModal({ source, isOpen, onClose, navigate, getSourceIcon })
 function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
   const anchorId = source.id === 'large-hydro' ? 'hydro' : source.id;
   const directPath = source.id === 'large-hydro' ? '/hydro' : `/${source.id}`;
-  const nextSource = idx < ENERGY_SOURCES.length - 1 ? ENERGY_SOURCES[idx + 1] : null;
-  const nextAnchorId = nextSource ? (nextSource.id === 'large-hydro' ? 'hydro' : nextSource.id) : null;
   const [isInView, setIsInView] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const sectionRef = useRef(null);
@@ -715,29 +713,6 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
             </div>
           </div>
         </div>
-
-        {/* Scroll to Next Source Switch Transition */}
-        {nextSource && (
-          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-left font-mono text-xs text-slate-400">
-              <span className="text-emerald-400 font-semibold uppercase tracking-wider block text-[10px]">
-                NEXT CLEAN ENERGY SECTOR
-              </span>
-              <span>Stage 0{idx + 2} // {nextSource.name} ({nextSource.badge})</span>
-            </div>
-            <button
-              onClick={() => {
-                const el = document.getElementById(nextAnchorId)
-                if (el) el.scrollIntoView({ behavior: 'smooth' })
-              }}
-              className="group relative px-6 py-3 rounded-full bg-black/60 hover:bg-emerald-950/60 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-white font-mono text-xs uppercase tracking-widest backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all cursor-pointer flex items-center gap-3 overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-              <span>Switch Page to {nextSource.shortName}</span>
-              <ChevronDown className="w-4 h-4 text-emerald-400 group-hover:translate-y-1 transition-transform" />
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Modal for Full Technical Dossier */}
