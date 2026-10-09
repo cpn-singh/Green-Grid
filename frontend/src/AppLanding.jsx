@@ -514,10 +514,11 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
 }
 
 export default function AppLanding() {
+  const hasSeenIntro = typeof window !== 'undefined' && localStorage.getItem('greengrid_intro_seen') === 'true'
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showUI, setShowUI] = useState(true)
-  const [isSystemInitiated, setIsSystemInitiated] = useState(false)
-  const [descentCompleted, setDescentCompleted] = useState(false)
+  const [isSystemInitiated, setIsSystemInitiated] = useState(hasSeenIntro)
+  const [descentCompleted, setDescentCompleted] = useState(hasSeenIntro)
   const [heroScrollFade, setHeroScrollFade] = useState(1)
   const [heroTranslateY, setHeroTranslateY] = useState(0)
   const navigate = useNavigate()
@@ -567,6 +568,9 @@ export default function AppLanding() {
   }
 
   const handleLaunchPlatform = () => {
+    try {
+      localStorage.setItem('greengrid_intro_seen', 'true')
+    } catch (_) {}
     if (!isSystemInitiated) {
       setIsSystemInitiated(true)
     } else {
@@ -594,9 +598,18 @@ export default function AppLanding() {
       <OrbitalEarthBackground
         opacity={heroScrollFade}
         isInitiated={isSystemInitiated}
-        onDescentComplete={() => setDescentCompleted(true)}
+        skipIntro={hasSeenIntro}
+        onDescentComplete={() => {
+          try {
+            localStorage.setItem('greengrid_intro_seen', 'true')
+          } catch (_) {}
+          setDescentCompleted(true)
+        }}
         onReplayDescent={() => setDescentCompleted(false)}
         onResetOrbit={() => {
+          try {
+            localStorage.removeItem('greengrid_intro_seen')
+          } catch (_) {}
           setIsSystemInitiated(false)
           setDescentCompleted(false)
         }}
