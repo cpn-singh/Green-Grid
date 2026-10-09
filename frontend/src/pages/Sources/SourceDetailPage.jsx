@@ -157,9 +157,9 @@ export default function SourceDetailPage({ sourceIdOverride }) {
     <div className="relative min-h-screen bg-[#000204] text-[#f0f4f1] font-sans selection:bg-emerald-500/20 selection:text-white overflow-x-hidden">
       <Navbar />
 
-      <DedicatedBackgroundImage imageSrc={source.image} />
+      <DedicatedBackgroundImage key={source.image} imageSrc={source.image} />
 
-      <div className="relative z-10 max-w-[1360px] mx-auto px-6 sm:px-12 pt-28 pb-20">
+      <div key={source.id} className="animate-blink-enter relative z-10 max-w-[1360px] mx-auto px-6 sm:px-12 pt-28 pb-20">
         {/* Back link and source switcher */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-4 border-b border-white/10">
           <Link

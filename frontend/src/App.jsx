@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import AppLanding from './AppLanding';
 import SynapseCursor from './components/ui/SynapseCursor';
+import { ErrorBoundary } from './components/ui';
 
 // Lazy load secondary routes so heavy packages (like Leaflet on /map) don't block the initial landing page
 const Register = lazy(() => import('./pages/Auth/Register'));
@@ -20,8 +21,9 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <SynapseCursor />
-        <Suspense fallback={<div className="min-h-screen bg-[#080b09]" />}>
-          <Routes>
+        <ErrorBoundary>
+          <Suspense fallback={<div className="min-h-screen bg-[#080b09]" />}>
+            <Routes>
             <Route path="/" element={<AppLanding />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
@@ -45,6 +47,7 @@ export default function App() {
             <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           </Routes>
         </Suspense>
+        </ErrorBoundary>
       </BrowserRouter>
     </AuthProvider>
   );

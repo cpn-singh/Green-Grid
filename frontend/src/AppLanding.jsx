@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Maximize2,
@@ -33,7 +33,7 @@ const btnSecondary =
 const card = 'rounded-lg border border-white/10 bg-black/50 p-5'
 const cardTitle = 'text-sm font-semibold text-white mb-3'
 
-function SectionBackgroundImage({ imageSrc }) {
+function SectionBackgroundImage({ imageSrc, isInView = true }) {
   return (
     <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden select-none bg-[#000204]">
       <img
@@ -41,7 +41,15 @@ function SectionBackgroundImage({ imageSrc }) {
         alt=""
         loading="eager"
         decoding="async"
-        className="w-full h-full object-cover object-center opacity-85 brightness-[0.82]"
+        className={`w-full h-full object-cover object-center brightness-[0.82] transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+          isInView
+            ? 'opacity-85 scale-100 filter-none'
+            : 'opacity-30 scale-105 blur-[8px] contrast-[160%]'
+        }`}
+        style={{
+          transform: 'translateZ(0)',
+          WebkitBackfaceVisibility: 'hidden',
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[#000204]/85 via-black/35 to-[#000204]/90" />
     </div>
@@ -325,20 +333,50 @@ function SourceDetailModal({ source, isOpen, onClose, navigate }) {
 function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
   const anchorId = source.id === 'large-hydro' ? 'hydro' : source.id
   const [showDetailModal, setShowDetailModal] = useState(false)
+  const [isInView, setIsInView] = useState(false)
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.12, rootMargin: '-30px 0px -30px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <section
+      ref={sectionRef}
       id={anchorId}
       style={{ zIndex: 10 + idx }}
       className="relative min-h-screen flex flex-col justify-center bg-[#000204] px-4 sm:px-12 py-16 sm:py-28 text-[#f0f4f1] scroll-mt-0 overflow-visible"
     >
-      <SectionBackgroundImage imageSrc={source.image} />
+      <SectionBackgroundImage imageSrc={source.image} isInView={isInView} />
 
-      <div className="relative z-10 max-w-[1360px] mx-auto w-full">
+      <div
+        className={`relative z-10 max-w-[1360px] mx-auto w-full transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) transform ${
+          isInView
+            ? 'opacity-100 translate-y-0 scale-100 filter-none'
+            : 'opacity-0 translate-y-12 scale-[0.98] blur-[12px] contrast-[180%]'
+        }`}
+      >
         {/* Header */}
-        <div className="mb-6 text-left">
+        <div
+          className={`mb-6 text-left transition-all duration-700 delay-100 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-            <span className="text-sm text-emerald-400">{source.badge}</span>
+            <span className="text-sm text-emerald-400 font-mono tracking-wider">
+              PAGE 0{idx + 1} OF 09 // {source.badge}
+            </span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white leading-tight flex items-center gap-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">

@@ -113,7 +113,6 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
       if (renderer && renderer.capabilities) {
         texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
       }
-      texture.needsUpdate = true
 
       faceGeo = new THREE.CircleGeometry(1.78, 96)
       // High contrast without washing out the logo
@@ -130,7 +129,7 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
       logoGroup.add(frontMesh)
 
       // Back face
-      backMesh = new THREE.Mesh(faceGeo, faceMat.clone())
+      backMesh = new THREE.Mesh(faceGeo, faceMat)
       backMesh.position.z = -0.114
       backMesh.rotation.y = Math.PI
       logoGroup.add(backMesh)

@@ -17,9 +17,24 @@ export default function Results() {
       matchAPI.getMyMatches().catch(() => ({ data: [] })),
     ])
       .then(([pRes, aRes, mRes]) => {
-        setProfile(pRes.data);
-        setAnalysis(aRes.data);
-        setMatches(mRes.data);
+        const validProfile =
+          pRes?.data && typeof pRes.data === 'object' && !Array.isArray(pRes.data) && pRes.data.project_name
+            ? pRes.data
+            : null;
+        const validAnalysis =
+          aRes?.data && typeof aRes.data === 'object' && !Array.isArray(aRes.data)
+            ? aRes.data
+            : null;
+        const validMatches = Array.isArray(mRes?.data) ? mRes.data : [];
+
+        setProfile(validProfile);
+        setAnalysis(validAnalysis);
+        setMatches(validMatches);
+      })
+      .catch(() => {
+        setProfile(null);
+        setAnalysis(null);
+        setMatches([]);
       })
       .finally(() => setLoading(false));
   }, []);
