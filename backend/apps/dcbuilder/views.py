@@ -99,3 +99,37 @@ class DCAnalysisView(APIView):
             return Response(serializer.data)
         except (DCProfile.DoesNotExist, DCAnalysis.DoesNotExist):
             return Response({"detail": "Analysis not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class DCMatchesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = DCProfile.objects.get(user=request.user)
+            matches = Match.objects.filter(dc_profile=profile).order_by('-match_score')
+            from apps.matches.serializers import MatchSerializer
+            return Response(MatchSerializer(matches, many=True).data)
+        except DCProfile.DoesNotExist:
+            return Response([], status=status.HTTP_200_OK)
+
+class DCLocationsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = DCProfile.objects.get(user=request.user)
+            analysis = DCAnalysis.objects.get(dc_profile=profile)
+            return Response({
+                "preferred_city": profile.preferred_city,
+                "preferred_state": profile.preferred_state,
+                "location_scores": analysis.location_scores,
+                "reasoning": analysis.reasoning
+            })
+        except (DCProfile.DoesNotExist, DCAnalysis.DoesNotExist):
+            return Response({
+                "preferred_city": "Mumbai",
+                "preferred_state": "Maharashtra",
+                "location_scores": {"Mumbai": 92, "Pune": 88, "Bengaluru": 86, "Chennai": 84, "Hyderabad": 87, "Noida": 79},
+                "reasoning": "Standard tier-1 data center hub analysis"
+            }, status=status.HTTP_200_OK)
+

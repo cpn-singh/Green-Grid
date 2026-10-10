@@ -73,3 +73,34 @@ class PublicSupplierListView(APIView):
         suppliers = SupplierProfile.objects.all()
         serializer = SupplierProfileSerializer(suppliers, many=True)
         return Response(serializer.data)
+
+class SupplierMatchesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = SupplierProfile.objects.get(user=request.user)
+            matches = Match.objects.filter(supplier_profile=profile).order_by('-match_score')
+            from apps.matches.serializers import MatchSerializer
+            return Response(MatchSerializer(matches, many=True).data)
+        except SupplierProfile.DoesNotExist:
+            return Response([], status=status.HTTP_200_OK)
+
+class SupplierDashboardView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = SupplierProfile.objects.get(user=request.user)
+            matches = Match.objects.filter(supplier_profile=profile).order_by('-match_score')
+            from apps.matches.serializers import MatchSerializer
+            inquiries = matches.filter(status__in=['accepted', 'negotiating'])
+            return Response({
+                "profile": SupplierProfileSerializer(profile).data,
+                "total_matches": matches.count(),
+                "active_inquiries": inquiries.count(),
+                "matches": MatchSerializer(matches[:10], many=True).data,
+            })
+        except SupplierProfile.DoesNotExist:
+            return Response({"detail": "Supplier profile not found"}, status=status.HTTP_404_NOT_FOUND)
+

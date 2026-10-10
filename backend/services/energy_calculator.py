@@ -1,5 +1,7 @@
 import json
+import os
 from .gemini_client import get_gemini_client
+
 
 def calculate_energy_requirements(dc_profile: dict) -> dict:
     """
@@ -65,13 +67,24 @@ def calculate_energy_requirements(dc_profile: dict) -> dict:
     """
 
     try:
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-            config={
-                'response_mime_type': 'application/json'
-            }
-        )
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config={
+                    'response_mime_type': 'application/json'
+                }
+            )
+        except Exception:
+            # Fallback to standard flash model if 3.8 preview name varies
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+                config={
+                    'response_mime_type': 'application/json'
+                }
+            )
         data = json.loads(response.text)
         return data
     except Exception as e:

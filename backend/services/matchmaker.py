@@ -1,6 +1,8 @@
 import json
 import math
+import os
 from .gemini_client import get_gemini_client
+
 
 def calculate_rule_match_score(dc_profile: dict, supplier_profile: dict) -> float:
     """
@@ -144,12 +146,21 @@ def get_ai_match_analysis(dc_profile: dict, supplier_profile: dict) -> dict:
     """
 
     try:
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-            config={'response_mime_type': 'application/json'}
-        )
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config={'response_mime_type': 'application/json'}
+            )
+        except Exception:
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+                config={'response_mime_type': 'application/json'}
+            )
         return json.loads(response.text)
     except Exception as e:
         print(f"Gemini match error: {e}. Using deterministic analysis.")
         return fallback_analysis
+
