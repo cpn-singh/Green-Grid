@@ -7,112 +7,120 @@ export default function Navbar({ visible = true }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Handle scroll state for navbar background
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleLogout = async () => {
-    await logout();
-    navigate('/');
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
   };
 
   const isVisible = visible || scrolled;
 
+  // Building the class string outside the return makes it much easier to read
+  const navClasses = `
+    fixed top-0 w-full z-50 flex items-center justify-between px-6 md:px-12 py-4 transition-all duration-300
+    ${scrolled ? 'bg-[#080b09]/95 backdrop-blur-md border-b border-[#19241d] shadow-lg' : 'bg-transparent'}
+    ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
+  `;
+
+  const handleLogoClick = () => {
+    if (window.location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <nav
-      className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-3.5 transition-all duration-700 ease-out ${
-        scrolled
-          ? 'bg-[#080b09]/92 backdrop-blur-md border-b border-[#19241d] shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
-          : 'bg-transparent'
-      } ${
-        isVisible
-          ? 'opacity-100 translate-y-0 pointer-events-auto'
-          : 'opacity-0 -translate-y-8 pointer-events-none'
-      }`}
-      style={{
-        transitionProperty: 'opacity, transform, background-color, border-color, backdrop-filter',
-        transitionDelay: isVisible ? '150ms' : '0ms'
-      }}
-    >
+    <nav className={navClasses}>
+      {/* Brand / Logo */}
       <div className="flex items-center gap-3">
         <Link
           to="/"
           state={{ toLogo: true }}
-          onClick={() => {
-            if (window.location.pathname === '/') {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-          }}
-          className="text-base sm:text-lg font-bold tracking-tight text-[#f0f4f1] group flex items-center gap-2.5"
+          onClick={handleLogoClick}
+          className="flex items-center gap-2 group"
         >
-          <div className="relative w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-[#22c55e] via-[#34d399] to-white/40 shadow-[0_0_12px_rgba(34,197,94,0.4)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 transform-gpu [perspective:600px]">
+          <div className="w-8 h-8 rounded-full p-[2px] bg-gradient-to-tr from-green-500 to-white/40 shadow-md group-hover:scale-105 transition-transform">
             <img
               src="/logo.png"
-              srcSet="/logo.png 1x, /logo-hires.png 2x"
               alt="GreenGrid Logo"
-              width="28"
-              height="28"
-              loading="eager"
-              decoding="async"
-              className="w-full h-full object-cover rounded-full select-none"
+              className="w-full h-full object-cover rounded-full"
             />
           </div>
-          <span className="font-bold font-display uppercase tracking-[-0.02em] text-[#f0f4f1] text-sm sm:text-base">
+          <span className="font-bold uppercase text-[#f0f4f1] text-sm md:text-base tracking-wide">
             GreenGrid
           </span>
         </Link>
       </div>
 
-      <ul className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-mono tracking-wider uppercase text-[#91a399]">
+      {/* Desktop Navigation Links */}
+      <ul className="hidden md:flex items-center gap-8 text-xs font-mono uppercase text-[#91a399]">
         <li>
-          <Link to="/map" className="hover:text-[#22c55e] transition-colors">National Radar</Link>
+          <Link to="/map" className="hover:text-green-500 transition-colors">National Radar</Link>
         </li>
         <li>
-          <Link to="/dc/profile" className="hover:text-[#22c55e] transition-colors">DC Sizing</Link>
+          <Link to="/dc/profile" className="hover:text-green-500 transition-colors">DC Sizing</Link>
         </li>
         <li>
-          <Link to="/dc/results" className="hover:text-[#22c55e] transition-colors">Clean Matches</Link>
+          <Link to="/dc/results" className="hover:text-green-500 transition-colors">Clean Matches</Link>
         </li>
         <li>
-          <Link to="/supplier/dashboard" className="hover:text-[#22c55e] transition-colors">Suppliers</Link>
+          <Link to="/supplier/dashboard" className="hover:text-green-500 transition-colors">Suppliers</Link>
         </li>
+        
         {user?.role === 'energy_supplier' && (
           <li>
-            <Link to="/supplier/profile" className="hover:text-[#22c55e] transition-colors">Asset Specs</Link>
+            <Link to="/supplier/profile" className="hover:text-green-500 transition-colors">Asset Specs</Link>
           </li>
         )}
       </ul>
 
+      {/* Auth / User Actions */}
       <div className="flex items-center gap-4">
         {user ? (
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-[#91a399] hidden sm:inline font-mono">
+          <div className="flex items-center gap-4">
+            <span className="text-xs text-[#91a399] hidden sm:block font-mono">
               {user.company_name || user.username}
             </span>
             <button
               onClick={handleLogout}
-              className="btn-busbar !py-1.5 !px-3 !text-[11px]"
+              className="btn-busbar px-3 py-1.5 text-xs"
             >
               Sign Out
             </button>
           </div>
         ) : (
-          <>
+          <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="text-[11px] font-mono tracking-wider uppercase text-[#91a399] hover:text-[#f0f4f1] transition-colors px-2 py-1"
+              className="text-xs font-mono uppercase text-[#91a399] hover:text-white transition-colors"
             >
               Sign In
             </Link>
             <Link
               to="/register"
-              className="btn-signal !py-1.5 !px-3.5 !text-[11px]"
+              className="btn-signal px-4 py-1.5 text-xs"
             >
-              Get Started →
+              Get Started &rarr;
             </Link>
-          </>
+          </div>
         )}
       </div>
     </nav>

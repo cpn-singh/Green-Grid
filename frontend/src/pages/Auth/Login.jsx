@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { Card, Badge, Button } from '../../components/ui';
+import { Card, Button } from '../../components/ui';
 
 export default function Login() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -15,8 +16,11 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setLoading(true);
+    
     try {
       const data = await login(formData.username, formData.password);
+      
+      // Route users based on their role
       if (data.user.role === 'dc_builder') {
         navigate('/dc/results');
       } else {
@@ -29,51 +33,60 @@ export default function Login() {
     }
   };
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-[#020504] text-white flex flex-col justify-center items-center px-4 pt-20">
+    <div className="min-h-screen bg-[#08090a] text-white flex flex-col justify-center items-center px-4 pt-16">
       <Navbar />
-      <Card className="w-full max-w-sm p-8">
-        <div className="flex justify-center mb-6">
-          <Badge>Institutional Access</Badge>
-        </div>
-        <h2 className="text-2xl font-bold tracking-tight text-center mb-1 text-white uppercase font-sans">
+      
+      <Card className="w-full max-w-sm p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-center mb-2">
           Welcome Back
         </h2>
-        <p className="text-xs text-[#94a3b8] text-center mb-6 font-sans">
-          Enter your institutional credentials
+        <p className="text-sm text-neutral-400 text-center mb-6">
+          Sign in to your account
         </p>
 
         {error && (
-          <div className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono">
+          <div className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+            <label className="block text-sm text-neutral-400 mb-1.5" htmlFor="username">
               Username
             </label>
             <input
+              id="username"
+              name="username"
               type="text"
               required
               value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="sf-input text-xs"
-              placeholder="username"
+              onChange={handleChange}
+              className="sf-input w-full text-sm"
+              placeholder="Enter username"
             />
           </div>
 
           <div>
-            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+            <label className="block text-sm text-neutral-400 mb-1.5" htmlFor="password">
               Password
             </label>
             <input
+              id="password"
+              name="password"
               type="password"
               required
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="sf-input text-xs"
+              onChange={handleChange}
+              className="sf-input w-full text-sm"
               placeholder="••••••••"
             />
           </div>
@@ -82,16 +95,16 @@ export default function Login() {
             type="submit"
             disabled={loading}
             variant="primary"
-            className="w-full py-3 mt-3"
+            className="w-full py-2.5 mt-2 font-medium"
           >
-            {loading ? 'Signing in...' : 'Sign In →'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </Button>
         </form>
 
-        <p className="text-center text-xs text-[#64748b] mt-6 font-mono">
+        <p className="text-center text-sm text-neutral-500 mt-6">
           Don't have an account?{' '}
-          <Link to="/register" className="text-emerald-400 hover:text-emerald-300 underline">
-            Register now
+          <Link to="/register" className="text-emerald-500 hover:text-emerald-400 transition-colors">
+            Register
           </Link>
         </p>
       </Card>

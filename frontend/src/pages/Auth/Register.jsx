@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { Card, Badge, Button } from '../../components/ui';
+import { Card, Button } from '../../components/ui';
 
 export default function Register() {
   const [searchParams] = useSearchParams();
@@ -16,8 +16,10 @@ export default function Register() {
     company_name: '',
     contact_phone: '',
   });
+  
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -25,6 +27,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
     setLoading(true);
+    
     try {
       const data = await register(formData);
       if (data.user.role === 'dc_builder') {
@@ -33,110 +36,129 @@ export default function Register() {
         navigate('/supplier/profile');
       }
     } catch (err) {
+      // Handles typical Django Rest Framework error arrays
       setError(err.response?.data?.username?.[0] || 'Registration failed. Please check inputs.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const setRole = (role) => {
+    setFormData((prev) => ({ ...prev, role }));
+  };
+
   return (
-    <div className="min-h-screen bg-[#020504] text-white flex flex-col justify-center items-center px-4 pt-24 pb-12">
+    <div className="min-h-screen bg-[#08090a] text-white flex flex-col justify-center items-center px-4 pt-24 pb-12">
       <Navbar />
-      <Card className="w-full max-w-md p-8">
-        <div className="flex justify-center mb-6">
-          <Badge>Institutional Onboarding</Badge>
-        </div>
-        <h2 className="text-2xl font-bold tracking-tight text-center mb-1 text-white uppercase font-sans">
-          Create Enterprise Account
+      
+      <Card className="w-full max-w-md p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-center mb-2">
+          Create Account
         </h2>
-        <p className="text-xs text-[#94a3b8] text-center mb-6 font-sans">
-          Select your primary role to configure your portal
+        <p className="text-sm text-neutral-400 text-center mb-6">
+          Select your role and enter your details to get started
         </p>
 
         {error && (
-          <div className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono">
+          <div className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
             {error}
           </div>
         )}
 
-        <div className="flex rounded border border-white/[0.08] p-1 mb-6 bg-black/60 gap-1.5">
+        {/* Role Selection Toggle */}
+        <div className="flex rounded-lg border border-white/10 p-1 mb-6 bg-black/50 gap-1">
           <button
             type="button"
-            onClick={() => setFormData({ ...formData, role: 'dc_builder' })}
-            className={`flex-1 py-2 text-xs font-mono uppercase tracking-wider rounded transition-all cursor-pointer ${
+            onClick={() => setRole('dc_builder')}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
               formData.role === 'dc_builder'
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold shadow-[0_0_15px_rgba(16,185,129,0.15)]'
-                : 'text-neutral-400 hover:text-white border border-transparent'
+                ? 'bg-emerald-500/20 text-emerald-400'
+                : 'text-neutral-400 hover:text-white'
             }`}
           >
-            🏗️ DC Builder
+            DC Builder
           </button>
           <button
             type="button"
-            onClick={() => setFormData({ ...formData, role: 'energy_supplier' })}
-            className={`flex-1 py-2 text-xs font-mono uppercase tracking-wider rounded transition-all cursor-pointer ${
+            onClick={() => setRole('energy_supplier')}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
               formData.role === 'energy_supplier'
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold shadow-[0_0_15px_rgba(16,185,129,0.15)]'
-                : 'text-neutral-400 hover:text-white border border-transparent'
+                ? 'bg-emerald-500/20 text-emerald-400'
+                : 'text-neutral-400 hover:text-white'
             }`}
           >
-            ⚡ Energy Supplier
+            Energy Supplier
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+            <label className="block text-sm text-neutral-400 mb-1.5" htmlFor="company_name">
               Company / Organization
             </label>
             <input
+              id="company_name"
+              name="company_name"
               type="text"
               required
               value={formData.company_name}
-              onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-              className="sf-input text-xs"
+              onChange={handleChange}
+              className="sf-input w-full text-sm"
               placeholder="e.g. Sify Cloud or Avaada Energy"
             />
           </div>
 
           <div>
-            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+            <label className="block text-sm text-neutral-400 mb-1.5" htmlFor="username">
               Username
             </label>
             <input
+              id="username"
+              name="username"
               type="text"
               required
               value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="sf-input text-xs"
-              placeholder="username"
+              onChange={handleChange}
+              className="sf-input w-full text-sm"
+              placeholder="Choose a username"
             />
           </div>
 
           <div>
-            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+            <label className="block text-sm text-neutral-400 mb-1.5" htmlFor="email">
               Business Email
             </label>
             <input
+              id="email"
+              name="email"
               type="email"
               required
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="sf-input text-xs"
+              onChange={handleChange}
+              className="sf-input w-full text-sm"
               placeholder="name@company.com"
             />
           </div>
 
           <div>
-            <label className="block font-mono uppercase tracking-wider text-[11px] text-[#94a3b8] mb-1.5">
+            <label className="block text-sm text-neutral-400 mb-1.5" htmlFor="password">
               Password
             </label>
             <input
+              id="password"
+              name="password"
               type="password"
               required
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="sf-input text-xs"
+              onChange={handleChange}
+              className="sf-input w-full text-sm"
               placeholder="••••••••"
             />
           </div>
@@ -145,15 +167,15 @@ export default function Register() {
             type="submit"
             disabled={loading}
             variant="primary"
-            className="w-full py-3 mt-3"
+            className="w-full py-2.5 mt-2 font-medium"
           >
-            {loading ? 'Creating Account...' : 'Continue to Specifications →'}
+            {loading ? 'Creating Account...' : 'Register'}
           </Button>
         </form>
 
-        <p className="text-center text-xs text-[#64748b] mt-6 font-mono">
+        <p className="text-center text-sm text-neutral-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-emerald-400 hover:text-emerald-300 underline">
+          <Link to="/login" className="text-emerald-500 hover:text-emerald-400 transition-colors">
             Sign In
           </Link>
         </p>
