@@ -111,20 +111,22 @@ export default function Navbar({ visible = true }) {
             state={{ toLogo: true }}
             onClick={handleLogoClick}
             className="flex items-center gap-2.5 group shrink-0 focus-visible:outline-none"
-            aria-label="GreenGrid Home"
+            aria-label="SYLVRA Home"
           >
             <div className="w-8 h-8 rounded-full p-[2px] bg-gradient-to-tr from-emerald-500 via-teal-400 to-white/40 shadow-md group-hover:scale-105 transition-transform duration-200">
               <img
-                src="/logo.png"
-                alt="GreenGrid Logo"
+                src="/sylvra-s-logo.png?v=6"
+                alt="SYLVRA Logo"
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-bold uppercase tracking-wider text-[#f0f4f1] text-sm sm:text-base group-hover:text-emerald-400 transition-colors">
-                GreenGrid
-              </span>
-              <span className="text-[9px] font-mono uppercase tracking-widest text-emerald-400/80 hidden xs:block -mt-1">
+            <div className="flex flex-col justify-center">
+              <img
+                src="/sylvra-wordmark.png"
+                alt="SYLVRA"
+                className="h-4 sm:h-[18px] w-auto object-contain my-0.5 group-hover:brightness-110 transition-all"
+              />
+              <span className="text-[9px] font-mono uppercase tracking-widest text-emerald-400/80 hidden xs:block -mt-0.5">
                 24/7 Clean Power
               </span>
             </div>

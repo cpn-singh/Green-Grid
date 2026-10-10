@@ -13,7 +13,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('GreenGrid UI caught error:', error, errorInfo);
+    console.error('SYLVRA UI caught error:', error, errorInfo);
   }
 
   handleReload = () => {

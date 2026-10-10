@@ -526,7 +526,7 @@ export default function AppLanding() {
   const shouldSkipIntro = () => {
     if (location.state?.toLogo) return true
     try {
-      const introDone = sessionStorage.getItem('greengrid_intro_done')
+      const introDone = sessionStorage.getItem('sylvra_intro_done')
       if (introDone === 'true') return true
     } catch (_) {}
     return false
@@ -546,7 +546,7 @@ export default function AppLanding() {
         ((e.key === 'r' || e.key === 'R') && (e.metaKey || e.ctrlKey) && e.shiftKey)
       ) {
         try {
-          sessionStorage.removeItem('greengrid_intro_done')
+          sessionStorage.removeItem('sylvra_intro_done')
         } catch (_) {}
       }
     }
@@ -560,7 +560,7 @@ export default function AppLanding() {
       setIsSystemInitiated(true)
       setDescentCompleted(true)
       try {
-        sessionStorage.setItem('greengrid_intro_done', 'true')
+        sessionStorage.setItem('sylvra_intro_done', 'true')
       } catch (_) {}
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -569,7 +569,7 @@ export default function AppLanding() {
   const handleDescentComplete = () => {
     setDescentCompleted(true)
     try {
-      sessionStorage.setItem('greengrid_intro_done', 'true')
+      sessionStorage.setItem('sylvra_intro_done', 'true')
     } catch (_) {}
   }
 
@@ -652,7 +652,7 @@ export default function AppLanding() {
           setIsSystemInitiated(false)
           setDescentCompleted(false)
           try {
-            sessionStorage.removeItem('greengrid_intro_done')
+            sessionStorage.removeItem('sylvra_intro_done')
           } catch (_) {}
         }}
       />
@@ -702,9 +702,14 @@ export default function AppLanding() {
           >
             <Logo3D size={200} className="w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] mb-5" />
 
-            <h2 className="text-4xl sm:text-6xl font-semibold tracking-tight text-white mb-4 drop-shadow-[0_8px_24px_rgba(0,0,0,0.9)]">
-              GreenGrid
-            </h2>
+            <h2 className="sr-only">SYLVRA</h2>
+            <div className="mb-5 flex items-center justify-center">
+              <img
+                src="/sylvra-wordmark.png"
+                alt="SYLVRA"
+                className="w-[280px] sm:w-[380px] md:w-[460px] max-w-[85vw] h-auto object-contain select-none drop-shadow-[0_0_35px_rgba(16,185,129,0.4)]"
+              />
+            </div>
 
             <p className="max-w-2xl text-base md:text-lg text-zinc-300 leading-relaxed mb-8 drop-shadow-[0_4px_14px_rgba(0,0,0,0.9)]">
               Match your data center's load with renewable supply, compare what each source costs, and see

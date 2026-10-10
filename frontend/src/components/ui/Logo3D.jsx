@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
 /**
- * Logo3D - Interactive WebGL 3D Medallion for GreenGrid
+ * Logo3D - Interactive WebGL 3D Medallion for SYLVRA
  * Features:
  * - Ultra-sharp supersampled 3D medallion with high-metalness emerald-obsidian bevel rim
  * - High-res 958x958 logo texture with anisotropic filtering and true contrast
@@ -22,7 +22,7 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     const canvas = document.createElement('canvas')
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
     if (!gl) {
-      container.innerHTML = `<img src="/logo-hires.png" alt="GreenGrid" class="w-full h-full object-contain rounded-full select-none" />`
+      container.innerHTML = `<img src="/sylvra-s-logo.png?v=6" alt="SYLVRA" class="w-full h-full object-contain rounded-full select-none" />`
       return
     }
 
@@ -98,14 +98,14 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     const rimMesh = new THREE.Mesh(bevelTorusGeo, rimMat)
     logoGroup.add(rimMesh)
 
-    // 6. Front & Back Face Texture with GreenGrid High-Resolution Logo
+    // 6. Front & Back Face Texture with SYLVRA High-Resolution Logo
     let frontMesh = null
     let backMesh = null
     let faceGeo = null
     let faceMat = null
 
     const textureLoader = new THREE.TextureLoader()
-    textureLoader.load('/logo-hires.png', (texture) => {
+    textureLoader.load('/sylvra-s-logo.png?v=6', (texture) => {
       texture.colorSpace = THREE.SRGBColorSpace
       texture.generateMipmaps = true
       texture.minFilter = THREE.LinearMipmapLinearFilter

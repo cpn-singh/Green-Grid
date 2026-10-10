@@ -1,6 +1,6 @@
-# Deploying Green Grid to Vercel (with Database & Backend)
+# Deploying SYLVRA to Vercel (with Database & Backend)
 
-This guide walks you through deploying **Green Grid** to **Vercel** with a live database and fully functional backend services.
+This guide walks you through deploying **SYLVRA** to **Vercel** with a live database and fully functional backend services.
 
 ---
 

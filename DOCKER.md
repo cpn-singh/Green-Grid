@@ -1,6 +1,6 @@
-# Green Grid — Docker Deployment Guide
+# SYLVRA — Docker Deployment Guide
 
-The Green Grid platform is fully containerized using **Docker** and **Docker Compose**. It runs a production-grade multi-stage architecture with Daphne (ASGI Django) for the backend and Nginx for the frontend.
+The SYLVRA platform is fully containerized using **Docker** and **Docker Compose**. It runs a production-grade multi-stage architecture with Daphne (ASGI Django) for the backend and Nginx for the frontend.
 
 ---
 

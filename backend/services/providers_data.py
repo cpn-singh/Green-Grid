@@ -1,4 +1,4 @@
-# GREEN GRID INDIA - Verified Renewable Energy Supplier Database
+# SYLVRA INDIA - Verified Renewable Energy Supplier Database
 # Research snapshot: October 2026 | India-focused | Technical & Procurement Ready
 
 ENERGY_PROVIDERS = [

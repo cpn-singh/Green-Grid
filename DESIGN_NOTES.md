@@ -1,8 +1,8 @@
-# GreenGrid — Creative Brief & Design Notes
+# SYLVRA — Creative Brief & Design Notes
 
 > **Studio Collective:** Senior In-House Design & Engineering Group  
 > **Date:** October 2026  
-> **Subject:** Complete Handcrafted Overhaul of GreenGrid  
+> **Subject:** Complete Handcrafted Overhaul of SYLVRA  
 
 ---
 
