@@ -426,7 +426,7 @@ code, kbd, samp, pre, .font-mono {
 }
 
 .satellite-tile-layer {
-  filter: brightness(0.85) contrast(1.1);
+  filter: contrast(1.06) saturate(1.12);
 }
 
 .leaflet-popup-content-wrapper {
@@ -437,5 +437,10 @@ code, kbd, samp, pre, .font-mono {
 
 .leaflet-popup-tip {
   background: rgba(255, 255, 255, 0.96) !important;
+}
+
+.custom-dc-marker {
+  background: transparent !important;
+  border: none !important;
 }
 
