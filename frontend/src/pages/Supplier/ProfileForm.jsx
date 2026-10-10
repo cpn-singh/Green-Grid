@@ -56,10 +56,10 @@ export default function SupplierProfileForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08090a] text-white pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-[#08090a] text-white pt-20 sm:pt-24 pb-16 px-3 sm:px-6">
       <Navbar />
       
-      <Card className="max-w-3xl mx-auto p-6 md:p-10">
+      <Card className="max-w-3xl mx-auto p-4 sm:p-6 md:p-10">
         <div className="mb-8">
           <Badge>Asset Specifications</Badge>
           <h1 className="text-2xl md:text-3xl font-bold mt-4 mb-2">

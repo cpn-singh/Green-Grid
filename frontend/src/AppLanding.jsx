@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import OrbitalEarthBackground from './components/ui/OrbitalEarthBackground'
 import Logo3D from './components/ui/Logo3D'
+import Navbar from './components/Navbar'
 import { ENERGY_SOURCES } from './data/energySourcesData'
 
 // Shared styles, so buttons and cards look the same everywhere
@@ -656,48 +657,11 @@ export default function AppLanding() {
         }}
       />
 
-      {/* Header */}
-      <header
-        className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 sm:px-12 pt-4 pb-5 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-500 ${isGroundReady && showUI ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
-      >
-        <Link
-          to="/"
-          state={{ toLogo: true }}
-          onClick={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-          }}
-          className="flex items-center gap-3 cursor-pointer"
-          title="Scroll to top of GreenGrid"
-        >
-          <Logo3D size={34} className="w-8 h-8 shrink-0" />
-          <span className="text-base font-semibold text-white">GreenGrid</span>
-        </Link>
+      {/* Header / Navbar */}
+      <div className={`transition-opacity duration-500 ${isGroundReady && showUI ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <Navbar visible={isGroundReady && showUI} />
+      </div>
 
-        <nav className="hidden md:flex items-center gap-7 text-sm text-zinc-300">
-          <Link to="/map" className="hover:text-white transition-colors">
-            Grid map
-          </Link>
-          <Link to="/dc/profile" className="hover:text-white transition-colors">
-            Data center builder
-          </Link>
-          <Link to="/dc/results" className="hover:text-white transition-colors">
-            Matches
-          </Link>
-          <Link to="/supplier/dashboard" className="hover:text-white transition-colors">
-            Suppliers
-          </Link>
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <Link to="/login" className="px-3 py-1.5 text-sm text-zinc-300 hover:text-white transition-colors">
-            Sign in
-          </Link>
-          <Link to="/register" className={btnPrimary}>
-            Sign up
-          </Link>
-        </div>
-      </header>
 
       {/* Hero */}
       <section

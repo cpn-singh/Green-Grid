@@ -252,53 +252,53 @@ export default function SimulatorPage() {
     <div className="min-h-screen bg-[#08090a] text-white flex flex-col pt-16">
       <Navbar />
 
-      <div className="border-b border-white/10 bg-[#0c0e10]/90 backdrop-blur-md px-4 sm:px-8 py-6">
+      <div className="border-b border-white/10 bg-[#0c0e10]/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-              <span className="font-mono text-xs uppercase tracking-wider text-emerald-400 font-medium">
-                Physics Engine
+              <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-emerald-400 font-medium">
+                Physics Dispatch Engine
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
               National Grid & Clean Power Simulator
             </h1>
-            <p className="text-sm text-neutral-400 mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-neutral-400 mt-1 max-w-2xl leading-relaxed">
               Model real-time generation dispatch, storage battery balancing, workload curves, and RTC clean energy matching.
             </p>
           </div>
 
-          <div className="flex items-center bg-black/80 p-1 rounded-xl border border-white/10 w-full md:w-auto overflow-x-auto">
+          <div className="flex items-center bg-black/80 p-1 rounded-xl border border-white/10 w-full md:w-auto overflow-x-auto no-scrollbar">
             <button
               onClick={() => setActiveTab('both')}
-              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1.5 ${activeTab === 'both' ? 'bg-emerald-500/20 text-emerald-400' : 'text-neutral-400 hover:text-white'
+              className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-center gap-1.5 ${activeTab === 'both' ? 'bg-emerald-500/20 text-emerald-400' : 'text-neutral-400 hover:text-white'
                 }`}
             >
-              <Activity className="w-4 h-4" />
+              <Activity className="w-4 h-4 shrink-0" />
               <span>Dispatch Matcher</span>
             </button>
             <button
               onClick={() => setActiveTab('datacenter')}
-              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1.5 ${activeTab === 'datacenter' ? 'bg-sky-500/20 text-sky-400' : 'text-neutral-400 hover:text-white'
+              className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-center gap-1.5 ${activeTab === 'datacenter' ? 'bg-sky-500/20 text-sky-400' : 'text-neutral-400 hover:text-white'
                 }`}
             >
-              <Cpu className="w-4 h-4" />
+              <Cpu className="w-4 h-4 shrink-0" />
               <span>Data Center</span>
             </button>
             <button
               onClick={() => setActiveTab('supplier')}
-              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1.5 ${activeTab === 'supplier' ? 'bg-amber-500/20 text-amber-400' : 'text-neutral-400 hover:text-white'
+              className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-center gap-1.5 ${activeTab === 'supplier' ? 'bg-amber-500/20 text-amber-400' : 'text-neutral-400 hover:text-white'
                 }`}
             >
-              <Zap className="w-4 h-4" />
+              <Zap className="w-4 h-4 shrink-0" />
               <span>Supplier</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 flex-1 space-y-8">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 space-y-6 sm:space-y-8">
 
         {/* KPI Scorecard */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -526,7 +526,7 @@ export default function SimulatorPage() {
 
               <div>
                 <label className="text-xs text-neutral-400 block mb-2 uppercase">Technology Split:</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="bg-black/40 p-3 rounded-lg border border-white/10">
                     <div className="flex items-center justify-between text-sm mb-2">
                       <span className="text-amber-400 font-medium flex items-center gap-1.5"><Sun className="w-3.5 h-3.5" /> Solar</span>
@@ -577,7 +577,7 @@ export default function SimulatorPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-white/10">
                 <div>
                   <label className="text-xs text-neutral-400 block mb-2">Climate Season:</label>
                   <div className="flex gap-1 bg-black/40 p-1 rounded-lg border border-white/10">

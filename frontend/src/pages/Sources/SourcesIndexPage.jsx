@@ -77,7 +77,7 @@ export default function SourcesIndexPage() {
       {/* Filters and links */}
       <section className="px-6 sm:px-12 max-w-[1360px] mx-auto py-8">
         <div className="flex items-center justify-between flex-wrap gap-4 border-b border-white/10 pb-6">
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar max-w-full">
             {ENERGY_SOURCE_CATEGORIES.map((cat) => {
               const active = selectedCategory === cat;
               return (

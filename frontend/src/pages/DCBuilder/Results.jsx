@@ -82,10 +82,10 @@ export default function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08090a] text-white pt-24 pb-20 px-4 md:px-12">
+    <div className="min-h-screen bg-[#08090a] text-white pt-20 sm:pt-24 pb-20 px-3 sm:px-6 md:px-12">
       <Navbar />
       
-      <div className="max-w-6xl mx-auto space-y-10">
+      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
         
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">

@@ -158,18 +158,18 @@ export default function LiveMapDashboard() {
   };
 
   return (
-    <div className="h-screen w-screen bg-[#08090a] text-white flex flex-col overflow-hidden pt-16">
+    <div className="h-screen w-screen bg-[#08090a] text-white flex flex-col overflow-hidden pt-14 sm:pt-16">
       <Navbar />
 
-      <div className="shrink-0 bg-[#0c0e10]/95 backdrop-blur-md border-b border-white/10 px-4 md:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs z-20">
-        <div className="flex items-center gap-2.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span className="font-medium text-emerald-400 uppercase text-xs">
-            Live Grid Map
+      <div className="shrink-0 bg-[#0c0e10]/95 backdrop-blur-md border-b border-white/10 px-3 sm:px-6 md:px-8 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-xs z-20">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="font-medium text-emerald-400 uppercase text-[11px] sm:text-xs tracking-wider">
+            Live Grid Radar
           </span>
         </div>
 
-        <div className="flex items-center gap-1 bg-black/70 p-1 rounded border border-white/10 overflow-x-auto">
+        <div className="flex items-center gap-1 bg-black/70 p-1 rounded border border-white/10 overflow-x-auto max-w-full no-scrollbar">
           <button onClick={() => setActiveFilter('all')} className={getFilterClass('all')}>
             All ({suppliersList.length + dcsList.length})
           </button>
@@ -177,33 +177,33 @@ export default function LiveMapDashboard() {
             Sources ({suppliersList.length})
           </button>
           <button onClick={() => setActiveFilter('dcs')} className={getFilterClass('dcs')}>
-            Data Centers ({dcsList.length})
+            DCs ({dcsList.length})
           </button>
           <button onClick={() => setActiveFilter('matches')} className={getFilterClass('matches')}>
             Routes ({matchesList.length})
           </button>
         </div>
 
-        <div className="flex items-center gap-1 bg-black/80 p-1 rounded border border-white/10">
+        <div className="flex items-center gap-1 bg-black/80 p-0.5 sm:p-1 rounded border border-white/10">
           <button
             onClick={() => setBaseLayer('dark')}
-            className={`px-2 py-1 rounded text-xs transition-all cursor-pointer ${
+            className={`px-2 py-1 rounded text-[11px] sm:text-xs transition-all cursor-pointer ${
               baseLayer === 'dark' ? 'bg-emerald-500/20 text-emerald-300 font-medium' : 'text-white/50 hover:text-white'
             }`}
           >
-            Standard Map
+            Standard
           </button>
           <button
             onClick={() => setBaseLayer('satellite')}
-            className={`px-2 py-1 rounded text-xs transition-all cursor-pointer ${
+            className={`px-2 py-1 rounded text-[11px] sm:text-xs transition-all cursor-pointer ${
               baseLayer === 'satellite' ? 'bg-sky-500/20 text-sky-300 font-medium' : 'text-white/50 hover:text-white'
             }`}
           >
-            Satellite Map
+            Satellite
           </button>
         </div>
 
-        <div className="hidden sm:flex items-center gap-4 text-white/70 text-xs">
+        <div className="hidden lg:flex items-center gap-4 text-white/70 text-xs font-mono">
           <div>Capacity: <span className="font-medium text-emerald-400">{stats?.clean_energy_gw || 130.7} GW</span></div>
           <div>DCs: <span className="font-medium text-sky-400">{dcsList.length}</span></div>
           <div>Routes: <span className="font-medium text-emerald-300">{matchesList.length}</span></div>
@@ -408,29 +408,32 @@ export default function LiveMapDashboard() {
           })}
         </MapContainer>
 
-        <div className="absolute top-3 right-3 z-[1000] p-3 rounded bg-black/80 backdrop-blur-md border border-white/10 text-xs space-y-2">
-          <div className="text-white mb-2">Legend</div>
+        {/* Compact, responsive legend */}
+        <div className="absolute top-3 right-3 z-[1000] p-2.5 sm:p-3 rounded-lg bg-black/85 backdrop-blur-md border border-white/10 text-[11px] sm:text-xs space-y-1.5 sm:space-y-2 shadow-xl">
+          <div className="text-white/90 font-mono uppercase tracking-wider text-[10px]">Legend</div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
             <span className="text-white/80">Sources</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-sky-500" />
+            <span className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
             <span className="text-white/80">Data Centers</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 border-t border-dashed border-emerald-400" />
-            <span className="text-white/80">Connections</span>
+            <span className="w-3 border-t border-dashed border-emerald-400 shrink-0" />
+            <span className="text-white/80">Routes</span>
           </div>
         </div>
 
-        <div className="absolute bottom-3 inset-x-4 z-[1000] pointer-events-none">
-          <div className="max-w-4xl mx-auto rounded bg-black/85 border border-white/10 px-4 py-2 flex items-center gap-3 pointer-events-auto">
-            <div className="text-emerald-400 text-xs">
-              Latest:
+        {/* Live event marquee ticker */}
+        <div className="absolute bottom-3 inset-x-2 sm:inset-x-4 z-[1000] pointer-events-none">
+          <div className="max-w-4xl mx-auto rounded-lg bg-black/90 backdrop-blur-md border border-white/10 px-3 py-1.5 sm:px-4 sm:py-2 flex items-center gap-2 sm:gap-3 pointer-events-auto shadow-2xl">
+            <div className="text-emerald-400 font-mono text-[10px] sm:text-xs shrink-0 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+              <span>LIVE:</span>
             </div>
-            <div className="overflow-hidden flex-1 text-xs text-white/70 whitespace-nowrap">
-              {events.join('  |  ')}
+            <div className="overflow-hidden flex-1 text-[11px] sm:text-xs text-white/80 whitespace-nowrap truncate font-mono">
+              {events.length > 0 ? events.join('  •  ') : 'Listening for telemetry events across 765 kV grid...'}
             </div>
           </div>
         </div>

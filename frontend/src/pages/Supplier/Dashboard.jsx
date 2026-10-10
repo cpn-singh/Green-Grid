@@ -143,10 +143,10 @@ export default function Dashboard() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[#08090a] text-white pt-24 pb-20 px-4 md:px-12">
+    <div className="min-h-screen bg-[#08090a] text-white pt-20 sm:pt-24 pb-20 px-3 sm:px-6 md:px-12">
       <Navbar />
       
-      <div className="max-w-6xl mx-auto space-y-10">
+      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
         {/* Preview Mode Banner */}
         {isPreviewMode && (
           <div className="bg-emerald-950/30 border border-emerald-500/20 rounded-lg p-4 flex flex-wrap items-center justify-between gap-4">

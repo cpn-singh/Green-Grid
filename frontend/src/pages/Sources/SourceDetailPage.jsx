@@ -170,7 +170,7 @@ export default function SourceDetailPage({ sourceIdOverride }) {
             Back to overview
           </Link>
 
-          <nav aria-label="Energy sources" className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
+          <nav aria-label="Energy sources" className="flex items-center gap-1.5 overflow-x-auto py-1 no-scrollbar max-w-full">
             {ENERGY_SOURCES.map((s) => {
               const isActive = s.id === source.id;
               return (

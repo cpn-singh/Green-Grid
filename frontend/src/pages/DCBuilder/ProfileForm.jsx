@@ -96,9 +96,9 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08090a] text-white pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-[#08090a] text-white pt-20 sm:pt-24 pb-16 px-3 sm:px-6">
       <Navbar />
-      <Card className="max-w-3xl mx-auto p-6 md:p-10">
+      <Card className="max-w-3xl mx-auto p-4 sm:p-6 md:p-10">
         <div className="mb-8">
           <Badge>Energy Sizing Profile</Badge>
           <h1 className="text-2xl md:text-3xl font-bold mt-4 mb-2">
@@ -239,7 +239,7 @@ export default function ProfileForm() {
                 Explore All Sources &rarr;
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
               {ENERGY_SOURCES.map((src) => {
                 const isSelected = formData.preferred_energy_sources.includes(src.id);
                 return (
