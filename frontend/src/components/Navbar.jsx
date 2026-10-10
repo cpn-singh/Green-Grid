@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Navbar({ visible = true }) {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ export default function Navbar({ visible = true }) {
     };
 
     window.addEventListener('scroll', handleScroll);
-    
+
     // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -34,7 +35,6 @@ export default function Navbar({ visible = true }) {
 
   const isVisible = visible || scrolled;
 
-  // Building the class string outside the return makes it much easier to read
   const navClasses = `
     fixed top-0 w-full z-50 flex items-center justify-between px-6 md:px-12 py-4 transition-all duration-300
     ${scrolled ? 'bg-[#080b09]/95 backdrop-blur-md border-b border-[#19241d] shadow-lg' : 'bg-transparent'}
@@ -46,8 +46,6 @@ export default function Navbar({ visible = true }) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
-
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
@@ -79,10 +77,7 @@ export default function Navbar({ visible = true }) {
             <Link to="/map" className="hover:text-green-500 transition-colors">National Radar</Link>
           </li>
           <li>
-            <Link to="/simulator" className="hover:text-green-500 transition-colors flex items-center gap-1.5 text-emerald-400 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Grid Simulator</span>
-            </Link>
+            <Link to="/simulator" className="hover:text-green-500 transition-colors">Grid Simulator</Link>
           </li>
           <li>
             <Link to="/dc/profile" className="hover:text-green-500 transition-colors">DC Sizing</Link>
@@ -93,7 +88,7 @@ export default function Navbar({ visible = true }) {
           <li>
             <Link to="/supplier/dashboard" className="hover:text-green-500 transition-colors">Suppliers</Link>
           </li>
-          
+
           {user?.role === 'energy_supplier' && (
             <li>
               <Link to="/supplier/profile" className="hover:text-green-500 transition-colors">Asset Specs</Link>
@@ -148,8 +143,8 @@ export default function Navbar({ visible = true }) {
         <div className="fixed inset-x-0 top-[60px] z-40 bg-[#080b09]/98 border-b border-[#19241d] p-5 backdrop-blur-xl md:hidden shadow-2xl animate-fadeIn">
           <ul className="flex flex-col gap-4 text-xs font-mono uppercase text-[#91a399]">
             <li>
-              <Link 
-                to="/map" 
+              <Link
+                to="/map"
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-green-500 transition-colors block py-1"
               >
@@ -157,18 +152,17 @@ export default function Navbar({ visible = true }) {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/simulator" 
+              <Link
+                to="/simulator"
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-green-500 transition-colors flex items-center gap-2 text-emerald-400 font-semibold py-1"
+                className="hover:text-green-500 transition-colors block py-1"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Grid Simulator (Power & Load)</span>
+                Grid Simulator
               </Link>
             </li>
             <li>
-              <Link 
-                to="/dc/profile" 
+              <Link
+                to="/dc/profile"
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-green-500 transition-colors block py-1"
               >
@@ -176,8 +170,8 @@ export default function Navbar({ visible = true }) {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/dc/results" 
+              <Link
+                to="/dc/results"
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-green-500 transition-colors block py-1"
               >
@@ -185,8 +179,8 @@ export default function Navbar({ visible = true }) {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/supplier/dashboard" 
+              <Link
+                to="/supplier/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-green-500 transition-colors block py-1"
               >
@@ -195,8 +189,8 @@ export default function Navbar({ visible = true }) {
             </li>
             {user?.role === 'energy_supplier' && (
               <li>
-                <Link 
-                  to="/supplier/profile" 
+                <Link
+                  to="/supplier/profile"
                   onClick={() => setMobileMenuOpen(false)}
                   className="hover:text-green-500 transition-colors block py-1"
                 >
@@ -206,8 +200,8 @@ export default function Navbar({ visible = true }) {
             )}
             {!user && (
               <li className="pt-2 border-t border-white/10">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   onClick={() => setMobileMenuOpen(false)}
                   className="hover:text-white transition-colors block py-1"
                 >
