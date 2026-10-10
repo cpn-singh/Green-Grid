@@ -13,6 +13,7 @@ const DCResults = lazy(() => import('./pages/DCBuilder/Results'));
 const SupplierProfileForm = lazy(() => import('./pages/Supplier/ProfileForm'));
 const SupplierDashboard = lazy(() => import('./pages/Supplier/Dashboard'));
 const LiveMapDashboard = lazy(() => import('./pages/Map/LiveMapDashboard'));
+const SimulatorPage = lazy(() => import('./pages/Simulator/SimulatorPage'));
 const SourcesIndexPage = lazy(() => import('./pages/Sources/SourcesIndexPage'));
 const SourceDetailPage = lazy(() => import('./pages/Sources/SourceDetailPage'));
 
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/supplier/profile" element={<SupplierProfileForm />} />
             <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
             <Route path="/map" element={<LiveMapDashboard />} />
+            <Route path="/simulator" element={<SimulatorPage />} />
             <Route path="/solar" element={<SourceDetailPage sourceIdOverride="solar" />} />
             <Route path="/wind" element={<SourceDetailPage sourceIdOverride="wind" />} />
             <Route path="/hydro" element={<SourceDetailPage sourceIdOverride="large-hydro" />} />
