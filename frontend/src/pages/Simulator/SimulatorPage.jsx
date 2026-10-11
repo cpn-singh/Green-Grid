@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import ContactModal from '../../components/ContactModal';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -47,6 +49,11 @@ export default function SimulatorPage() {
   const [activeTab, setActiveTab] = useState('both');
   const [selectedSeason, setSelectedSeason] = useState('summer');
   const [showHourlyTable, setShowHourlyTable] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = "Cost Sim | SYLVRA Clean Power & Tariff Simulator";
+  }, []);
 
   // Data Center Parameters
   const [itLoadMw, setItLoadMw] = useState(60);
@@ -258,14 +265,14 @@ export default function SimulatorPage() {
             <div className="flex items-center gap-2 mb-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
               <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-emerald-400 font-medium">
-                Physics Dispatch Engine
+                Physics & Tariff Engine
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
-              National Grid & Clean Power Simulator
+              Cost Sim // Clean Power & Grid Economics Simulator
             </h1>
             <p className="text-xs sm:text-sm text-neutral-400 mt-1 max-w-2xl leading-relaxed">
-              Model real-time generation dispatch, storage battery balancing, workload curves, and RTC clean energy matching.
+              Model real-time generation dispatch, storage battery balancing, workload curves, PPA tariffs, and annual cost savings (₹ Cr).
             </p>
           </div>
 
@@ -772,8 +779,10 @@ export default function SimulatorPage() {
             </div>
           </div>
         )}
-
       </div>
+
+      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </div>
   );
 }

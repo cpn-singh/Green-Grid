@@ -132,3 +132,9 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+# Contact Inquiry & Notification Settings
+CONTACT_INQUIRY_RECIPIENT = 'cpnsingh2001@gmail.com'
+DEFAULT_FROM_EMAIL = 'notifications@sylvra.energy'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

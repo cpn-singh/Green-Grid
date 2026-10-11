@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { supplierAPI, matchAPI } from '../../services/api';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import ContactModal from '../../components/ContactModal';
 import { Link } from 'react-router-dom';
 import { Card, Badge, Button } from '../../components/ui';
 
@@ -70,6 +72,7 @@ export default function Dashboard() {
   const [profile, setProfile] = useState(null);
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -143,10 +146,10 @@ export default function Dashboard() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[#08090a] text-white pt-20 sm:pt-24 pb-20 px-3 sm:px-6 md:px-12">
+    <div className="min-h-screen bg-[#08090a] text-white pt-20 sm:pt-24 flex flex-col justify-between">
       <Navbar />
       
-      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
+      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10 px-3 sm:px-6 md:px-12 pb-20 w-full flex-1">
         {/* Preview Mode Banner */}
         {isPreviewMode && (
           <div className="bg-emerald-950/30 border border-emerald-500/20 rounded-lg p-4 flex flex-wrap items-center justify-between gap-4">
@@ -290,6 +293,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </div>
   );
 }

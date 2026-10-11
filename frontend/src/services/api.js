@@ -68,4 +68,8 @@ export const mapAPI = {
   getStats: () => api.get('/map/stats/'),
 };
 
+export const contactAPI = {
+  submitInquiry: (data) => api.post('/contact/', data),
+};
+
 export default api;

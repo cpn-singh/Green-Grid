@@ -17,6 +17,8 @@ import {
   Flame
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import ContactModal from '../../components/ContactModal';
 import { getEnergySourceById, ENERGY_SOURCES } from '../../data/energySourcesData';
 
 // Same button and card styles as the landing page, so the site feels consistent
@@ -121,6 +123,7 @@ const getSourceIcon = (id) => {
 export default function SourceDetailPage({ sourceIdOverride }) {
   const { sourceId: paramId } = useParams();
   const sourceId = sourceIdOverride || paramId || 'solar';
+  const [isContactOpen, setIsContactOpen] = React.useState(false);
   const navigate = useNavigate();
   const source = getEnergySourceById(sourceId);
 
@@ -380,6 +383,9 @@ export default function SourceDetailPage({ sourceIdOverride }) {
           </Link>
         </div>
       </div>
+
+      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </div>
   );
 }

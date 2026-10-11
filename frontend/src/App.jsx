@@ -16,6 +16,7 @@ const LiveMapDashboard = lazy(() => import('./pages/Map/LiveMapDashboard'));
 const SimulatorPage = lazy(() => import('./pages/Simulator/SimulatorPage'));
 const SourcesIndexPage = lazy(() => import('./pages/Sources/SourcesIndexPage'));
 const SourceDetailPage = lazy(() => import('./pages/Sources/SourceDetailPage'));
+const ContactPage = lazy(() => import('./pages/Contact/ContactPage'));
 
 export default function App() {
   return (
@@ -34,6 +35,8 @@ export default function App() {
             <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
             <Route path="/map" element={<LiveMapDashboard />} />
             <Route path="/simulator" element={<SimulatorPage />} />
+            <Route path="/cost-sim" element={<SimulatorPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/solar" element={<SourceDetailPage sourceIdOverride="solar" />} />
             <Route path="/wind" element={<SourceDetailPage sourceIdOverride="wind" />} />
             <Route path="/hydro" element={<SourceDetailPage sourceIdOverride="large-hydro" />} />

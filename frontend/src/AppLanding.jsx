@@ -19,11 +19,17 @@ import {
   Layers,
   AlertCircle,
   MapPin,
-  X
+  X,
+  Phone,
+  MessageSquare,
+  Mail,
+  Sliders
 } from 'lucide-react'
 import OrbitalEarthBackground from './components/ui/OrbitalEarthBackground'
 import Logo3D from './components/ui/Logo3D'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import ContactModal from './components/ContactModal'
 import { ENERGY_SOURCES } from './data/energySourcesData'
 
 // Shared styles, so buttons and cards look the same everywhere
@@ -517,6 +523,7 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
 export default function AppLanding() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showUI, setShowUI] = useState(true)
+  const [isContactOpen, setIsContactOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -724,8 +731,13 @@ export default function AppLanding() {
                 <Globe className="w-4 h-4" />
                 Open grid map
               </button>
-              <button onClick={() => navigate('/dc/profile')} className={btnSecondary}>
-                Plan your power mix
+              <button onClick={() => navigate('/simulator')} className={btnSecondary}>
+                <Sliders className="w-4 h-4" />
+                Cost Sim
+              </button>
+              <button onClick={() => setIsContactOpen(true)} className={btnSecondary}>
+                <Phone className="w-4 h-4 text-emerald-400" />
+                Contact Us
               </button>
             </div>
 
@@ -755,10 +767,10 @@ export default function AppLanding() {
 
           {/* Bottom call-to-action */}
           <section className="relative z-20 bg-transparent px-6 sm:px-12 py-24 text-[#f0f4f1]">
-            <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-8 rounded-xl bg-black/60 border border-white/10 text-left">
+            <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 p-8 rounded-xl bg-black/60 border border-white/10 text-left">
               <div>
-                <h3 className="text-2xl font-semibold text-white mb-2">Transmission corridors across India</h3>
-                <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                <h3 className="text-xl font-semibold text-white mb-2">Transmission corridors</h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-4">
                   See renewable energy parks, substation capacity and data center campuses across Gujarat,
                   Rajasthan, Tamil Nadu and Maharashtra.
                 </p>
@@ -769,22 +781,51 @@ export default function AppLanding() {
               </div>
 
               <div className="md:border-l border-white/10 md:pl-8">
-                <h3 className="text-2xl font-semibold text-white mb-2">Data center sizing wizard</h3>
-                <p className="text-sm text-slate-300 leading-relaxed mb-4">
-                  Enter your IT load, target PUE and cooling setup, and we'll model solar, wind and storage
-                  mixes that keep your supply clean around the clock.
+                <h3 className="text-xl font-semibold text-white mb-2">Cost Sim & Tariffs</h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-4">
+                  Simulate round-the-clock power costs, compare PPA rates against state tariffs, and calculate annual savings in ₹ Crores.
                 </p>
-                <Link to="/dc/profile" className={btnSecondary}>
-                  Set up your facility
+                <Link to="/simulator" className={btnSecondary}>
+                  <Sliders className="w-4 h-4" />
+                  Launch Cost Sim
                 </Link>
+              </div>
+
+              <div className="md:border-l border-white/10 md:pl-8">
+                <h3 className="text-xl font-semibold text-white mb-2">24/7 Contact Desk</h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                  Reach our dispatch and siting team on WhatsApp or phone at <span className="text-emerald-400 font-mono font-medium">+91 9350349962</span> or email <span className="text-white font-mono">cpnsingh2001@gmail.com</span>.
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href="https://wa.me/919350349962?text=Hello%20SYLVRA%20Team,%20I%20would%20like%20to%20inquire%20about%20clean%20power%20siting."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition-colors"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                  <button
+                    onClick={() => setIsContactOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 text-white text-xs font-medium transition-colors cursor-pointer"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Inquiry Desk</span>
+                  </button>
+                </div>
               </div>
             </div>
           </section>
+
+          {/* Full platform footer */}
+          <Footer onOpenContact={() => setIsContactOpen(true)} />
+          <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
         </>
       )}
 
       {/* Bottom-right controls */}
-      <footer className="fixed bottom-0 inset-x-0 z-30 flex items-center justify-end px-6 sm:px-12 py-5 pointer-events-none">
+      <div className="fixed bottom-0 inset-x-0 z-30 flex items-center justify-end px-6 sm:px-12 py-5 pointer-events-none">
         <div className="flex items-center gap-2 pointer-events-auto">
           <button
             onClick={() => setShowUI(!showUI)}
@@ -804,7 +845,7 @@ export default function AppLanding() {
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }

@@ -13,7 +13,8 @@ import {
   Sun,
   LogIn,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Phone
 } from 'lucide-react';
 
 export default function Navbar({ visible = true }) {
@@ -84,11 +85,12 @@ export default function Navbar({ visible = true }) {
 
   const navLinks = [
     { name: 'Radar Map', path: '/map', icon: Radio },
-    { name: 'Grid Sim', path: '/simulator', icon: Sliders },
+    { name: 'Cost Sim', path: '/simulator', icon: Sliders },
     { name: 'DC Sizing', path: '/dc/profile', icon: Cpu },
     { name: 'Matches', path: '/dc/results', icon: ShieldCheck },
     { name: 'Suppliers', path: '/supplier/dashboard', icon: Building2 },
     { name: 'Clean Sources', path: '/sources', icon: Sun },
+    { name: 'Contact Us', path: '/contact', icon: Phone },
     ...(user?.role === 'energy_supplier'
       ? [{ name: 'Asset Specs', path: '/supplier/profile', icon: FileSpreadsheet }]
       : [])

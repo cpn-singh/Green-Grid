@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Sliders, Globe } from 'lucide-react';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import ContactModal from '../../components/ContactModal';
 import { ENERGY_SOURCES, ENERGY_SOURCE_CATEGORIES } from '../../data/energySourcesData';
 
 // Same button and card styles as the landing and detail pages
@@ -18,6 +20,7 @@ function scoreClasses(score) {
 
 export default function SourcesIndexPage() {
   const [selectedCategory, setSelectedCategory] = useState('All Sources');
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const navigate = useNavigate();
 
   const filteredSources =
@@ -235,6 +238,9 @@ export default function SourcesIndexPage() {
           </table>
         </div>
       </section>
+
+      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </div>
   );
 }

@@ -36,3 +36,23 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid credentials")
         data['user'] = user
         return data
+
+
+class ContactInquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        from .models import ContactInquiry
+        model = ContactInquiry
+        fields = [
+            'id',
+            'ticket_id',
+            'name',
+            'email',
+            'phone',
+            'organization',
+            'inquiry_type',
+            'message',
+            'status',
+            'created_at'
+        ]
+        read_only_fields = ['id', 'status', 'created_at']
+
