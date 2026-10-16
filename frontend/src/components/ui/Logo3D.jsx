@@ -107,6 +107,31 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
     const textureLoader = new THREE.TextureLoader()
     textureLoader.load('/sylvra-s-logo.png?v=6', (texture) => {
       texture.colorSpace = THREE.SRGBColorSpace
+
+      // The source PNG has a pale mint background baked in. Key out only the
+      // bright, low-saturation mint pixels so the artwork sits naturally on
+      // the dark medallion while its saturated emerald/cyan details remain.
+      const image = texture.image
+      const textureCanvas = document.createElement('canvas')
+      textureCanvas.width = image.width
+      textureCanvas.height = image.height
+      const context = textureCanvas.getContext('2d', { willReadFrequently: true })
+      context.drawImage(image, 0, 0)
+      const pixels = context.getImageData(0, 0, textureCanvas.width, textureCanvas.height)
+      for (let i = 0; i < pixels.data.length; i += 4) {
+        const r = pixels.data[i]
+        const g = pixels.data[i + 1]
+        const b = pixels.data[i + 2]
+        const max = Math.max(r, g, b)
+        const min = Math.min(r, g, b)
+        const saturation = max === 0 ? 0 : (max - min) / max
+        const isPaleMint = g > r && g > b && g > 150 && saturation < 0.36
+        if (isPaleMint) pixels.data[i + 3] = 0
+      }
+      context.putImageData(pixels, 0, 0)
+      texture.image = textureCanvas
+      texture.needsUpdate = true
+
       texture.generateMipmaps = true
       texture.minFilter = THREE.LinearMipmapLinearFilter
       texture.magFilter = THREE.LinearFilter
@@ -115,12 +140,12 @@ export default function Logo3D({ size = 220, className = '', onClick }) {
       }
 
       faceGeo = new THREE.CircleGeometry(1.78, 96)
-      // High contrast without washing out the logo
-      faceMat = new THREE.MeshStandardMaterial({
+      // Preserve the source artwork's colors; scene lighting/tone mapping was
+      // washing out the mint, emerald, silver, and cyan gradients.
+      faceMat = new THREE.MeshBasicMaterial({
         map: texture,
-        metalness: 0.05,
-        roughness: 0.2,
         transparent: true,
+        toneMapped: false,
       })
 
       // Front face
