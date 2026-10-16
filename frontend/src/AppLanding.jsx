@@ -682,7 +682,7 @@ export default function AppLanding() {
               Clean power for India's data centers
             </h1>
 
-            <p className="max-w-xl text-base text-zinc-300 mt-6 leading-relaxed drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+            <p className="max-w-xl text-base text-zinc-100 mt-6 leading-relaxed drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
               Compare renewable sources, tariffs and grid connections, and find a mix that can keep a data
               center running around the clock.
             </p>
