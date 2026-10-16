@@ -380,12 +380,6 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
             isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-            <span className="text-sm text-emerald-400 font-mono tracking-wider">
-              PAGE 0{idx + 1} OF 09 // {source.badge}
-            </span>
-          </div>
-
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white leading-tight flex items-center gap-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             <span className="hidden sm:inline-flex">{getSourceIcon(source.id)}</span>
             <span>{source.name}</span>
@@ -475,10 +469,6 @@ function EnergySourceSection({ source, idx, getSourceIcon, navigate }) {
                   className={`${btnPrimary} flex-1`}
                 >
                   Add to my data center
-                </button>
-                <button onClick={() => navigate('/map')} className={btnSecondary}>
-                  <Globe className="w-4 h-4" />
-                  Grid map
                 </button>
               </div>
             </div>
@@ -701,53 +691,81 @@ export default function AppLanding() {
         {/* After the descent */}
         {isGroundReady && (
           <div
-            className="max-w-3xl flex flex-col items-center justify-center pt-24 pb-8 z-30 px-4 will-change-transform"
+            key={descentCompleted ? 'hero-ground-active' : 'hero-ground-initial'}
+            className="max-w-3xl flex flex-col items-center justify-center pt-24 pb-8 z-30 px-4 will-change-transform relative"
             style={{
               opacity: heroScrollFade,
               transform: `translate3d(0, -${heroTranslateY}px, 0)`,
             }}
           >
-            <Logo3D size={200} className="w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] mb-5" />
+            {/* Ambient atmospheric emerald energy pulse / shockwave */}
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[560px] h-[300px] bg-gradient-to-b from-emerald-500/35 via-teal-500/15 to-transparent rounded-full pointer-events-none animate-hero-bloom"
+            />
 
-            <h2 className="sr-only">SYLVRA</h2>
-            <div className="mb-5 flex items-center justify-center">
-              <img
-                src="/sylvra-wordmark.png"
-                alt="SYLVRA"
-                className="w-[280px] sm:w-[380px] md:w-[460px] max-w-[85vw] h-auto object-contain select-none drop-shadow-[0_0_35px_rgba(16,185,129,0.4)]"
-              />
+            {/* Inner Entrance Elements Container */}
+            <div className="w-full flex flex-col items-center justify-center relative">
+              {/* 1. 3D Medallion Logo (Scales up with glowing emerald rim flare) */}
+              <div className="flex flex-col items-center justify-center animate-hero-logo">
+                <Logo3D size={200} className="w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] mb-5" />
+              </div>
+
+              <h2 className="sr-only">SYLVRA</h2>
+              {/* 2. Brand Wordmark with radiant glow */}
+              <div className="mb-5 flex items-center justify-center animate-hero-wordmark">
+                <img
+                  src="/sylvra-wordmark.png"
+                  alt="SYLVRA"
+                  className="w-[280px] sm:w-[380px] md:w-[460px] max-w-[85vw] h-auto object-contain select-none"
+                />
+              </div>
+
+              {/* 3. Description Subtitle */}
+              <p className="max-w-2xl text-base md:text-lg text-zinc-300 leading-relaxed mb-8 drop-shadow-[0_4px_14px_rgba(0,0,0,0.9)] animate-hero-sub">
+                Match your data center's load with renewable supply, compare what each source costs, and see
+                where the grid can support you.
+              </p>
+
+              {/* 4. Action Buttons (Staggered spring entrance) */}
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+                <button
+                  onClick={scrollToSources}
+                  className={`${btnPrimary} animate-hero-btn-1 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-200`}
+                >
+                  Browse energy sources
+                </button>
+                <button
+                  onClick={() => navigate('/map')}
+                  className={`${btnSecondary} animate-hero-btn-2 hover:-translate-y-0.5 hover:border-white/40 transition-all duration-200`}
+                >
+                  <Globe className="w-4 h-4" />
+                  Open grid map
+                </button>
+                <button
+                  onClick={() => navigate('/simulator')}
+                  className={`${btnSecondary} animate-hero-btn-3 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:text-emerald-300 transition-all duration-200`}
+                >
+                  <Sliders className="w-4 h-4" />
+                  Cost Sim
+                </button>
+                <button
+                  onClick={() => setIsContactOpen(true)}
+                  className={`${btnSecondary} animate-hero-btn-4 hover:-translate-y-0.5 hover:border-emerald-500/40 transition-all duration-200`}
+                >
+                  <Phone className="w-4 h-4 text-emerald-400" />
+                  Contact Us
+                </button>
+              </div>
+
+              {/* 5. Scroll Prompt with Animated Chevron */}
+              <button
+                onClick={scrollToSources}
+                className="flex flex-col items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer group animate-hero-scroll"
+              >
+                <span className="tracking-wide">Scroll to see the sources</span>
+                <ChevronDown className="w-4 h-4 animate-scroll-bounce group-hover:text-emerald-400 transition-colors" />
+              </button>
             </div>
-
-            <p className="max-w-2xl text-base md:text-lg text-zinc-300 leading-relaxed mb-8 drop-shadow-[0_4px_14px_rgba(0,0,0,0.9)]">
-              Match your data center's load with renewable supply, compare what each source costs, and see
-              where the grid can support you.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-              <button onClick={scrollToSources} className={btnPrimary}>
-                Browse energy sources
-              </button>
-              <button onClick={() => navigate('/map')} className={btnSecondary}>
-                <Globe className="w-4 h-4" />
-                Open grid map
-              </button>
-              <button onClick={() => navigate('/simulator')} className={btnSecondary}>
-                <Sliders className="w-4 h-4" />
-                Cost Sim
-              </button>
-              <button onClick={() => setIsContactOpen(true)} className={btnSecondary}>
-                <Phone className="w-4 h-4 text-emerald-400" />
-                Contact Us
-              </button>
-            </div>
-
-            <button
-              onClick={scrollToSources}
-              className="flex flex-col items-center gap-1 text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer"
-            >
-              <span>Scroll to see the sources</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
           </div>
         )}
       </section>

@@ -469,4 +469,171 @@ code, kbd, samp, pre, .font-mono {
   scrollbar-width: none;
 }
 
+/* --- CINEMATIC HERO ENTRANCE TRANSITIONS --- */
+
+/* Radial background bloom / aura shockwave */
+@keyframes heroAtmosphericPulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+    filter: blur(20px);
+  }
+  45% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.35);
+    filter: blur(55px);
+  }
+  100% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(75px);
+  }
+}
+
+/* 3D Medallion Logo: dramatic cinematic emergence */
+@keyframes heroLogoArrival {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 80px, 0) scale(0.5);
+    filter: blur(16px) brightness(1.9) drop-shadow(0 0 60px rgba(16, 185, 129, 0.9));
+  }
+  55% {
+    opacity: 1;
+    transform: translate3d(0, -10px, 0) scale(1.08);
+    filter: blur(0px) brightness(1.25) drop-shadow(0 0 45px rgba(16, 185, 129, 0.75));
+  }
+  78% {
+    transform: translate3d(0, 3px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px) brightness(1) drop-shadow(0 0 30px rgba(16, 185, 129, 0.45));
+  }
+}
+
+/* SYLVRA Wordmark: glowing unmask and expansion */
+@keyframes heroWordmarkArrival {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0) scale(0.85);
+    filter: blur(14px) drop-shadow(0 0 70px rgba(52, 211, 153, 0.95));
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(0, -6px, 0) scale(1.04);
+    filter: blur(0px) drop-shadow(0 0 45px rgba(16, 185, 129, 0.8));
+  }
+  80% {
+    transform: translate3d(0, 2px, 0) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px) drop-shadow(0 0 32px rgba(16, 185, 129, 0.55));
+  }
+}
+
+/* Radiant glow pulse loop after entrance */
+@keyframes heroWordmarkGlowLoop {
+  0%, 100% {
+    filter: drop-shadow(0 0 32px rgba(16, 185, 129, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 55px rgba(16, 185, 129, 0.85)) drop-shadow(0 0 95px rgba(52, 211, 153, 0.4));
+  }
+}
+
+/* Text subtitle cascade */
+@keyframes heroSubtitleReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 38px, 0);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0px);
+  }
+}
+
+/* Individual button spring-in */
+@keyframes heroButtonArrival {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0) scale(0.88);
+  }
+  65% {
+    opacity: 1;
+    transform: translate3d(0, -4px, 0) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Scroll indicator reveal */
+@keyframes heroScrollReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scrollBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(6px);
+  }
+  60% {
+    transform: translateY(3px);
+  }
+}
+
+.animate-hero-bloom {
+  animation: heroAtmosphericPulse 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-hero-logo {
+  animation: heroLogoArrival 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+.animate-hero-wordmark {
+  animation: heroWordmarkArrival 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both, heroWordmarkGlowLoop 4s ease-in-out 1.5s infinite;
+}
+
+.animate-hero-sub {
+  animation: heroSubtitleReveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+}
+
+.animate-hero-btn-1 {
+  animation: heroButtonArrival 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.58s both;
+}
+.animate-hero-btn-2 {
+  animation: heroButtonArrival 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.68s both;
+}
+.animate-hero-btn-3 {
+  animation: heroButtonArrival 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.78s both;
+}
+.animate-hero-btn-4 {
+  animation: heroButtonArrival 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.88s both;
+}
+
+.animate-hero-scroll {
+  animation: heroScrollReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 1.05s both;
+}
+
+.animate-scroll-bounce {
+  animation: scrollBounce 2.2s infinite ease-in-out;
+}
+
+
 
